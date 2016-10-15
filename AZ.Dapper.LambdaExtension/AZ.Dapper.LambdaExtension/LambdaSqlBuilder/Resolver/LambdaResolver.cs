@@ -35,7 +35,7 @@ namespace AZ.Dapper.LambdaExtension.Resolver
         public static string GetColumnName(Expression expression)
         {
             var member = GetMemberExpression(expression);
-            var column = member.Member.GetCustomAttributes(false).OfType<ColumnAttribute>().FirstOrDefault();
+            var column = member.Member.GetCustomAttributes(false).OfType<LamColumnAttribute>().FirstOrDefault();
             if (column != null)
                 return column.Name;
             else
@@ -49,7 +49,7 @@ namespace AZ.Dapper.LambdaExtension.Resolver
 
         public static string GetTableName(Type type)
         {
-            var column = type.GetCustomAttributes(false).OfType<TableAttribute>().FirstOrDefault();
+            var column = type.GetCustomAttributes(false).OfType<LamTableAttribute>().FirstOrDefault();
             if (column != null)
                 return column.Name;
             else

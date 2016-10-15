@@ -60,10 +60,10 @@ namespace AZ.Dapper.LambdaExtension.Resolver
             Type type = entity.GetType();
             var ps = type.GetProperties().Where(m =>
             {
-                var obj = m.GetCustomAttributes(typeof(KeyAttribute), false).FirstOrDefault();
+                var obj = m.GetCustomAttributes(typeof(LamKeyAttribute), false).FirstOrDefault();
                 if (obj != null)
                 {
-                    KeyAttribute key = obj as KeyAttribute;
+                    LamKeyAttribute key = obj as LamKeyAttribute;
                     return !key.Increment;
                 }
                 return true;

@@ -1,11 +1,12 @@
-﻿using Dapper.Contrib.Extensions;
+﻿using AZ.Dapper.LambdaExtension.Attributes;
+using Dapper.Contrib.Extensions;
 
 namespace testdemo.Entities
 {
-    [Table("tbn1")]
+    [LamTable("tbn1")]
     public class Tbn
     {
-        [Key]
+        [LamKey]
         public int id { get; set; }
 
         public string name { get; set; }

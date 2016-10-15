@@ -3,9 +3,9 @@
 namespace AZ.Dapper.LambdaExtension.Attributes
 {
     [AttributeUsage(AttributeTargets.Property)]
-    public class ColumnAttribute : Attribute
+    public class LamColumnAttribute : Attribute
     {
-        public ColumnAttribute(string name)
+        public LamColumnAttribute(string name)
         {
             this.Name = name;
         }

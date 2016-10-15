@@ -3,14 +3,14 @@
 namespace AZ.Dapper.LambdaExtension.Attributes
 {
     [AttributeUsage(AttributeTargets.Property)]
-    public class KeyAttribute : Attribute
+    public class LamKeyAttribute : Attribute
     {
-        public KeyAttribute(bool increment)
+        public LamKeyAttribute(bool increment)
         {
             this.Increment = increment;
         }
 
-        public KeyAttribute()
+        public LamKeyAttribute()
             : this(false)
         {
 

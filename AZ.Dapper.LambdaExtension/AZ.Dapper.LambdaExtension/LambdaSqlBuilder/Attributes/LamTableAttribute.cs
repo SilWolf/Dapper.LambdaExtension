@@ -3,9 +3,9 @@
 namespace AZ.Dapper.LambdaExtension.Attributes
 {
     [AttributeUsage(AttributeTargets.Class)]
-    public class TableAttribute : Attribute
+    public class LamTableAttribute : Attribute
     {
-        public TableAttribute(string name)
+        public LamTableAttribute(string name)
         {
             this.Name = name;
         }
