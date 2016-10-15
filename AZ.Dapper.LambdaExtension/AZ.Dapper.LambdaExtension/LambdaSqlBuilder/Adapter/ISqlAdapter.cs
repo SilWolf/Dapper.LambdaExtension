@@ -1,0 +1,28 @@
+﻿using AZ.Dapper.LambdaExtension.Entity;
+
+namespace AZ.Dapper.LambdaExtension.Adapter
+{
+ 
+    interface ISqlAdapter
+    {
+        //string LeftToken { get; }
+        //string RightToken { get; }
+        //string ParamPrefix { get; }
+        bool SupportParameter { get; }
+
+        string Query(SqlEntity entity);
+        string QueryPage(SqlEntity entity);
+        string Insert(bool key, SqlEntity entity);
+        string Update(SqlEntity entity);
+        string Delete(SqlEntity entity);
+
+        string Table(string tableName);
+        string Field(string filedName);
+        string Field(string tableName, string fieldName);
+        string Parameter(string parameterId);
+
+        string LikeStagement();
+
+        string LikeChars();
+    }
+}
