@@ -27,7 +27,7 @@ namespace AZ.Dapper.LambdaExtension
         public static IEnumerable<T> Query<T>(this IDbConnection db, Expression<Func<T, bool>> wherExpression=null)
         {
 
-            var sqllam = new SqlLam<T>(db.GetAdapter());
+            var sqllam = new SqlExp<T>(db.GetAdapter());
 
             if (wherExpression != null)
             {
@@ -42,10 +42,10 @@ namespace AZ.Dapper.LambdaExtension
 
         }
 
-        public static IEnumerable<T> QueryWithAction<T>(this IDbConnection db, Action<SqlLam<T>> action=null)
+        public static IEnumerable<T> QueryWithAction<T>(this IDbConnection db, Action<SqlExp<T>> action=null)
         {
 
-            var sqllam = new SqlLam<T>(db.GetAdapter());
+            var sqllam = new SqlExp<T>(db.GetAdapter());
 
             action?.Invoke(sqllam);
 
@@ -62,8 +62,8 @@ namespace AZ.Dapper.LambdaExtension
             where T:class
         {
 
-            var sqllam = new SqlLam<T>(db.GetAdapter());
-            var countSqlam = new SqlLam<T>(db.GetAdapter());
+            var sqllam = new SqlExp<T>(db.GetAdapter());
+            var countSqlam = new SqlExp<T>(db.GetAdapter());
             if (whereExpression != null)
             {
                 sqllam = sqllam.Where(whereExpression);
@@ -96,10 +96,10 @@ namespace AZ.Dapper.LambdaExtension
 
         }
 
-        public static PagedResult<T> PagedQueryWithAction<T>(this IDbConnection db, int pageSize, int pageNumber, Action<SqlLam<T>> action=null) where T :class
+        public static PagedResult<T> PagedQueryWithAction<T>(this IDbConnection db, int pageSize, int pageNumber, Action<SqlExp<T>> action=null) where T :class
         {
 
-            var sqllam = new SqlLam<T>(db.GetAdapter());
+            var sqllam = new SqlExp<T>(db.GetAdapter());
            
 
             if (action != null)

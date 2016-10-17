@@ -7,7 +7,7 @@ using AZ.Dapper.LambdaExtension.Resolver;
 namespace AZ.Dapper.LambdaExtension
 {
     [Serializable]
-    public abstract class SqlLamBase
+    public abstract class SqlExpBase
     {
         internal Builder.Builder _builder;
         internal LambdaResolver _resolver;
@@ -18,12 +18,12 @@ namespace AZ.Dapper.LambdaExtension
 
         public SqlType SqlType { get { return _type; } }
 
-        public SqlLamBase()
+        public SqlExpBase()
         {
 
         }
 
-        public SqlLamBase(SqlAdapter adater, string tableName)
+        public SqlExpBase(SqlAdapter adater, string tableName)
         {
             _type = SqlType.Query;
             _adapter = adater;

@@ -8,7 +8,7 @@ namespace AZ.Dapper.LambdaExtension.Resolver
 {
     partial class LambdaResolver
     {
-        public void QueryByIsIn<T>(bool isNot, Expression<Func<T, object>> expression, SqlLamBase sqlQuery)
+        public void QueryByIsIn<T>(bool isNot, Expression<Func<T, object>> expression, SqlExpBase sqlQuery)
         {
             var fieldName = GetColumnName(expression);
             _builder.AddCondition(isNot, GetTableName<T>(), fieldName, sqlQuery);

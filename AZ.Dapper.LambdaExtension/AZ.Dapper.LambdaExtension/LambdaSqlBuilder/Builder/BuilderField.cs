@@ -49,7 +49,7 @@ namespace AZ.Dapper.LambdaExtension.Builder
             _conditions.Add(newCondition);
         }
 
-        public void AddCondition(bool notIn, string tableName, string fieldName, SqlLamBase sqlQuery)
+        public void AddCondition(bool notIn, string tableName, string fieldName, SqlExpBase sqlQuery)
         {
             var innerQuery = sqlQuery.SqlString;
             foreach (var name in sqlQuery.Parameters)
