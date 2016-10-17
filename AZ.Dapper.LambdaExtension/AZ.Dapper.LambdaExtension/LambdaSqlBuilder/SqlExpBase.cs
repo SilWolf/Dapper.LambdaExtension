@@ -79,9 +79,9 @@ namespace AZ.Dapper.LambdaExtension
         {
             switch (adapter)
             {
-                case SqlAdapter.SqlServer2005:
+                case SqlAdapter.SqlServer:
                     return new SqlserverAdapter();
-                case SqlAdapter.Sqlite3:
+                case SqlAdapter.Sqlite:
                     return new Sqlite3Adapter();
                 case SqlAdapter.Oracle:
                     return new OracleAdapter();

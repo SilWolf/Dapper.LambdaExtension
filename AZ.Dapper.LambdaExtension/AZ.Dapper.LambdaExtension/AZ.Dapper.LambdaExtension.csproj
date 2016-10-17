@@ -81,8 +81,8 @@
     <Compile Include="LambdaSqlBuilder\Resolver\LambdaResolverQuery.cs" />
     <Compile Include="LambdaSqlBuilder\Resolver\LambdaResolverSpec.cs" />
     <Compile Include="LambdaSqlBuilder\Resolver\LambdaResolverTree.cs" />
-    <Compile Include="LambdaSqlBuilder\SqlLam.cs" />
-    <Compile Include="LambdaSqlBuilder\SqlLamBase.cs" />
+    <Compile Include="LambdaSqlBuilder\SqlExp.cs" />
+    <Compile Include="LambdaSqlBuilder\SqlExpBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Dapper.Lambda.csproj" />

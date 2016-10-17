@@ -15,15 +15,15 @@ namespace AZ.Dapper.LambdaExtension.Extentions
 
             if (typeName.Contains("SqlConnection"))
             {
-                return SqlAdapter.SqlServer2005;
+                return SqlAdapter.SqlServer;
             }
             if (typeName.Contains("SQLiteConnection"))
             {
-                return SqlAdapter.Sqlite3;
+                return SqlAdapter.Sqlite;
             }
             if (typeName.Contains("SqliteConnection"))
             {
-                return SqlAdapter.Sqlite3;
+                return SqlAdapter.Sqlite;
             }
             if (typeName.Contains("OracleConnection"))
             {
@@ -39,7 +39,7 @@ namespace AZ.Dapper.LambdaExtension.Extentions
                 return SqlAdapter.SqlAnyWhere;
             }
 
-            return SqlAdapter.SqlServer2005;
+            return SqlAdapter.SqlServer;
         }
     }
 }
