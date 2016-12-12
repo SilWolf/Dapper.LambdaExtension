@@ -16,5 +16,8 @@ namespace AZ.Dapper.LambdaExtension.Entity
 
         public static string SqlserverAutoKeySQLString = "SELECT ISNULL(SCOPE_IDENTITY(),0) AS AutoID";
         public static string SqliteAutoKeySQLString = "SELECT last_insert_rowid() AS AutoID;";
+
+
+        public static string CreateTableSqlFormatString = @"CREATE TABLE";
     }
 }

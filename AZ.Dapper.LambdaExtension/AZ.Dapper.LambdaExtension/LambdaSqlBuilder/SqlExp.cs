@@ -11,7 +11,7 @@ namespace AZ.Dapper.LambdaExtension
     [Serializable]
     public class SqlExp<T> : SqlExpBase
     {
-        public SqlExp(SqlAdapter type = SqlAdapter.SqlServer)
+        public SqlExp(SqlAdapterType type = SqlAdapterType.SqlServer)
             : base(type, LambdaResolver.GetTableName<T>())
         {
             //_type = SqlType.Query;

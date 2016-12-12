@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using AZ.Dapper.LambdaExtension.Adapter;
 using AZ.Dapper.LambdaExtension.Entity;
+using AZ.Dapper.LambdaExtension.LambdaSqlBuilder.Adapter;
 using AZ.Dapper.LambdaExtension.Resolver;
 
 namespace AZ.Dapper.LambdaExtension
@@ -12,7 +13,7 @@ namespace AZ.Dapper.LambdaExtension
         internal Builder.Builder _builder;
         internal LambdaResolver _resolver;
         internal SqlType _type;
-        internal SqlAdapter _adapter;
+        internal SqlAdapterType _adapter;
 
         public Builder.Builder SqlBuilder { get { return _builder; } }
 
@@ -23,11 +24,11 @@ namespace AZ.Dapper.LambdaExtension
 
         }
 
-        public SqlExpBase(SqlAdapter adater, string tableName)
+        public SqlExpBase(SqlAdapterType adater, string tableName)
         {
             _type = SqlType.Query;
             _adapter = adater;
-            _builder = new Builder.Builder(_type, tableName, GetAdapterInstance(_adapter));
+            _builder = new Builder.Builder(_type, tableName, AdapterFactory.GetAdapterInstance(_adapter));
             _resolver = new LambdaResolver(_builder);
         }
 
@@ -70,31 +71,12 @@ namespace AZ.Dapper.LambdaExtension
 
         #endregion
 
-        public void SetAdapter(SqlAdapter adapter)
+        public void SetAdapter(SqlAdapterType adapter)
         {
-            _builder.Adapter = GetAdapterInstance(adapter);
+            _builder.Adapter =AdapterFactory.GetAdapterInstance(adapter);
         }
 
-        private ISqlAdapter GetAdapterInstance(SqlAdapter adapter)
-        {
-            switch (adapter)
-            {
-                case SqlAdapter.SqlServer:
-                    return new SqlserverAdapter();
-                case SqlAdapter.Sqlite:
-                    return new Sqlite3Adapter();
-                case SqlAdapter.Oracle:
-                    return new OracleAdapter();
-                case SqlAdapter.MySql:
-                    return new MySqlAdapter();
-                case SqlAdapter.Postgres:
-                    return new PostgresAdapter();
-                case SqlAdapter.SqlAnyWhere:
-                    return new SqlAnyWhereAdapter();
-                default:
-                    throw new ArgumentException("The specified Sql Adapter was not recognized");
-            }
-        }
+      
 
         //public static SqlAdapter GetAdapterByDb(IDbConnection dbconnection)
         //{

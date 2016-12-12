@@ -1,6 +1,6 @@
 ﻿namespace AZ.Dapper.LambdaExtension.Adapter
 {
-    public enum SqlAdapter
+    public enum SqlAdapterType
     {
         /// <summary>
         /// Note: the sqlserver adapter only support sqlserve 2005 or higher.

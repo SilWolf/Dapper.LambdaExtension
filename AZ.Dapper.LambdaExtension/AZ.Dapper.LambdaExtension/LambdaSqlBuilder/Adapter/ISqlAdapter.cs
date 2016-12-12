@@ -1,9 +1,11 @@
-﻿using AZ.Dapper.LambdaExtension.Entity;
+﻿using System.Collections.Generic;
+using AZ.Dapper.LambdaExtension.Entity;
+using AZ.Dapper.LambdaExtension.LambdaSqlBuilder.Entity;
 
 namespace AZ.Dapper.LambdaExtension.Adapter
 {
  
-    interface ISqlAdapter
+    public interface ISqlAdapter
     {
         //string LeftToken { get; }
         //string RightToken { get; }
@@ -24,5 +26,6 @@ namespace AZ.Dapper.LambdaExtension.Adapter
         string LikeStagement();
 
         string LikeChars();
+        string CreateTable(SqlTableDefine tableDefine, List<SqlColumnDefine> columnDefines);
     }
 }

@@ -3,7 +3,7 @@
 namespace AZ.Dapper.LambdaExtension.Entity
 {
     [Serializable]
-    internal class SqlEntity
+     public class SqlEntity
     {
         /// <summary>
         /// 页面数 从 1 开始
