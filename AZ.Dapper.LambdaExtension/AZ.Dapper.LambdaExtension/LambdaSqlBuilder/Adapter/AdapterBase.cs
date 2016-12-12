@@ -126,6 +126,11 @@ namespace AZ.Dapper.LambdaExtension.Adapter
         }
 
 
+        public virtual string FormatColumnDefineSql(string columName,string dataTypestr,string nullstr,string primaryStr,string incrementStr)
+        {
+            return $" {columName} {dataTypestr} {nullstr} {primaryStr} {incrementStr},";
+        }
+
         public virtual string CreateTable(SqlTableDefine tableDefine,List<SqlColumnDefine> columnDefines)
         {
             var sql= CreateTablePrefix ;
@@ -189,8 +194,8 @@ namespace AZ.Dapper.LambdaExtension.Adapter
                     nullStr = "not null";
                 }
 
-                // 列名 类型 是否空 其他标记
-                var columnDefStr = $" {cname} {datatypestr} {nullStr} {primary} {increment},";
+
+                var columnDefStr = FormatColumnDefineSql(cname,datatypestr,nullStr,primary,increment); //$" {cname} {datatypestr} {nullStr} {primary} {increment},");
                 sql += columnDefStr;
             }
 

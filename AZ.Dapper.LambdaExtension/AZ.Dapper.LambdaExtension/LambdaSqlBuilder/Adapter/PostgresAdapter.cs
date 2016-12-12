@@ -69,5 +69,16 @@ namespace AZ.Dapper.LambdaExtension.Adapter
         {
             get { return "CREATE TABLE if not EXISTS "; }
         }
+
+        public override string FormatColumnDefineSql(string columName, string dataTypestr, string nullstr, string primaryStr, string incrementStr)
+        {
+            //postgres 的自增字段比较特殊,是用一个特定的数据类型来标识的.
+            if (!string.IsNullOrEmpty(incrementStr))
+            {
+                dataTypestr = incrementStr;
+            }
+
+            return $" {columName} {dataTypestr} {nullstr} {primaryStr},";
+        }
     }
 }
