@@ -25,7 +25,7 @@ namespace AZ.Dapper.LambdaExtension.Adapter
         public override string ParamStringPrefix { get; } = ":";
 
         public override string PrimaryKeyDefinition { get; } = " Primary Key";
-        public override string SelectIdentitySql { get; set; } = "SELECT LASTVAL()";
+        public override string SelectIdentitySql { get; set; } = "RETURNING";
 
         public PostgresAdapter()
             : base(SqlConst.LeftTokens[2], SqlConst.RightTokens[2], SqlConst.ParamPrefixs[0])
@@ -68,6 +68,21 @@ namespace AZ.Dapper.LambdaExtension.Adapter
         public override string CreateTablePrefix
         {
             get { return "CREATE TABLE if not EXISTS "; }
+        }
+
+        /// <summary>
+        /// 同样,获取最后一条插入数据的id,在postgresql中也有点特殊.
+        /// </summary>
+        /// <param name="incrementColumnName"></param>
+        /// <returns></returns>
+        public override string GetIdentitySql(string incrementColumnName)
+        {
+            if (!string.IsNullOrEmpty(incrementColumnName))
+            {
+                return SelectIdentitySql + " " + incrementColumnName + ";";
+            }
+
+            return string.Empty;
         }
 
         public override string FormatColumnDefineSql(string columName, string dataTypestr, string nullstr, string primaryStr, string incrementStr)

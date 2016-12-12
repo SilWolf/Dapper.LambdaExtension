@@ -117,6 +117,11 @@ namespace AZ.Dapper.LambdaExtension.Adapter
             return "%";
         }
 
+        public virtual string GetIdentitySql(string incrementColumnName)
+        {
+            return SelectIdentitySql;
+        }
+
         #region create table or schema
 
 
