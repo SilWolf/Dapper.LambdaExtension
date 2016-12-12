@@ -12,9 +12,13 @@ namespace testdemo
     {
         static void Main(string[] args)
         {
-            Test2();
+            // Test2();
+            var npglogic = new PgTestLogic();
 
-          
+            npglogic.CreateTest3();
+
+
+
 
             Console.ReadLine();
         }

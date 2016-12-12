@@ -99,6 +99,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\Test2.cs" />
+    <Compile Include="Entities\Test3.cs" />
     <Compile Include="MsSqlBase.cs" />
     <Compile Include="MysqlBase.cs" />
     <Compile Include="NpgsqlBase.cs" />

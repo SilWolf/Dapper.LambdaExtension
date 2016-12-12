@@ -4,12 +4,32 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AZ.Dapper.LambdaExtension;
+using AZ.Dapper.LambdaExtension.Extentions;
 using testdemo.Entities;
 
 namespace testdemo
 {
     public class PgTestLogic:NpgsqlBase
     {
+
+
+        public void CreateTest3()
+        {
+            using (var db = GetConnection())
+            {
+                try
+                {
+                    db.CreateTable<Test3>();
+
+                    Console.WriteLine("table test3 created.");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message+ex.StackTrace);
+                }
+            }
+        }
+
 
         public List<Test2> FindAction()
         {
