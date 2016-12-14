@@ -29,7 +29,6 @@ namespace AZ.Dapper.LambdaExtension
         }
         public static IEnumerable<T> Query<T>(this IDbConnection db, Expression<Func<T, bool>> wherExpression=null, IDbTransaction trans = null, int? commandTimeout = null)
         {
-
             var sqllam = new SqlExp<T>(db.GetAdapter());
 
             if (wherExpression != null)
