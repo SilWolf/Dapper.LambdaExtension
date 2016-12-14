@@ -1,5 +1,5 @@
 ﻿using AZ.Dapper.LambdaExtension.Attributes;
-using Dapper.Contrib.Extensions;
+ 
 
 namespace testdemo.Entities
 {

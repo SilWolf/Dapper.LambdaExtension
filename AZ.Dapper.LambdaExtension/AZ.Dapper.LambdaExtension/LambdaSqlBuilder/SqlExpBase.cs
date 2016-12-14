@@ -15,6 +15,8 @@ namespace AZ.Dapper.LambdaExtension
         internal SqlType _type;
         internal SqlAdapterType _adapter;
 
+        internal Type _entityType;
+
         public Builder.Builder SqlBuilder { get { return _builder; } }
 
         public SqlType SqlType { get { return _type; } }
@@ -24,11 +26,12 @@ namespace AZ.Dapper.LambdaExtension
 
         }
 
-        public SqlExpBase(SqlAdapterType adater, string tableName)
+        public SqlExpBase(SqlAdapterType adater, string tableName,Type entityType)
         {
             _type = SqlType.Query;
             _adapter = adater;
-            _builder = new Builder.Builder(_type, tableName, AdapterFactory.GetAdapterInstance(_adapter));
+            _entityType = entityType;
+            _builder = new Builder.Builder(_type, tableName,entityType, AdapterFactory.GetAdapterInstance(_adapter));
             _resolver = new LambdaResolver(_builder);
         }
 

@@ -15,15 +15,20 @@ namespace AZ.Dapper.LambdaExtension.Helpers
         {
             var type = typeof(T);
 
-            //处理表定义
+            return GetEntityDefine(type);
+        }
+
+        private static Tuple<SqlTableDefine, List<SqlColumnDefine>> GetEntityDefine(Type type)
+        {
+//处理表定义
             var name = type.Name;
 
-            var tableAttr=type.GetCustomAttribute<LamTableAttribute>();
+            var tableAttr = type.GetCustomAttribute<LamTableAttribute>();
 
-            var sqlTableDef=new SqlTableDefine(tableAttr,name);
+            var sqlTableDef = new SqlTableDefine(tableAttr, name);
 
             //处理列定义
-            var colDeflist=new List<SqlColumnDefine>();
+            var colDeflist = new List<SqlColumnDefine>();
 
             var columns = type.GetProperties();
 
@@ -41,13 +46,25 @@ namespace AZ.Dapper.LambdaExtension.Helpers
 
                     var nullable = cp.PropertyType.IsNullableType();
 
-                    var cd=new SqlColumnDefine(cname,columnAttr.Name,null,cp.PropertyType, nullable, columnAttr,keyAttr,dataTypeAttr);
+                    var cd = new SqlColumnDefine(cname, columnAttr.Name, null, cp.PropertyType, nullable, columnAttr, keyAttr,
+                        dataTypeAttr);
 
                     colDeflist.Add(cd);
                 }
             }
 
-            return new Tuple<SqlTableDefine, List<SqlColumnDefine>>(sqlTableDef,colDeflist);
+            return new Tuple<SqlTableDefine, List<SqlColumnDefine>>(sqlTableDef, colDeflist);
+        }
+
+
+        //public static Tuple<SqlTableDefine, List<SqlColumnDefine>> GetEntityDefine<T>(this T t) where T : class
+        //{
+        //    return GetEntityDefine<T>();
+        //}
+
+        public static Tuple<SqlTableDefine, List<SqlColumnDefine>> GetEntityDefines(this Type t)
+        {
+            return GetEntityDefine(t);
         }
 
         public static bool IsNullableType(this Type theType)

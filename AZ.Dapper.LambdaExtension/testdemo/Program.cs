@@ -4,7 +4,8 @@ using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
- 
+using testdemo.Entities;
+
 
 namespace testdemo
 {
@@ -15,10 +16,18 @@ namespace testdemo
             // Test2();
             var npglogic = new PgTestLogic();
 
-            npglogic.CreateTest3();
+            //npglogic.CreateTest3();
+
+            npglogic.InsertTest3(new Test3() {VName = "test111"});
 
 
+            var test3 = npglogic.GeTest3();
 
+         //   test3.VName = "222222";
+
+           // npglogic.UpdateTest3(test3);
+
+            npglogic.DeleteTest3(test3);
 
             Console.ReadLine();
         }

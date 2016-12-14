@@ -5,19 +5,22 @@ using System.Globalization;
 using System.Linq;
 using AZ.Dapper.LambdaExtension.Adapter;
 using AZ.Dapper.LambdaExtension.Entity;
+using AZ.Dapper.LambdaExtension.Helpers;
+using AZ.Dapper.LambdaExtension.LambdaSqlBuilder.Entity;
 
 namespace AZ.Dapper.LambdaExtension.Builder
 {
     [Serializable]
     public partial class Builder
     {
-        internal Builder(SqlType type, string tableName, ISqlAdapter adapter)
+        internal Builder(SqlType type, string tableName, Type entityType, ISqlAdapter adapter)
         {
             _paramIndex = 0;
             _tableNames.Add(tableName);
             this._adapter = adapter;
             this._type = type;
             this._useField = true;
+            _entityType = entityType;
             this._parameterDic = new Dictionary<string, object>(); //new ExpandoObject();
         }
 
@@ -25,6 +28,9 @@ namespace AZ.Dapper.LambdaExtension.Builder
         private SqlType _type;
         private bool _useField;
         private bool _userKey;
+
+        private Type _entityType;
+
 
         internal ISqlAdapter Adapter { get { return _adapter; } set { _adapter = value; } }
 
@@ -128,7 +134,30 @@ namespace AZ.Dapper.LambdaExtension.Builder
         private string GetSelection()
         {
             if (_selectionList.Count == 0)
-                return string.Format("{0}.*", _adapter.Table(_tableNames.First()));
+            {
+                var columnList = new List<string>();
+
+                var entityDef = _entityType.GetEntityDefines();
+
+                foreach (var cdef in entityDef.Item2)
+                {
+                    var s = _adapter.Field(cdef.AliasName);
+
+                    if (!string.IsNullOrEmpty(cdef.AliasName))
+                    {
+                        s += " as " + _adapter.Field(cdef.Name);
+                    }
+                    else
+                    {
+                        s = _adapter.Field(cdef.Name);
+                    }
+                    columnList.Add(s);
+                }
+
+                return string.Join(",", columnList);
+
+            }
+            //return string.Format("{0}.*", _adapter.Table(_tableNames.First()));
             else
                 return string.Join(", ", _selectionList);
         }
@@ -145,12 +174,25 @@ namespace AZ.Dapper.LambdaExtension.Builder
             entity.Having = GetForamtList(" ", "HAVING ", _havingConditions);
             entity.Grouping = GetForamtList(", ", "GROUP BY ", _groupingList);
             entity.OrderBy = GetForamtList(", ", "ORDER BY ", _sortList);
-            entity.Conditions = GetForamtList("", "WHERE ", _conditions);
+            entity.Conditions = GetForamtList("", "WHERE ", GetConditions());
             entity.Parameter = GetForamtList(", ", "", _parameters);
             entity.TableName = GetTableName();
             entity.Selection = GetSelection();
             return entity;
         }
+
+        //private SqlEntity GetSqlEntity()
+        //{
+        //    SqlEntity entity = new SqlEntity();
+        //    entity.Having = GetForamtList(" ", "HAVING ", _havingConditions);
+        //    entity.Grouping = GetForamtList(", ", "GROUP BY ", _groupingList);
+        //    entity.OrderBy = GetForamtList(", ", "ORDER BY ", _sortList);
+        //    entity.Conditions = GetForamtList("", "WHERE ", _conditions);
+        //    entity.Parameter = GetForamtList(", ", "", _parameters);
+        //    entity.TableName = GetTableName();
+        //    entity.Selection = GetSelection();
+        //    return entity;
+        //}
 
         private string GetParamId()
         {
@@ -175,6 +217,45 @@ namespace AZ.Dapper.LambdaExtension.Builder
             string value = _adapter.Parameter(paramId);
             this.AddParameter(value, fieldValue);
             return string.Format("{0} {1} {2}", key, op, value);
+        }
+
+        private string GetCondition(string tableName, string fieldName, string aliasName, string op, object fieldValue)
+        {
+            string paramId = this.GetParamId(fieldName);
+            string key = _adapter.Field(aliasName);
+            string value = _adapter.Parameter(paramId);
+            this.AddParameter(value, fieldValue);
+            return string.Format("{0} {1} {2}", key, op, value);
+        }
+
+        public List<string> GetConditions()
+        {
+            if (_type == SqlType.Update||_type==SqlType.Delete)
+            {
+                if (_conditions.Count == 0)
+                {
+                    var tabDef = _entityType.GetEntityDefines();
+
+                    var keyField = tabDef.Item2.FirstOrDefault(p => p.KeyAttribute != null);
+
+                    if (keyField == null)
+                    {
+                        throw new Exception("Must to define LamKey attribute to entity");
+                    }
+
+                    string paramId = keyField.AliasName ?? keyField.Name;
+                    string key = _adapter.Field(paramId);
+                    string value = _adapter.Parameter(paramId);
+
+                    var condition = string.Format("{0} {1} {2}", key, "=", value);
+
+
+                    return new List<string>() { condition };
+
+                }
+            }
+
+            return _conditions;
         }
 
         private void AddParameter(string key, object value)

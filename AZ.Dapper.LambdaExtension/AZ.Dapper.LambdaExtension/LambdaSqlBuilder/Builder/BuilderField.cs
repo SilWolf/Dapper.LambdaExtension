@@ -65,16 +65,24 @@ namespace AZ.Dapper.LambdaExtension.Builder
             _conditions.Add(newCondition);
         }
 
-        public void AddSection(string tableName, string fieldName, string op, object fieldValue)
+        public void AddSection(string tableName, string fieldName, string aliasName, string op, object fieldValue)
         {
-            string condition = GetCondition(tableName, fieldName, op, fieldValue);
+            string condition = GetCondition(tableName, fieldName, aliasName, op, fieldValue);
             _selectionList.Add(condition);
         }
 
-        public void AddSection(string tableName, string fieldName, object fieldValue)
+        //public void AddSection(string tableName, string fieldName, object fieldValue)
+        //{
+        //    var paramId = _adapter.Parameter(fieldName);
+        //    _selectionList.Add(_adapter.Field(tableName, fieldName));
+        //    _parameters.Add(paramId);
+        //    AddParameter(paramId, fieldValue);
+        //}
+
+        public void AddSection(string tableName, string fieldName, string aliasName, object fieldValue)
         {
             var paramId = _adapter.Parameter(fieldName);
-            _selectionList.Add(_adapter.Field(tableName, fieldName));
+            _selectionList.Add(_adapter.Field(aliasName));
             _parameters.Add(paramId);
             AddParameter(paramId, fieldValue);
         }

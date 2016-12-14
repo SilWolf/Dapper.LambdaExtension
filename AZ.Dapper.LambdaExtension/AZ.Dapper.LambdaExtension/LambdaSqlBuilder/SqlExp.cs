@@ -12,7 +12,7 @@ namespace AZ.Dapper.LambdaExtension
     public class SqlExp<T> : SqlExpBase
     {
         public SqlExp(SqlAdapterType type = SqlAdapterType.SqlServer)
-            : base(type, LambdaResolver.GetTableName<T>())
+            : base(type, LambdaResolver.GetTableName<T>(),typeof(T))
         {
             //_type = SqlType.Query;
             //GetAdapterInstance(type);
@@ -87,9 +87,13 @@ namespace AZ.Dapper.LambdaExtension
             return this;
         }
 
-        public SqlExp<T> Delete(Expression<Func<T, bool>> expression)
+        public SqlExp<T> Delete(Expression<Func<T, bool>> expression=null)
         {
             _builder.UpdateSqlType(SqlType.Delete);
+            if (expression == null)
+            {
+                return this;
+            }
             return And(expression);
         }
 

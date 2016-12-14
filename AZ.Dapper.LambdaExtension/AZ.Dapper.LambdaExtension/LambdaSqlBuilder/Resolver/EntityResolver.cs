@@ -39,7 +39,23 @@ namespace AZ.Dapper.LambdaExtension.Resolver
             foreach (PropertyInfo item in ps)
             {
                 object obj = item.GetValue(entity, null);
-                _builder.AddSection(tableName, item.Name, _operationDictionary[ExpressionType.Equal], obj);
+
+                var propname = item.Name;
+
+                var fieldAlias = propname;
+
+                //resolve custome column name
+                var colAttr = item.GetCustomAttribute<LamColumnAttribute>();
+
+                if (colAttr != null)
+                {
+                    if (!string.IsNullOrEmpty(colAttr.Name))
+                    {
+                        fieldAlias = colAttr.Name;
+                    }
+                }
+
+                _builder.AddSection(tableName, item.Name,fieldAlias, _operationDictionary[ExpressionType.Equal], obj);
             }
         }
 
@@ -51,7 +67,23 @@ namespace AZ.Dapper.LambdaExtension.Resolver
             foreach (PropertyInfo item in ps)
             {
                 object obj = item.GetValue(entity, null);
-                _builder.AddSection(tableName, item.Name, obj);
+
+                var propname = item.Name;
+
+                var fieldAlias = propname;
+
+                //resolve custome column name
+                var colAttr = item.GetCustomAttribute<LamColumnAttribute>();
+
+                if (colAttr != null)
+                {
+                    if (!string.IsNullOrEmpty(colAttr.Name))
+                    {
+                        fieldAlias = colAttr.Name;
+                    }
+                }
+
+                _builder.AddSection(tableName, propname,fieldAlias, obj);
             }
         }
 
@@ -68,6 +100,7 @@ namespace AZ.Dapper.LambdaExtension.Resolver
                 }
                 return true;
             });
+
             return ps;
         }
     }

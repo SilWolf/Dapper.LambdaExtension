@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AZ.Dapper.LambdaExtension;
 using AZ.Dapper.LambdaExtension.Extentions;
+using Dapper;
 using testdemo.Entities;
 
 namespace testdemo
@@ -28,6 +29,84 @@ namespace testdemo
                     Console.WriteLine(ex.Message+ex.StackTrace);
                 }
             }
+        }
+
+
+        public void InsertTest3(Test3 item)
+        {
+            using (var db = GetConnection())
+            {
+                try
+                {
+                    db.Insert(item);
+
+                    
+
+                    Console.WriteLine("  test3 inserted.");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message + ex.StackTrace);
+                }
+            }
+        }
+
+        public void UpdateTest3(Test3 item)
+        {
+            using (var db = GetConnection())
+            {
+                try
+                {
+                    db.Update(item);
+
+
+
+                    Console.WriteLine("  test3 updated.");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message + ex.StackTrace);
+                }
+            }
+        }
+
+        public void DeleteTest3(Test3 item)
+        {
+            using (var db = GetConnection())
+            {
+                try
+                {
+                    db.Delete(item);
+
+
+
+                    Console.WriteLine("  test3 updated.");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message + ex.StackTrace);
+                }
+            }
+        }
+
+        public Test3 GeTest3()
+        {
+            using (var db = GetConnection())
+            {
+                try
+                {
+                    var test3=db.QueryFirstOrDefault<Test3>();
+
+
+                    Console.WriteLine("  test3 get.");
+                    return test3;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message + ex.StackTrace);
+                }
+            }
+            return null;
         }
 
 

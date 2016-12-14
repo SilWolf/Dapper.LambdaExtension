@@ -8,7 +8,7 @@ using ConsoleApp1;
  
  
 using Dapper;
-using Dapper.Contrib.Extensions;
+ 
 using testdemo.Entities;
 
 namespace testdemo
