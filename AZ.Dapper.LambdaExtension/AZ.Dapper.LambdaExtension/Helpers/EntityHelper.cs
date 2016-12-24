@@ -44,10 +44,16 @@ namespace AZ.Dapper.LambdaExtension.Helpers
 
                     var cname = cp.Name;
 
+                    var alias = cname;
+                    if (columnAttr != null)
+                    {
+                        alias = columnAttr.Name;
+                    }
+
+
                     var nullable = cp.PropertyType.IsNullableType();
 
-                    var cd = new SqlColumnDefine(cname, columnAttr.Name, null, cp.PropertyType, nullable, columnAttr, keyAttr,
-                        dataTypeAttr);
+                    var cd = new SqlColumnDefine(cname, alias, null, cp.PropertyType, nullable, columnAttr, keyAttr,dataTypeAttr);
 
                     colDeflist.Add(cd);
                 }

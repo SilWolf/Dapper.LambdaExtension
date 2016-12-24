@@ -11,7 +11,7 @@ namespace AZ.Dapper.LambdaExtension.Adapter
 
         public override string IntColumnDefinition { get; } = "INTEGER";
         public override string LongColumnDefinition { get; } = "INTEGER";
-        public override string GuidColumnDefinition { get; } = "VARCHAR(32)";
+        public override string GuidColumnDefinition { get; } = "VARCHAR(48)";
         public override string BoolColumnDefinition { get; } = "INTEGER";
         public override string RealColumnDefinition { get; } = "REAL";
         public override string DecimalColumnDefinition { get; } = "NUMERIC";
