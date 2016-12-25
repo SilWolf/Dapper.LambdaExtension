@@ -28,6 +28,8 @@ namespace AZ.Dapper.LambdaExtension.Adapter
 
         public override string SelectIdentitySql { get; set; } = "select last_insert_rowid()";
 
+        public override string CreateTablePrefix { get; } = "create table if not EXISTS ";
+
         public Sqlite3Adapter()
             : base(SqlConst.LeftTokens[0], SqlConst.RightTokens[0], SqlConst.ParamPrefixs[0])
         {
