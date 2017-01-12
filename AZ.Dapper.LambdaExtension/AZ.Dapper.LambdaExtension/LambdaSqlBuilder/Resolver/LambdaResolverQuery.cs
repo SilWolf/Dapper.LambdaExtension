@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using AZ.Dapper.LambdaExtension.Resolver.ExpressionTree;
+using Dapper.LambdaExtension.LambdaSqlBuilder.Resolver.ExpressionTree;
 
-namespace AZ.Dapper.LambdaExtension.Resolver
+namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
 {
     partial class LambdaResolver
     {

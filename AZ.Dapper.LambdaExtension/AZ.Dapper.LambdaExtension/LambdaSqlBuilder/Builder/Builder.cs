@@ -3,24 +3,33 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Globalization;
 using System.Linq;
-using AZ.Dapper.LambdaExtension.Adapter;
-using AZ.Dapper.LambdaExtension.Entity;
-using AZ.Dapper.LambdaExtension.Helpers;
-using AZ.Dapper.LambdaExtension.LambdaSqlBuilder.Entity;
+using Dapper.LambdaExtension.Helpers;
+using Dapper.LambdaExtension.LambdaSqlBuilder.Adapter;
+using Dapper.LambdaExtension.LambdaSqlBuilder.Entity;
 
-namespace AZ.Dapper.LambdaExtension.Builder
+namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
 {
     [Serializable]
     public partial class Builder
     {
-        internal Builder(SqlType type, string tableName, Type entityType, ISqlAdapter adapter)
+        internal Builder(SqlType type, Type entityType, ISqlAdapter adapter)
         {
             _paramIndex = 0;
-            _tableNames.Add(tableName);
+           
             this._adapter = adapter;
             this._type = type;
             this._useField = true;
             _entityType = entityType;
+            var tabDef = _entityType.GetEntityDefines();
+
+            var tname = tabDef.Item1.TableAttribute?.Name;
+            if (string.IsNullOrEmpty(tname))
+            {
+                tname = tabDef.Item1.Name;
+            }
+
+            _tableNames.Add(tname);
+            _schema = tabDef.Item1.TableAttribute?.Schema;
             this._parameterDic = new Dictionary<string, object>(); //new ExpandoObject();
         }
 
@@ -37,6 +46,7 @@ namespace AZ.Dapper.LambdaExtension.Builder
         private const string PARAMETER_PREFIX = "Param";
 
         private readonly List<string> _tableNames = new List<string>();
+        private readonly string _schema = string.Empty;
         private readonly List<string> _joinExpressions = new List<string>();
         private readonly List<string> _selectionList = new List<string>();
         private readonly List<string> _conditions = new List<string>();
@@ -129,7 +139,7 @@ namespace AZ.Dapper.LambdaExtension.Builder
         private string GetTableName()
         {
             var joinExpression = string.Join(" ", _joinExpressions);
-            return string.Format("{0} {1}", _adapter.Table(_tableNames.First()), joinExpression);
+            return string.Format("{0} {1}", _adapter.Table(_tableNames.First(),_schema), joinExpression);
         }
         private string GetSelection()
         {

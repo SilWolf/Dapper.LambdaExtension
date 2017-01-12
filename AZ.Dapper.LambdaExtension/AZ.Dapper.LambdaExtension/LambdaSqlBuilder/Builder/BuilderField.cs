@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace AZ.Dapper.LambdaExtension.Builder
+namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
 {
     partial class Builder
     {

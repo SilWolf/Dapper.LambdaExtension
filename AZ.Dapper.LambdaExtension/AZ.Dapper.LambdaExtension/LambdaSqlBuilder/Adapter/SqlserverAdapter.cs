@@ -1,7 +1,7 @@
 ﻿using System;
-using AZ.Dapper.LambdaExtension.Entity;
+using Dapper.LambdaExtension.LambdaSqlBuilder.Entity;
 
-namespace AZ.Dapper.LambdaExtension.Adapter
+namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
 {
    
     /// <summary>

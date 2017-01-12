@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using AZ.Dapper.LambdaExtension.Attributes;
+using Dapper.LambdaExtension.LambdaSqlBuilder.Attributes;
 
-namespace AZ.Dapper.LambdaExtension.Resolver
+namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
 {
     partial class LambdaResolver
     {

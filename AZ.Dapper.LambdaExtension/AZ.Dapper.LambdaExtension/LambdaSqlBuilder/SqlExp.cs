@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using AZ.Dapper.LambdaExtension.Adapter;
-using AZ.Dapper.LambdaExtension.Entity;
-using AZ.Dapper.LambdaExtension.Resolver;
-using AZ.Dapper.LambdaExtension.Resolver.ExpressionTree;
+using Dapper.LambdaExtension.LambdaSqlBuilder.Adapter;
+using Dapper.LambdaExtension.LambdaSqlBuilder.Entity;
+using Dapper.LambdaExtension.LambdaSqlBuilder.Resolver;
+using Dapper.LambdaExtension.LambdaSqlBuilder.Resolver.ExpressionTree;
 
-namespace AZ.Dapper.LambdaExtension
+namespace Dapper.LambdaExtension.LambdaSqlBuilder
 {
     [Serializable]
     public class SqlExp<T> : SqlExpBase
     {
         public SqlExp(SqlAdapterType type = SqlAdapterType.SqlServer)
-            : base(type, LambdaResolver.GetTableName<T>(),typeof(T))
+            : base(type,typeof(T))
         {
             //_type = SqlType.Query;
             //GetAdapterInstance(type);

@@ -1,4 +1,4 @@
-﻿namespace AZ.Dapper.LambdaExtension.Builder
+﻿namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
 {
   
     partial class Builder

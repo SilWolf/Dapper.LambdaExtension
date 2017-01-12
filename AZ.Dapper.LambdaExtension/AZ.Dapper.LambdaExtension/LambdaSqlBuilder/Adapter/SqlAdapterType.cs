@@ -1,4 +1,4 @@
-﻿namespace AZ.Dapper.LambdaExtension.Adapter
+﻿namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
 {
     public enum SqlAdapterType
     {

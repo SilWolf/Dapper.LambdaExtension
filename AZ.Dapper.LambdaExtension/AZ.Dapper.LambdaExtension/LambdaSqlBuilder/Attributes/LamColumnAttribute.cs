@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AZ.Dapper.LambdaExtension.Attributes
+namespace Dapper.LambdaExtension.LambdaSqlBuilder.Attributes
 {
     [AttributeUsage(AttributeTargets.Property)]
     public class LamColumnAttribute : Attribute

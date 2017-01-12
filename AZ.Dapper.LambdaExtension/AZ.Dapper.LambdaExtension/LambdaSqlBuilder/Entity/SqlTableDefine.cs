@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AZ.Dapper.LambdaExtension.Attributes;
+using Dapper.LambdaExtension.LambdaSqlBuilder.Attributes;
 
-namespace AZ.Dapper.LambdaExtension.LambdaSqlBuilder.Entity
+namespace Dapper.LambdaExtension.LambdaSqlBuilder.Entity
 {
     [Serializable]
     public class SqlTableDefine
@@ -18,8 +14,18 @@ namespace AZ.Dapper.LambdaExtension.LambdaSqlBuilder.Entity
         public SqlTableDefine(LamTableAttribute tableAttr,string name )
         {
             TableAttribute = tableAttr;
-            Name = name;
-            
+            if (tableAttr != null)
+            {
+                Name = tableAttr.Name;
+                if (string.IsNullOrEmpty(tableAttr.Name))
+                {
+                    Name = name;
+                }
+            }
+            else
+            {
+                Name = name;
+            }
         }
     }
 }

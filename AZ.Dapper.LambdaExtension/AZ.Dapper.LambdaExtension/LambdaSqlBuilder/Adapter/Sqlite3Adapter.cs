@@ -1,7 +1,7 @@
 ﻿using System;
-using AZ.Dapper.LambdaExtension.Entity;
+using Dapper.LambdaExtension.LambdaSqlBuilder.Entity;
 
-namespace AZ.Dapper.LambdaExtension.Adapter
+namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
 {
     [Serializable]
     class Sqlite3Adapter : AdapterBase
@@ -11,7 +11,7 @@ namespace AZ.Dapper.LambdaExtension.Adapter
 
         public override string IntColumnDefinition { get; } = "INTEGER";
         public override string LongColumnDefinition { get; } = "INTEGER";
-        public override string GuidColumnDefinition { get; } = "VARCHAR(32)";
+        public override string GuidColumnDefinition { get; } = "VARCHAR(48)";
         public override string BoolColumnDefinition { get; } = "INTEGER";
         public override string RealColumnDefinition { get; } = "REAL";
         public override string DecimalColumnDefinition { get; } = "NUMERIC";
@@ -27,6 +27,8 @@ namespace AZ.Dapper.LambdaExtension.Adapter
         public override string PrimaryKeyDefinition { get; } = " Primary Key";
 
         public override string SelectIdentitySql { get; set; } = "select last_insert_rowid()";
+
+        public override string CreateTablePrefix { get; } = "create table if not EXISTS ";
 
         public Sqlite3Adapter()
             : base(SqlConst.LeftTokens[0], SqlConst.RightTokens[0], SqlConst.ParamPrefixs[0])

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace AZ.Dapper.LambdaExtension
+namespace Dapper.LambdaExtension.Extentions
 {
     public class PagedResult<T> where T : class
     {

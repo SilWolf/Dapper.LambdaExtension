@@ -7,7 +7,7 @@
     <ProjectGuid>{8B94DAD8-CF44-4FF7-BF66-AA2A0E8B2A63}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AZ.Dapper.LambdaExtension</RootNamespace>
+    <RootNamespace>Dapper.LambdaExtension</RootNamespace>
     <AssemblyName>AZ.Dapper.LambdaExtension</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

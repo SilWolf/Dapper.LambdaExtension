@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using AZ.Dapper.LambdaExtension.Adapter;
-using AZ.Dapper.LambdaExtension.Entity;
-using AZ.Dapper.LambdaExtension.LambdaSqlBuilder.Adapter;
-using AZ.Dapper.LambdaExtension.Resolver;
+using Dapper.LambdaExtension.LambdaSqlBuilder.Adapter;
+using Dapper.LambdaExtension.LambdaSqlBuilder.Entity;
+using Dapper.LambdaExtension.LambdaSqlBuilder.Resolver;
 
-namespace AZ.Dapper.LambdaExtension
+namespace Dapper.LambdaExtension.LambdaSqlBuilder
 {
     [Serializable]
     public abstract class SqlExpBase
@@ -26,12 +25,12 @@ namespace AZ.Dapper.LambdaExtension
 
         }
 
-        public SqlExpBase(SqlAdapterType adater, string tableName,Type entityType)
+        public SqlExpBase(SqlAdapterType adater,Type entityType)
         {
             _type = SqlType.Query;
             _adapter = adater;
             _entityType = entityType;
-            _builder = new Builder.Builder(_type, tableName,entityType, AdapterFactory.GetAdapterInstance(_adapter));
+            _builder = new Builder.Builder(_type, entityType, AdapterFactory.GetAdapterInstance(_adapter));
             _resolver = new LambdaResolver(_builder);
         }
 

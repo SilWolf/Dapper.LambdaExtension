@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using AZ.Dapper.LambdaExtension.Attributes;
-using AZ.Dapper.LambdaExtension.LambdaSqlBuilder.Entity;
+using Dapper.LambdaExtension.LambdaSqlBuilder.Attributes;
+using Dapper.LambdaExtension.LambdaSqlBuilder.Entity;
 
-namespace AZ.Dapper.LambdaExtension.Helpers
+namespace Dapper.LambdaExtension.Helpers
 {
     public static class EntityHelper
     {
@@ -44,10 +41,16 @@ namespace AZ.Dapper.LambdaExtension.Helpers
 
                     var cname = cp.Name;
 
+                    var alias = cname;
+                    if (columnAttr != null)
+                    {
+                        alias = columnAttr.Name;
+                    }
+
+
                     var nullable = cp.PropertyType.IsNullableType();
 
-                    var cd = new SqlColumnDefine(cname, columnAttr.Name, null, cp.PropertyType, nullable, columnAttr, keyAttr,
-                        dataTypeAttr);
+                    var cd = new SqlColumnDefine(cname, alias, null, cp.PropertyType, nullable, columnAttr, keyAttr,dataTypeAttr);
 
                     colDeflist.Add(cd);
                 }

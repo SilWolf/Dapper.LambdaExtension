@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using AZ.Dapper.LambdaExtension.Attributes;
+using Dapper.LambdaExtension.LambdaSqlBuilder.Attributes;
 
-namespace AZ.Dapper.LambdaExtension.Resolver
+namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
 {
     [Serializable]
     partial class LambdaResolver
@@ -27,12 +27,12 @@ namespace AZ.Dapper.LambdaExtension.Resolver
         }
 
         #region helpers
-        public static string GetColumnName<T>(Expression<Func<T, object>> selector)
+        public   string GetColumnName<T>(Expression<Func<T, object>> selector)
         {
             return GetColumnName(GetMemberExpression(selector.Body));
         }
 
-        public static string GetColumnName(Expression expression)
+        public   string GetColumnName(Expression expression)
         {
             var member = GetMemberExpression(expression);
             var column = member.Member.GetCustomAttributes(false).OfType<LamColumnAttribute>().FirstOrDefault();
@@ -42,21 +42,29 @@ namespace AZ.Dapper.LambdaExtension.Resolver
                 return member.Member.Name;
         }
 
-        public static string GetTableName<T>()
+        public   string GetTableName<T>()
         {
             return GetTableName(typeof(T));
         }
 
-        public static string GetTableName(Type type)
+        public   string GetTableName(Type type)
         {
             var column = type.GetCustomAttributes(false).OfType<LamTableAttribute>().FirstOrDefault();
             if (column != null)
-                return column.Name;
+            {
+                var tname = column.Name;
+                if (string.IsNullOrEmpty(tname))
+                {
+                    tname = type.Name;
+                }
+
+                return _builder.Adapter.Table(tname, column.Schema);
+            }
             else
                 return type.Name;
         }
 
-        private static string GetTableName(MemberExpression expression)
+        private   string GetTableName(MemberExpression expression)
         {
             return GetTableName(expression.Member.DeclaringType);
         }

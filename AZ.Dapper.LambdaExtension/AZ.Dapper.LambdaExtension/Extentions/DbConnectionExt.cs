@@ -1,11 +1,14 @@
-﻿using System;
-using System.Data;
-using AZ.Dapper.LambdaExtension.Adapter;
-using AZ.Dapper.LambdaExtension.Helpers;
-using AZ.Dapper.LambdaExtension.LambdaSqlBuilder.Adapter;
-using Dapper;
+﻿using System.Data;
+using Dapper.LambdaExtension.Helpers;
+using Dapper.LambdaExtension.LambdaSqlBuilder.Adapter;
 
-namespace AZ.Dapper.LambdaExtension.Extentions
+#if ZEROPLUS
+  using ZeroPlus.Dapper;
+#else
+  using Dapper;
+#endif
+
+namespace Dapper.LambdaExtension.Extentions
 {
     public static class DbConnectionExt
     {

@@ -1,13 +1,13 @@
-﻿using AZ.Dapper.LambdaExtension.Resolver.ExpressionTree;
+﻿using Dapper.LambdaExtension.LambdaSqlBuilder.Resolver.ExpressionTree;
 
-namespace AZ.Dapper.LambdaExtension.Builder
+namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
 {
     partial class Builder
     {
         public void Join(string originalTableName, string joinTableName, string leftField, string rightField)
         {
             var joinString = string.Format("JOIN {0} ON {1} = {2}",
-                                           _adapter.Table(joinTableName),
+                                           _adapter.Table(joinTableName,""),
                                            _adapter.Field(originalTableName, leftField),
                                            _adapter.Field(joinTableName, rightField));
             _tableNames.Add(joinTableName);
@@ -25,7 +25,7 @@ namespace AZ.Dapper.LambdaExtension.Builder
 
         public void Select(string tableName)
         {
-            var selectionString = string.Format("{0}.*", _adapter.Table(tableName));
+            var selectionString = string.Format("{0}.*", _adapter.Table(tableName,_schema));
             _selectionList.Add(selectionString);
         }
 

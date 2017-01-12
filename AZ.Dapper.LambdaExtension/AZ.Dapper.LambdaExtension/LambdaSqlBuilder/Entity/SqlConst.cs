@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AZ.Dapper.LambdaExtension.Entity
+namespace Dapper.LambdaExtension.LambdaSqlBuilder.Entity
 {
     [Serializable]
     internal class SqlConst

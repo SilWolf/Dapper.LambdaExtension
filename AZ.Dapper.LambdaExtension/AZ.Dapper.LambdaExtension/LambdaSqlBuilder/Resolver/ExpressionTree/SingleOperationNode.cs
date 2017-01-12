@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace AZ.Dapper.LambdaExtension.Resolver.ExpressionTree
+namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver.ExpressionTree
 {
     class SingleOperationNode : Node
     {

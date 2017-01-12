@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AZ.Dapper.LambdaExtension.Adapter;
 
-namespace AZ.Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
+namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
 {
     public static class AdapterFactory
     {

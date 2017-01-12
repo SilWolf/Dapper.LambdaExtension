@@ -1,4 +1,4 @@
-﻿namespace AZ.Dapper.LambdaExtension.Resolver.ExpressionTree
+﻿namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver.ExpressionTree
 {
     public enum LikeMethod
     {

@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlTypes;
-using AZ.Dapper.LambdaExtension.Entity;
-using AZ.Dapper.LambdaExtension.LambdaSqlBuilder;
-using AZ.Dapper.LambdaExtension.LambdaSqlBuilder.Entity;
+using Dapper.LambdaExtension.LambdaSqlBuilder.Entity;
 
-namespace AZ.Dapper.LambdaExtension.Adapter
+namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
 {
     [Serializable]
     abstract class AdapterBase : ISqlAdapter
@@ -87,7 +84,7 @@ namespace AZ.Dapper.LambdaExtension.Adapter
 
         public virtual bool SupportParameter { get { return true; } }
 
-        public virtual string Table(string tableName)
+        public virtual string Table(string tableName,string schema)
         {
             return string.Format("{0}{1}{2}", _leftToken, tableName, _rightToken);
         }
@@ -99,7 +96,7 @@ namespace AZ.Dapper.LambdaExtension.Adapter
 
         public virtual string Field(string tableName, string fieldName)
         {
-            return string.Format("{0}.{1}", this.Table(tableName), this.Field(fieldName));
+            return string.Format("{0}.{1}", this.Table(tableName,""), this.Field(fieldName));
         }
 
         public virtual string Parameter(string parameterId)
@@ -145,16 +142,16 @@ namespace AZ.Dapper.LambdaExtension.Adapter
             {
                 if (tableDefine.TableAttribute.Name != null && !string.IsNullOrEmpty(tableDefine.TableAttribute.Name))
                 {
-                    tableName = tableDefine.TableAttribute.Name;
+                    tableName = _leftToken + tableDefine.TableAttribute.Name + _rightToken;
                 }
 
                 if (tableDefine.TableAttribute.Schema != null)
                 {
-                    tableName =(tableDefine.TableAttribute.Schema + ".")+tableName;
+                    tableName =(_leftToken + tableDefine.TableAttribute.Schema + _rightToken + ".") + tableName ;
                 }
             }
 
-            sql += _leftToken + tableName + _rightToken;
+           sql +=  tableName ;
 
             sql += " (";
 

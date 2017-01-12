@@ -7,13 +7,15 @@ using System.Linq.Expressions;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
-using System.Xml;
-using AZ.Dapper.LambdaExtension.Adapter;
-using AZ.Dapper.LambdaExtension.Extentions;
-using AZ.Dapper.LambdaExtension.Helpers;
-using Dapper;
+using Dapper.LambdaExtension.LambdaSqlBuilder;
 
-namespace AZ.Dapper.LambdaExtension
+#if ZEROPLUS
+  using ZeroPlus.Dapper;
+#else
+using Dapper;
+#endif
+
+namespace Dapper.LambdaExtension.Extentions
 {
     public static class DapperLambdaExt
     {
@@ -80,7 +82,7 @@ namespace AZ.Dapper.LambdaExtension
 
         }
 
-        public static int InsertList<T>(this IDbConnection db, List<T> entitys, IDbTransaction trans = null, int? commandTimeout = null)
+        public static int InsertList<T>(this IDbConnection db, IEnumerable<T> entitys, IDbTransaction trans = null, int? commandTimeout = null)
         {
 
             var sqllam = new SqlExp<T>(db.GetAdapter());
@@ -116,7 +118,7 @@ namespace AZ.Dapper.LambdaExtension
 
       
 
-        public static int UpdateList<T>(this IDbConnection db, List<T> entitys, IDbTransaction trans = null, int? commandTimeout = null)
+        public static int UpdateList<T>(this IDbConnection db, IEnumerable<T> entitys, IDbTransaction trans = null, int? commandTimeout = null)
         {
 
             var sqllam = new SqlExp<T>(db.GetAdapter());
@@ -166,7 +168,7 @@ namespace AZ.Dapper.LambdaExtension
 
         }
 
-        public static int DeleteList<T>(this IDbConnection db, List<T> engityList, IDbTransaction trans = null, int? commandTimeout = null)
+        public static int DeleteList<T>(this IDbConnection db, IEnumerable<T> engityList, IDbTransaction trans = null, int? commandTimeout = null)
         {
 
             var sqllam = new SqlExp<T>(db.GetAdapter());
@@ -185,6 +187,10 @@ namespace AZ.Dapper.LambdaExtension
 
         public static int Delete<T>(this IDbConnection db, Expression<Func<T,bool>> deleteExpression, IDbTransaction trans = null, int? commandTimeout = null)
         {
+            if (deleteExpression == null)
+            {
+                throw new Exception("delete expression is null!");
+            }
 
             var sqllam = new SqlExp<T>(db.GetAdapter());
 

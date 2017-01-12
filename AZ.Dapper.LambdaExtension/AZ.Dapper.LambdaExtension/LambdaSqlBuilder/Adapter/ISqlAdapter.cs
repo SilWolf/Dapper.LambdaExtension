@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
-using AZ.Dapper.LambdaExtension.Entity;
-using AZ.Dapper.LambdaExtension.LambdaSqlBuilder.Entity;
+using Dapper.LambdaExtension.LambdaSqlBuilder.Entity;
 
-namespace AZ.Dapper.LambdaExtension.Adapter
+namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
 {
  
     public interface ISqlAdapter
@@ -18,7 +17,7 @@ namespace AZ.Dapper.LambdaExtension.Adapter
         string Update(SqlEntity entity);
         string Delete(SqlEntity entity);
 
-        string Table(string tableName);
+        string Table(string tableName,string schema);
         string Field(string filedName);
         string Field(string tableName, string fieldName);
         string Parameter(string parameterId);

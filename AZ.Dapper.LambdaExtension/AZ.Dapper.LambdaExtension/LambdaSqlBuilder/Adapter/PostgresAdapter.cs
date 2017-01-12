@@ -1,7 +1,7 @@
 ﻿using System;
-using AZ.Dapper.LambdaExtension.Entity;
+using Dapper.LambdaExtension.LambdaSqlBuilder.Entity;
 
-namespace AZ.Dapper.LambdaExtension.Adapter
+namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
 {
     [Serializable]
     class PostgresAdapter : AdapterBase
@@ -47,12 +47,17 @@ namespace AZ.Dapper.LambdaExtension.Adapter
 
         public override string Field(string tableName, string fieldName)
         {
-            return string.Format("{0}.{1}", Table(tableName), this.Field(fieldName)); //fieldName;
+            return string.Format("{0}.{1}", Table(tableName,""), this.Field(fieldName)); //fieldName;
         }
 
-        public override string Table(string tableName)
+        public override string Table(string tableName,string schema)
         {
-            return string.Format("{0}{1}{2}", "", tableName, "");
+            var tbname = string.Format("{0}{1}{2}", "", tableName, "");
+            if (!string.IsNullOrEmpty(schema))
+            {
+                return _leftToken + schema + _rightToken + "."+tbname;
+            }
+            return tbname;
         }
 
         public override string LikeStagement()

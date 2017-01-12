@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AZ.Dapper.LambdaExtension;
 using ConsoleApp1;
  
  
 using Dapper;
- 
+using Dapper.LambdaExtension.Extentions;
 using testdemo.Entities;
 
 namespace testdemo
