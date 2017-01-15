@@ -20,7 +20,7 @@ namespace Dapper.LambdaExtension.Helpers
 //处理表定义
             var name = type.Name;
 
-            var tableAttr = type.GetCustomAttribute<LamTableAttribute>();
+            var tableAttr = type.GetCustomAttribute<DBTableAttribute>();
 
             var sqlTableDef = new SqlTableDefine(tableAttr, name);
 
@@ -31,13 +31,13 @@ namespace Dapper.LambdaExtension.Helpers
 
             foreach (var cp in columns)
             {
-                var ignore = cp.GetCustomAttribute<LamIgnoreAttribute>();
+                var ignore = cp.GetCustomAttribute<DBIgnoreAttribute>();
 
                 if (ignore == null)
                 {
-                    var keyAttr = cp.GetCustomAttribute<LamKeyAttribute>();
-                    var columnAttr = cp.GetCustomAttribute<LamColumnAttribute>();
-                    var dataTypeAttr = cp.GetCustomAttribute<LamCustomeDataTypeAttribute>();
+                    var keyAttr = cp.GetCustomAttribute<DBKeyAttribute>();
+                    var columnAttr = cp.GetCustomAttribute<DBColumnAttribute>();
+                    var dataTypeAttr = cp.GetCustomAttribute<DBCustomeDataTypeAttribute>();
 
                     var cname = cp.Name;
 

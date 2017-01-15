@@ -11,11 +11,11 @@ namespace testdemo.Entities
      
     public class Test2
     {
-        [LamKey(true)]
+        [DBKey(true)]
         
         public int Id { get; set; }
 
-        [LamColumn("c_name")]
+        [DBColumn("c_name")]
         public string Name { get; set; }
     }
 }

@@ -16,16 +16,16 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Entity
 
         public bool NullAble { get; set; }
 
-        public LamColumnAttribute ColumnAttribute { get; set; }
+        public DBColumnAttribute ColumnAttribute { get; set; }
 
-        public LamKeyAttribute KeyAttribute { get; set; }
+        public DBKeyAttribute KeyAttribute { get; set; }
 
-        public LamCustomeDataTypeAttribute DataTypeAttribute { get; set; }
+        public DBCustomeDataTypeAttribute DataTypeAttribute { get; set; }
 
 
-        public LamIgnoreAttribute IgnoreAttribute { get; set; }
+        public DBIgnoreAttribute IgnoreAttribute { get; set; }
 
-        public SqlColumnDefine(string name, string aliasName, object value,Type valueType, bool nullAble,LamColumnAttribute columnAttr, LamKeyAttribute keyAttr, LamCustomeDataTypeAttribute customeDataTypeAttr, LamIgnoreAttribute ignoreAttr=null)
+        public SqlColumnDefine(string name, string aliasName, object value,Type valueType, bool nullAble,DBColumnAttribute columnAttr, DBKeyAttribute keyAttr, DBCustomeDataTypeAttribute customeDataTypeAttr, DBIgnoreAttribute ignoreAttr=null)
         {
             Name = name;
             AliasName = aliasName;

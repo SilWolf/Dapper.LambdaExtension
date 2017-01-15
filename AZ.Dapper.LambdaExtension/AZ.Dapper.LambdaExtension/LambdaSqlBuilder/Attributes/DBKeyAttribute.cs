@@ -3,14 +3,14 @@
 namespace Dapper.LambdaExtension.LambdaSqlBuilder.Attributes
 {
     [AttributeUsage(AttributeTargets.Property)]
-    public class LamKeyAttribute : Attribute
+    public class DBKeyAttribute : Attribute
     {
-        public LamKeyAttribute(bool increment)
+        public DBKeyAttribute(bool increment)
         {
             this.Increment = increment;
         }
 
-        public LamKeyAttribute()
+        public DBKeyAttribute()
             : this(false)
         {
 

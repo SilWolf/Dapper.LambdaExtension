@@ -9,16 +9,17 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using Dapper.LambdaExtension.LambdaSqlBuilder;
 
-#if ZEROPLUS
-  using ZeroPlus.Dapper;
-#else
-using Dapper;
-#endif
+ 
 
 namespace Dapper.LambdaExtension.Extentions
 {
     public static class DapperLambdaExt
     {
+        static DapperLambdaExt()
+        {
+            PreApplicationStart.RegisterTypeMaps();
+        }
+
         public static string GetParameterString(IDictionary<string, object> dic)
         {
             StringBuilder sb = new StringBuilder();

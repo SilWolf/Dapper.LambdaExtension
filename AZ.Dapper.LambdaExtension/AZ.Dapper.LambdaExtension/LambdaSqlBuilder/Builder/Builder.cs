@@ -155,7 +155,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
 
                     if (!string.IsNullOrEmpty(cdef.AliasName))
                     {
-                        s += " as " + _adapter.Field(cdef.Name);
+                        //s += " as " + _adapter.Field(cdef.Name);//use custome type mapped instead as.
                     }
                     else
                     {

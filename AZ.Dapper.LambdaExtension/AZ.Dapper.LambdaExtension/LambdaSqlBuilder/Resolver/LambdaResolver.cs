@@ -35,7 +35,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
         public   string GetColumnName(Expression expression)
         {
             var member = GetMemberExpression(expression);
-            var column = member.Member.GetCustomAttributes(false).OfType<LamColumnAttribute>().FirstOrDefault();
+            var column = member.Member.GetCustomAttributes(false).OfType<DBColumnAttribute>().FirstOrDefault();
             if (column != null)
                 return column.Name;
             else
@@ -49,7 +49,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
 
         public   string GetTableName(Type type)
         {
-            var column = type.GetCustomAttributes(false).OfType<LamTableAttribute>().FirstOrDefault();
+            var column = type.GetCustomAttributes(false).OfType<DBTableAttribute>().FirstOrDefault();
             if (column != null)
             {
                 var tname = column.Name;

@@ -1,17 +1,16 @@
 ﻿using System.Data;
 using Dapper.LambdaExtension.Helpers;
 using Dapper.LambdaExtension.LambdaSqlBuilder.Adapter;
-
-#if ZEROPLUS
-  using ZeroPlus.Dapper;
-#else
-  using Dapper;
-#endif
+ 
 
 namespace Dapper.LambdaExtension.Extentions
 {
     public static class DbConnectionExt
     {
+        static DbConnectionExt()
+        {
+            PreApplicationStart.RegisterTypeMaps();
+        }
         public static SqlAdapterType GetAdapter(this IDbConnection dbconn)
         {
             var typeName = dbconn.GetType().Name;

@@ -55,11 +55,11 @@
     <Compile Include="LambdaSqlBuilder\Adapter\Sqlite3Adapter.cs" />
     <Compile Include="LambdaSqlBuilder\Adapter\SqlserverAdapter.cs" />
     <Compile Include="LambdaSqlBuilder\Adapter\SqlAnyWhereAdapter.cs" />
-    <Compile Include="LambdaSqlBuilder\Attributes\LamColumnAttribute.cs" />
-    <Compile Include="LambdaSqlBuilder\Attributes\LamCustomeDataType.cs" />
-    <Compile Include="LambdaSqlBuilder\Attributes\LamIgnoreAttribute.cs" />
-    <Compile Include="LambdaSqlBuilder\Attributes\LamKeyAttribute.cs" />
-    <Compile Include="LambdaSqlBuilder\Attributes\LamTableAttribute.cs" />
+    <Compile Include="LambdaSqlBuilder\Attributes\DBColumnAttribute.cs" />
+    <Compile Include="LambdaSqlBuilder\Attributes\DBCustomeDataTypeAttribute.cs" />
+    <Compile Include="LambdaSqlBuilder\Attributes\DBIgnoreAttribute.cs" />
+    <Compile Include="LambdaSqlBuilder\Attributes\DBKeyAttribute.cs" />
+    <Compile Include="LambdaSqlBuilder\Attributes\DBTableAttribute.cs" />
     <Compile Include="LambdaSqlBuilder\Builder\Builder.cs" />
     <Compile Include="LambdaSqlBuilder\Builder\BuilderCommon.cs" />
     <Compile Include="LambdaSqlBuilder\Builder\BuilderField.cs" />
@@ -74,6 +74,7 @@
     <Compile Include="Extentions\DbConnectionExt.cs" />
     <Compile Include="Extentions\PagedResult.cs" />
     <Compile Include="LambdaSqlBuilder\Entity\SqlTableDefine.cs" />
+    <Compile Include="PreApplicationStart.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="LambdaSqlBuilder\Resolver\EntityResolver.cs" />
     <Compile Include="LambdaSqlBuilder\Resolver\ExpressionTree\LikeMethod.cs" />

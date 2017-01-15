@@ -3,10 +3,10 @@ using Dapper.LambdaExtension.LambdaSqlBuilder.Attributes;
 
 namespace testdemo.Entities
 {
-    [LamTable("tbn1")]
+    [DBTable("tbn1")]
     public class Tbn
     {
-        [LamKey]
+        [DBKey]
         public int id { get; set; }
 
         public string name { get; set; }

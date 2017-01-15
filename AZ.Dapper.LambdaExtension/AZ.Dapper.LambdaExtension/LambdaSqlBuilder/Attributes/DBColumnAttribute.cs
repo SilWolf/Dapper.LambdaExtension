@@ -3,9 +3,9 @@
 namespace Dapper.LambdaExtension.LambdaSqlBuilder.Attributes
 {
     [AttributeUsage(AttributeTargets.Property)]
-    public class LamColumnAttribute : Attribute
+    public class DBColumnAttribute : Attribute
     {
-        public LamColumnAttribute(string name)
+        public DBColumnAttribute(string name)
         {
             this.Name = name;
         }

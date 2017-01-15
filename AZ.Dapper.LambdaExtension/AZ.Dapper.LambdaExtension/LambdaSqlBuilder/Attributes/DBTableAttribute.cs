@@ -3,11 +3,11 @@
 namespace Dapper.LambdaExtension.LambdaSqlBuilder.Attributes
 {
     [AttributeUsage(AttributeTargets.Class)]
-    public class LamTableAttribute : Attribute
+    public class DBTableAttribute : Attribute
     {
 
 
-        public LamTableAttribute(string name,string schema=null)
+        public DBTableAttribute(string name,string schema=null)
         {
             this.Name = name;
             this.Schema = schema;

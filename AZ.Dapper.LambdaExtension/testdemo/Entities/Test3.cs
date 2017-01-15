@@ -7,14 +7,14 @@ using Dapper.LambdaExtension.LambdaSqlBuilder.Attributes;
 
 namespace testdemo.Entities
 {
-    [LamTable("o_test3")]
+    [DBTable("o_test3")]
     public class Test3
     {
-        [LamKey(true)]
-        [LamColumn("id")]
+        [DBKey(true)]
+        [DBColumn("id")]
         public int Id { get; set; }
 
-        [LamColumn("v_name")]
+        [DBColumn("v_name")]
         public string VName { get; set; }
     }
 }

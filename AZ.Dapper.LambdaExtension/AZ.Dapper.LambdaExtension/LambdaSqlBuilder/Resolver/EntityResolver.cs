@@ -45,7 +45,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
                 var fieldAlias = propname;
 
                 //resolve custome column name
-                var colAttr = item.GetCustomAttribute<LamColumnAttribute>();
+                var colAttr = item.GetCustomAttribute<DBColumnAttribute>();
 
                 if (colAttr != null)
                 {
@@ -73,7 +73,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
                 var fieldAlias = propname;
 
                 //resolve custome column name
-                var colAttr = item.GetCustomAttribute<LamColumnAttribute>();
+                var colAttr = item.GetCustomAttribute<DBColumnAttribute>();
 
                 if (colAttr != null)
                 {
@@ -92,10 +92,10 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
             Type type = entity.GetType();
             var ps = type.GetProperties().Where(m =>
             {
-                var obj = m.GetCustomAttributes(typeof(LamKeyAttribute), false).FirstOrDefault();
+                var obj = m.GetCustomAttributes(typeof(DBKeyAttribute), false).FirstOrDefault();
                 if (obj != null)
                 {
-                    LamKeyAttribute key = obj as LamKeyAttribute;
+                    DBKeyAttribute key = obj as DBKeyAttribute;
                     return !key.Increment;
                 }
                 return true;
