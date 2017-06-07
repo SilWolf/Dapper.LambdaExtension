@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using Dapper.LambdaExtension.LambdaSqlBuilder.Attributes;
 
+using Dapper.LambdaExtension.LambdaSqlBuilder.Attributes;
+#if NETCOREAPP1_0
+using System.Reflection;
+#endif
 namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
 {
-    [Serializable]
+    
     partial class LambdaResolver
     {
         private Dictionary<ExpressionType, string> _operationDictionary = new Dictionary<ExpressionType, string>()
@@ -32,24 +35,32 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
             return GetColumnName(GetMemberExpression(selector.Body));
         }
 
-        public   string GetColumnName(Expression expression)
+        public string GetColumnName(Expression expression)
         {
             var member = GetMemberExpression(expression);
+#if NETCOREAPP1_0
+            var column = member.Member.GetCustomAttributes(false).OfType<DBColumnAttribute>().FirstOrDefault();//.GetCustomAttributes(false).OfType<DBColumnAttribute>().FirstOrDefault();
+#else
             var column = member.Member.GetCustomAttributes(false).OfType<DBColumnAttribute>().FirstOrDefault();
+#endif
             if (column != null)
                 return column.Name;
             else
                 return member.Member.Name;
         }
 
-        public   string GetTableName<T>()
+        public string GetTableName<T>()
         {
             return GetTableName(typeof(T));
         }
 
-        public   string GetTableName(Type type)
+        public string GetTableName(Type type)
         {
+#if NETCOREAPP1_0
+            var column = type.GetTypeInfo().GetCustomAttributes(false).OfType<DBTableAttribute>().FirstOrDefault();//.GetCustomAttributes(false).OfType<DBColumnAttribute>().FirstOrDefault();
+#else
             var column = type.GetCustomAttributes(false).OfType<DBTableAttribute>().FirstOrDefault();
+#endif
             if (column != null)
             {
                 var tname = column.Name;
@@ -64,7 +75,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
                 return type.Name;
         }
 
-        private   string GetTableName(MemberExpression expression)
+        private string GetTableName(MemberExpression expression)
         {
             return GetTableName(expression.Member.DeclaringType);
         }

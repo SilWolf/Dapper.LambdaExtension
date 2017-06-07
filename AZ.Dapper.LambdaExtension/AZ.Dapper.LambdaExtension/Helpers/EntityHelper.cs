@@ -17,11 +17,13 @@ namespace Dapper.LambdaExtension.Helpers
 
         private static Tuple<SqlTableDefine, List<SqlColumnDefine>> GetEntityDefine(Type type)
         {
-//处理表定义
+            //处理表定义
             var name = type.Name;
-
+#if NETCOREAPP1_0
+            var tableAttr = type.GetTypeInfo().GetCustomAttribute<DBTableAttribute>();
+#else
             var tableAttr = type.GetCustomAttribute<DBTableAttribute>();
-
+#endif 
             var sqlTableDef = new SqlTableDefine(tableAttr, name);
 
             //处理列定义
@@ -47,10 +49,27 @@ namespace Dapper.LambdaExtension.Helpers
                         alias = columnAttr.Name;
                     }
 
+                    // edit by cheery 2017-2-21
+                    var nullable = true;
+                    // 如果是Key 不允许空
+                    if (keyAttr != null)
+                    {
+                        nullable = false;
+                    }
+                    // 如果字段定义上有是否允许空标记 则依赖该标记
+                    else if (columnAttr?.Nullable != null)
+                    {
+                        nullable = columnAttr.Nullable.Value;
+                    }
+                    // 否则 根据类型判断
+                    else
+                    {
+                        nullable = cp.PropertyType.IsNullableType();
+                    }
 
-                    var nullable = cp.PropertyType.IsNullableType();
+                    //var nullable = keyAttr == null && (columnAttr?.Nullable ?? cp.PropertyType.IsNullableType());
 
-                    var cd = new SqlColumnDefine(cname, alias, null, cp.PropertyType, nullable, columnAttr, keyAttr,dataTypeAttr);
+                    var cd = new SqlColumnDefine(cname, alias, null, cp.PropertyType, nullable, columnAttr, keyAttr, dataTypeAttr);
 
                     colDeflist.Add(cd);
                 }
@@ -72,8 +91,26 @@ namespace Dapper.LambdaExtension.Helpers
 
         public static bool IsNullableType(this Type theType)
         {
-            return (theType.IsGenericType
-                && theType.GetGenericTypeDefinition() == typeof(Nullable<>));
+            // edit by cheery 2017-2-21
+            // 如果是引用类型，默认允许空
+#if NETCOREAPP1_0
+            if (!theType.GetTypeInfo().IsValueType)
+#else
+
+            if (!theType.IsValueType)
+#endif
+            {
+                return true;
+            }
+
+            var isgenericType = false;
+#if NETCOREAPP1_0
+            isgenericType = theType.GetTypeInfo().IsGenericType;
+#else
+
+            isgenericType = theType.IsGenericType;
+#endif
+            return (isgenericType && theType.GetGenericTypeDefinition() == typeof(Nullable<>));
         }
     }
 }

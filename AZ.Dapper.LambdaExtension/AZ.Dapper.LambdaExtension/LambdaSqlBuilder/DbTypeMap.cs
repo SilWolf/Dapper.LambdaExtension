@@ -21,5 +21,10 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
             ColumnTypeMap[typeof(T)] = columnDefine;
             ColumnDbTypeMap[typeof(T)] = dbtype;
         }
+
+        public void Set<T>(DbType dbtype)
+        {
+            ColumnDbTypeMap[typeof(T)] = dbtype;
+        }
     }
 }

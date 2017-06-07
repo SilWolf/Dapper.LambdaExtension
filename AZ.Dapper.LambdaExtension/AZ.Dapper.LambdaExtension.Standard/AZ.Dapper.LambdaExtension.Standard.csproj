@@ -1,0 +1,83 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.6</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE;DEBUG;NETCOREAPP1_0;NETSTANDARD1_6</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>D:\WorkRoot\Open\github\Dapper.LambdaExtension\Release\NetStandard\</OutputPath>
+    <DefineConstants>TRACE;RELEASE;NETCOREAPP1_0;NETSTANDARD1_6</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\AZ.Dapper.LambdaExtension\Extentions\DapperLambdaExt.cs" Link="Extentions\DapperLambdaExt.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\Extentions\DbConnectionExt.cs" Link="Extentions\DbConnectionExt.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\Extentions\Extension.cs" Link="Extentions\Extension.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\Extentions\PagedResult.cs" Link="Extentions\PagedResult.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\Helpers\EntityHelper.cs" Link="Helpers\EntityHelper.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Adapter\AdapterBase.cs" Link="LambdaSqlBuilder\Adapter\AdapterBase.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Adapter\AdapterFactory.cs" Link="LambdaSqlBuilder\Adapter\AdapterFactory.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Adapter\ISqlAdapter.cs" Link="LambdaSqlBuilder\Adapter\ISqlAdapter.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Adapter\MySqlAdapter.cs" Link="LambdaSqlBuilder\Adapter\MySqlAdapter.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Adapter\OracleAdapter.cs" Link="LambdaSqlBuilder\Adapter\OracleAdapter.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Adapter\PostgresAdapter.cs" Link="LambdaSqlBuilder\Adapter\PostgresAdapter.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Adapter\SqlAdapterType.cs" Link="LambdaSqlBuilder\Adapter\SqlAdapterType.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Adapter\SqlAnyWhereAdapter.cs" Link="LambdaSqlBuilder\Adapter\SqlAnyWhereAdapter.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Adapter\Sqlite3Adapter.cs" Link="LambdaSqlBuilder\Adapter\Sqlite3Adapter.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Adapter\SqlserverAdapter.cs" Link="LambdaSqlBuilder\Adapter\SqlserverAdapter.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Attributes\DBColumnAttribute.cs" Link="LambdaSqlBuilder\Attributes\DBColumnAttribute.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Attributes\DBCustomeDataTypeAttribute.cs" Link="LambdaSqlBuilder\Attributes\DBCustomeDataTypeAttribute.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Attributes\DBIgnoreAttribute.cs" Link="LambdaSqlBuilder\Attributes\DBIgnoreAttribute.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Attributes\DBKeyAttribute.cs" Link="LambdaSqlBuilder\Attributes\DBKeyAttribute.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Attributes\DBTableAttribute.cs" Link="LambdaSqlBuilder\Attributes\DBTableAttribute.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Builder\Builder.cs" Link="LambdaSqlBuilder\Builder\Builder.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Builder\BuilderCommon.cs" Link="LambdaSqlBuilder\Builder\BuilderCommon.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Builder\BuilderField.cs" Link="LambdaSqlBuilder\Builder\BuilderField.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Builder\BuilderOther.cs" Link="LambdaSqlBuilder\Builder\BuilderOther.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\DbTypeMap.cs" Link="LambdaSqlBuilder\DbTypeMap.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Entity\SqlColumnDefine.cs" Link="LambdaSqlBuilder\Entity\SqlColumnDefine.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Entity\SqlColumnEntity.cs" Link="LambdaSqlBuilder\Entity\SqlColumnEntity.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Entity\SqlConst.cs" Link="LambdaSqlBuilder\Entity\SqlConst.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Entity\SqlEntity.cs" Link="LambdaSqlBuilder\Entity\SqlEntity.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Entity\SqlTableDefine.cs" Link="LambdaSqlBuilder\Entity\SqlTableDefine.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Resolver\EntityResolver.cs" Link="LambdaSqlBuilder\Resolver\EntityResolver.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Resolver\ExpressionTree\LikeMethod.cs" Link="LambdaSqlBuilder\Resolver\ExpressionTree\LikeMethod.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Resolver\ExpressionTree\LikeNode.cs" Link="LambdaSqlBuilder\Resolver\ExpressionTree\LikeNode.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Resolver\ExpressionTree\MemberNode.cs" Link="LambdaSqlBuilder\Resolver\ExpressionTree\MemberNode.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Resolver\ExpressionTree\Node.cs" Link="LambdaSqlBuilder\Resolver\ExpressionTree\Node.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Resolver\ExpressionTree\OperationNode.cs" Link="LambdaSqlBuilder\Resolver\ExpressionTree\OperationNode.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Resolver\ExpressionTree\SelectFunction.cs" Link="LambdaSqlBuilder\Resolver\ExpressionTree\SelectFunction.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Resolver\ExpressionTree\SingleOperationNode.cs" Link="LambdaSqlBuilder\Resolver\ExpressionTree\SingleOperationNode.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Resolver\ExpressionTree\ValueNode.cs" Link="LambdaSqlBuilder\Resolver\ExpressionTree\ValueNode.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Resolver\LambdaResolver.cs" Link="LambdaSqlBuilder\Resolver\LambdaResolver.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Resolver\LambdaResolverQuery.cs" Link="LambdaSqlBuilder\Resolver\LambdaResolverQuery.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Resolver\LambdaResolverSpec.cs" Link="LambdaSqlBuilder\Resolver\LambdaResolverSpec.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Resolver\LambdaResolverTree.cs" Link="LambdaSqlBuilder\Resolver\LambdaResolverTree.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\SqlExp.cs" Link="LambdaSqlBuilder\SqlExp.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\SqlExpBase.cs" Link="LambdaSqlBuilder\SqlExpBase.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\PreApplicationStart.cs" Link="PreApplicationStart.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="1.50.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="1.1.1" />
+    <PackageReference Include="System.Data.Common" Version="4.3.0" />
+    <PackageReference Include="System.Reflection" Version="4.3.0" />
+    <PackageReference Include="System.Reflection.Extensions" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Extentions\" />
+    <Folder Include="Helpers\" />
+    <Folder Include="LambdaSqlBuilder\Builder\" />
+    <Folder Include="LambdaSqlBuilder\Entity\" />
+    <Folder Include="LambdaSqlBuilder\Attributes\" />
+    <Folder Include="LambdaSqlBuilder\Adapter\" />
+    <Folder Include="LambdaSqlBuilder\Resolver\ExpressionTree\" />
+  </ItemGroup>
+
+</Project>

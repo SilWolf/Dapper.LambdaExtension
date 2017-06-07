@@ -2,7 +2,7 @@
 
 namespace Dapper.LambdaExtension.LambdaSqlBuilder.Entity
 {
-    [Serializable]
+    
     public class SqlColumnEntity
     {
         public object Value { get; set; }

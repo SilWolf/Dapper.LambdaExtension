@@ -9,7 +9,7 @@ using Dapper.LambdaExtension.LambdaSqlBuilder.Entity;
 
 namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
 {
-    [Serializable]
+    
     public partial class Builder
     {
         internal Builder(SqlType type, Type entityType, ISqlAdapter adapter)
@@ -234,6 +234,10 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
             string paramId = this.GetParamId(fieldName);
             string key = _adapter.Field(aliasName);
             string value = _adapter.Parameter(paramId);
+            if (_parameterDic.ContainsKey(value))
+            {
+                value = value + Guid.NewGuid().ToString("n");
+            }
             this.AddParameter(value, fieldValue);
             return string.Format("{0} {1} {2}", key, op, value);
         }

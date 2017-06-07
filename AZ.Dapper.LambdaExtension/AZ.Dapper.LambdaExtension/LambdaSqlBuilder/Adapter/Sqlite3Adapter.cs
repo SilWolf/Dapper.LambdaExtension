@@ -3,24 +3,24 @@ using Dapper.LambdaExtension.LambdaSqlBuilder.Entity;
 
 namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
 {
-    [Serializable]
+    
     class Sqlite3Adapter : AdapterBase
     {
         public override string AutoIncrementDefinition { get; } = "AUTOINCREMENT";
-        public override string StringColumnDefinition { get; } = "VARCHAR(255)";
+        //public override string StringColumnDefinition { get; } = "VARCHAR(255)";
 
-        public override string IntColumnDefinition { get; } = "INTEGER";
-        public override string LongColumnDefinition { get; } = "INTEGER";
-        public override string GuidColumnDefinition { get; } = "VARCHAR(48)";
-        public override string BoolColumnDefinition { get; } = "INTEGER";
-        public override string RealColumnDefinition { get; } = "REAL";
-        public override string DecimalColumnDefinition { get; } = "NUMERIC";
-        public override string BlobColumnDefinition { get; } = "BLOB";
-        public override string DateTimeColumnDefinition { get; } = "DATETIME";
-        public override string TimeColumnDefinition { get; } = "DATETIME";
+        //public override string IntColumnDefinition { get; } = "INTEGER";
+        //public override string LongColumnDefinition { get; } = "INTEGER";
+        //public override string GuidColumnDefinition { get; } = "VARCHAR(48)";
+        //public override string BoolColumnDefinition { get; } = "INTEGER";
+        //public override string RealColumnDefinition { get; } = "REAL";
+        //public override string DecimalColumnDefinition { get; } = "NUMERIC";
+        //public override string BlobColumnDefinition { get; } = "BLOB";
+        //public override string DateTimeColumnDefinition { get; } = "DATETIME";
+        //public override string TimeColumnDefinition { get; } = "DATETIME";
 
-        public override string StringLengthNonUnicodeColumnDefinitionFormat { get; } = "VARCHAR({0})";
-        public override string StringLengthUnicodeColumnDefinitionFormat { get; } = "NVARCHAR({0})";
+        //public override string StringLengthNonUnicodeColumnDefinitionFormat { get; } = "VARCHAR({0})";
+        //public override string StringLengthUnicodeColumnDefinitionFormat { get; } = "NVARCHAR({0})";
 
         public override string ParamStringPrefix { get; } = "@";
 
@@ -46,6 +46,27 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
         public override string Field(string tableName, string fieldName)
         {
             return this.Field(fieldName);
+        }
+
+        public override string TableExistSql(string tableName, string tableSchema)
+        {
+            var sql = $"SELECT COUNT(*) FROM sqlite_master where type='table' and name='{tableName}'";
+
+            return sql;
+        }
+
+        protected override string DbTypeBoolean(string fieldLength)
+        {
+            return "boolean";
+        }
+
+        protected override string DbTypeGuid(string fieldLength)
+        {
+            if (string.IsNullOrEmpty(fieldLength))
+            {
+                fieldLength = "36";
+            }
+            return $"CHAR({fieldLength})";
         }
     }
 }

@@ -7,8 +7,7 @@ using Dapper.LambdaExtension.LambdaSqlBuilder.Resolver;
 using Dapper.LambdaExtension.LambdaSqlBuilder.Resolver.ExpressionTree;
 
 namespace Dapper.LambdaExtension.LambdaSqlBuilder
-{
-    [Serializable]
+{ 
     public class SqlExp<T> : SqlExpBase
     {
         public SqlExp(SqlAdapterType type = SqlAdapterType.SqlServer)
@@ -151,17 +150,35 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
 
         #region 排序
 
-        public SqlExp<T> OrderBy(params Expression<Func<T, object>>[] expressions)
+        //public SqlExp<T> OrderBy(params Expression<Func<T, object>>[] expressions)
+        //{
+        //    foreach (var expression in expressions)
+        //        _resolver.OrderBy(expression);
+        //    return this;
+        //}
+
+        //public SqlExp<T> OrderByDescending(params Expression<Func<T, object>>[] expressions)
+        //{
+        //    foreach (var expression in expressions)
+        //        _resolver.OrderBy(expression, true);
+        //    return this;
+        //}
+
+        public SqlExp<T> OrderBy(Expression<Func<T, object>> expression, bool desc = false)
         {
-            foreach (var expression in expressions)
-                _resolver.OrderBy(expression);
+            _resolver.OrderBy(expression, desc);
             return this;
         }
 
-        public SqlExp<T> OrderByDescending(params Expression<Func<T, object>>[] expressions)
+        public SqlExp<T> OrderBy(string columnName, bool desc = false)
         {
-            foreach (var expression in expressions)
-                _resolver.OrderBy(expression, true);
+            var pe = Expression.Parameter(typeof(T));
+            if (string.IsNullOrEmpty(columnName))
+            {
+                columnName = "id";
+            }
+            var memberExpression = Expression.PropertyOrField(pe, columnName);
+            _resolver.OrderBy<T>(memberExpression, desc);
             return this;
         }
         #endregion
@@ -252,9 +269,28 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
 
         #region 分组
 
-        public SqlExp<T> GroupBy(Expression<Func<T, object>> expression)
+        //public SqlExp<T> GroupBy(Expression<Func<T, object>> expression)
+        //{
+        //    _resolver.GroupBy(expression);
+        //    return this;
+        //}
+
+        public SqlExp<T> GroupBy(params Expression<Func<T, object>>[] expressions)
         {
-            _resolver.GroupBy(expression);
+            foreach (var expression in expressions)
+                _resolver.GroupBy(expression);
+            return this;
+        }
+
+        public SqlExp<T> GroupBy(params string[] columnNames)
+        {
+
+            foreach (var columnName in columnNames)
+            {
+                var pe = Expression.Parameter(typeof(T));
+                var memberExpression = Expression.PropertyOrField(pe, columnName);
+                _resolver.GroupBy<T>(memberExpression);
+            }
             return this;
         }
 

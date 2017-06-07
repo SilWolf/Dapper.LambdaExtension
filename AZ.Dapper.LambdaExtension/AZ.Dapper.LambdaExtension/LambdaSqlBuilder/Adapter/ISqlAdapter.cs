@@ -17,7 +17,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
         string Update(SqlEntity entity);
         string Delete(SqlEntity entity);
 
-        string Table(string tableName,string schema);
+        string Table(string tableName, string schema);
         string Field(string filedName);
         string Field(string tableName, string fieldName);
         string Parameter(string parameterId);
@@ -25,6 +25,16 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
         string LikeStagement();
 
         string LikeChars();
-        string CreateTable(SqlTableDefine tableDefine, List<SqlColumnDefine> columnDefines);
+        string CreateTableSql(SqlTableDefine tableDefine, List<SqlColumnDefine> columnDefines);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        string TableExistSql(string tableName, string tableSchema);
+
+        string DropTableSql(string tableName, string tableSchema);
+
+        string TruncateTableSql(string tableName, string tableSchema);
     }
 }

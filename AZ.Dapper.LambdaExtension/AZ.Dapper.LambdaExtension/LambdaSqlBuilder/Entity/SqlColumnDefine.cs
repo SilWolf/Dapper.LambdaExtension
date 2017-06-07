@@ -3,9 +3,10 @@ using Dapper.LambdaExtension.LambdaSqlBuilder.Attributes;
 
 namespace Dapper.LambdaExtension.LambdaSqlBuilder.Entity
 {
-    [Serializable]
+    
     public class SqlColumnDefine
     {
+        [Obsolete]
         public object Value { get; set; }
 
         public Type ValueType { get; set; }
@@ -20,6 +21,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Entity
 
         public DBKeyAttribute KeyAttribute { get; set; }
 
+        [Obsolete]
         public DBCustomeDataTypeAttribute DataTypeAttribute { get; set; }
 
 
@@ -36,6 +38,14 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Entity
             IgnoreAttribute = ignoreAttr;
             ValueType = valueType;
             NullAble = nullAble;
+        }
+
+        public SqlColumnDefine(DBColumnAttribute columnAttribute, DBKeyAttribute keyAttribute = null)
+        {
+            Name = columnAttribute.Name;
+            AliasName = columnAttribute.Name;
+            ColumnAttribute = columnAttribute;
+            KeyAttribute = keyAttribute;
         }
     }
 }

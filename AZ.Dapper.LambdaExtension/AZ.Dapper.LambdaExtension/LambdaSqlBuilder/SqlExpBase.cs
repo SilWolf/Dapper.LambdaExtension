@@ -6,7 +6,7 @@ using Dapper.LambdaExtension.LambdaSqlBuilder.Resolver;
 
 namespace Dapper.LambdaExtension.LambdaSqlBuilder
 {
-    [Serializable]
+  
     public abstract class SqlExpBase
     {
         internal Builder.Builder _builder;

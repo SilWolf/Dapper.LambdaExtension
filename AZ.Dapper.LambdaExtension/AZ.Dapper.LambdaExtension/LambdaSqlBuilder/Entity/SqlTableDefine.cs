@@ -3,7 +3,7 @@ using Dapper.LambdaExtension.LambdaSqlBuilder.Attributes;
 
 namespace Dapper.LambdaExtension.LambdaSqlBuilder.Entity
 {
-    [Serializable]
+ 
     public class SqlTableDefine
     {
         public DBTableAttribute TableAttribute { get; set; }
@@ -26,6 +26,10 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Entity
             {
                 Name = name;
             }
+        }
+        public SqlTableDefine(DBTableAttribute tableAttr)
+        {
+            TableAttribute = tableAttr;
         }
     }
 }

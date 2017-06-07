@@ -2,7 +2,7 @@
 
 namespace Dapper.LambdaExtension.LambdaSqlBuilder.Entity
 {
-    [Serializable]
+    
     internal class SqlConst
     {
         public static string[] LeftTokens = new string[] { "[", "`", "\"","" };

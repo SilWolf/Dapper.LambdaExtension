@@ -113,7 +113,7 @@ namespace testdemo
         {
             using (var db = GetConnection())
             {
-                return db.QueryWithAction<Test2>(sql =>
+                return db.Query<Test2>(sql =>
                 {
                     sql.WhereIsIn(p => p.Id, new List<object>() {1,4});
                 }).ToList();
@@ -133,7 +133,7 @@ namespace testdemo
         {
             using (var db = GetConnection())
             {
-                return db.PagedQueryWithAction<Test2>(pageSize, pageNumber, sql =>
+                return db.PagedQuery<Test2>(pageSize, pageNumber, sql =>
                 {
                     sql.Where(p => p.Id >= 1);
                 } );

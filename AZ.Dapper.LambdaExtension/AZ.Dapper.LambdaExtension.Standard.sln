@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demos", "Demos", "{0601A551-0F9F-4581-98A9-01F3B889846D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AZ.Dapper.LambdaExtension.Standard", "AZ.Dapper.LambdaExtension.Standard\AZ.Dapper.LambdaExtension.Standard.csproj", "{4D350316-2701-4699-A4EC-EF4723E4ADAF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{7DC4ED95-FB12-439B-A868-40D3C52C0C52}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4D350316-2701-4699-A4EC-EF4723E4ADAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D350316-2701-4699-A4EC-EF4723E4ADAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D350316-2701-4699-A4EC-EF4723E4ADAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D350316-2701-4699-A4EC-EF4723E4ADAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DC4ED95-FB12-439B-A868-40D3C52C0C52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DC4ED95-FB12-439B-A868-40D3C52C0C52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DC4ED95-FB12-439B-A868-40D3C52C0C52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DC4ED95-FB12-439B-A868-40D3C52C0C52}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7DC4ED95-FB12-439B-A868-40D3C52C0C52} = {0601A551-0F9F-4581-98A9-01F3B889846D}
+	EndGlobalSection
+EndGlobal

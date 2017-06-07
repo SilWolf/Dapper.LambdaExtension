@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+ 
 using Dapper.LambdaExtension.LambdaSqlBuilder.Entity;
 using Dapper.LambdaExtension.LambdaSqlBuilder.Resolver.ExpressionTree;
 
+#if NETCOREAPP1_0
+using System.Reflection;
+#endif
 namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
 {
     partial class LambdaResolver
@@ -54,7 +58,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
             }
         }
 
-        private void OrderBy<T>(MemberExpression expression, bool desc)
+        internal void OrderBy<T>(MemberExpression expression, bool desc)
         {
             var fieldName = GetColumnName(GetMemberExpression(expression));
             _builder.OrderBy(GetTableName<T>(), fieldName, desc);
@@ -92,12 +96,21 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
 
         private void Select<T>(MemberExpression expression)
         {
+#if NETCOREAPP1_0
+            if (expression.Type.GetTypeInfo().IsClass && expression.Type != typeof(String))
+            {
+                _builder.Select(GetTableName(expression.Type));
+            }
+            else
+                _builder.Select(GetTableName<T>(), GetColumnName(expression));
+#else
             if (expression.Type.IsClass && expression.Type != typeof(String))
             {
                 _builder.Select(GetTableName(expression.Type));
             }
             else
                 _builder.Select(GetTableName<T>(), GetColumnName(expression));
+#endif
         }
 
         public void SelectWithFunction<T>(Expression<Func<T, object>> expression, SelectFunction selectFunction, string aliasName)
@@ -126,7 +139,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
                 GroupBy<T>(GetMemberExpression(body));
             }
         }
-        private void GroupBy<T>(MemberExpression expression)
+        internal void GroupBy<T>(MemberExpression expression)
         {
             var fieldName = GetColumnName(GetMemberExpression(expression));
             _builder.GroupBy(GetTableName<T>(), fieldName);

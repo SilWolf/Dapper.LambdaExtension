@@ -47,6 +47,11 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
                 //resolve custome column name
                 var colAttr = item.GetCustomAttribute<DBColumnAttribute>();
 
+                var colIgnore = item.GetCustomAttribute<DBIgnoreAttribute>();
+                if (colIgnore != null)
+                {
+                    continue;
+                }
                 if (colAttr != null)
                 {
                     if (!string.IsNullOrEmpty(colAttr.Name))
@@ -66,6 +71,12 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
             var ps = GetPropertyInfos<T>(entity);
             foreach (PropertyInfo item in ps)
             {
+                var colIgnore = item.GetCustomAttribute<DBIgnoreAttribute>();
+                if (colIgnore != null)
+                {
+                    continue;
+                }
+
                 object obj = item.GetValue(entity, null);
 
                 var propname = item.Name;
@@ -74,7 +85,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
 
                 //resolve custome column name
                 var colAttr = item.GetCustomAttribute<DBColumnAttribute>();
-
+                
                 if (colAttr != null)
                 {
                     if (!string.IsNullOrEmpty(colAttr.Name))
@@ -89,7 +100,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
 
         private IEnumerable<PropertyInfo> GetPropertyInfos<T>(T entity)
         {
-            Type type = entity.GetType();
+            Type type = typeof(T);//entity.GetType();
             var ps = type.GetProperties().Where(m =>
             {
                 var obj = m.GetCustomAttributes(typeof(DBKeyAttribute), false).FirstOrDefault();
