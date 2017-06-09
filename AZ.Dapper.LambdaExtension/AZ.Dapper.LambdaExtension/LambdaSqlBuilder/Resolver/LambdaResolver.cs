@@ -4,6 +4,8 @@ using System.Linq;
 using System.Linq.Expressions;
 
 using Dapper.LambdaExtension.LambdaSqlBuilder.Attributes;
+using Dapper.LambdaExtension.LambdaSqlBuilder.Entity;
+
 #if NETCOREAPP1_0
 using System.Reflection;
 #endif
@@ -79,7 +81,21 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
         {
             return GetTableName(expression.Member.DeclaringType);
         }
+        public string GetTableName(SqlTableDefine tableDefine)
+        {
+            if (tableDefine.TableAttribute != null)
+            {
+                var tname = tableDefine.TableAttribute.Name;
+                if (string.IsNullOrEmpty(tname))
+                {
+                    tname = tableDefine.Name;
+                }
 
+                return _builder.Adapter.Table(tname, tableDefine.TableAttribute.Schema);
+            }
+            else
+                return tableDefine.Name;
+        }
         private static BinaryExpression GetBinaryExpression(Expression expression)
         {
             if (expression is BinaryExpression)

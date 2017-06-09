@@ -10,14 +10,18 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
 { 
     public class SqlExp<T> : SqlExpBase
     {
-        public SqlExp(SqlAdapterType type = SqlAdapterType.SqlServer)
-            : base(type,typeof(T))
+        private bool useForCount;
+        public SqlExp(SqlAdapterType type = SqlAdapterType.SqlServer, bool forCount = false)
+            : base(type, typeof(T))
         {
+            useForCount = forCount;
             //_type = SqlType.Query;
             //GetAdapterInstance(type);
             //_builder = new Builder(_type, LambdaResolver.GetTableName<T>(), _defaultAdapter);
             //_resolver = new LambdaResolver(_builder);
         }
+
+
 
         public SqlExp(Expression<Func<T, bool>> expression)
             : this()
@@ -72,12 +76,21 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
             return this;
         }
 
+        public SqlExp<T> Insert(SqlTableDefine tableDefine, List<SqlColumnDefine> columnDefines, bool key = false)
+        {
+            _builder.UpdateSqlType(SqlType.Insert);
+
+            _resolver.ResolveInsert(key, tableDefine, columnDefines);
+            return this;
+        }
+
         public SqlExp<T> Update(T entity)
         {
             _builder.UpdateSqlType(SqlType.Update);
             _resolver.ResolveUpdate<T>(entity);
             return this;
         }
+
 
         public SqlExp<T> Update(object obj)
         {
@@ -86,7 +99,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
             return this;
         }
 
-        public SqlExp<T> Delete(Expression<Func<T, bool>> expression=null)
+        public SqlExp<T> Delete(Expression<Func<T, bool>> expression = null)
         {
             _builder.UpdateSqlType(SqlType.Delete);
             if (expression == null)
@@ -146,16 +159,34 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
             _resolver.QueryByIsIn(true, expression, values);
             return this;
         }
+
         #endregion
 
         #region 排序
 
-        //public SqlExp<T> OrderBy(params Expression<Func<T, object>>[] expressions)
-        //{
-        //    foreach (var expression in expressions)
-        //        _resolver.OrderBy(expression);
-        //    return this;
-        //}
+        public virtual SqlExp<T> OrderBy(Expression<Func<T, object>> expression, bool desc = false)
+        {
+            if (!useForCount)
+            {
+                _resolver.OrderBy(expression, desc);
+            }
+            return this;
+        }
+
+        public SqlExp<T> OrderBy(string columnName, bool desc = false)
+        {
+            if (!useForCount)
+            {
+                var pe = Expression.Parameter(typeof(T));
+                if (string.IsNullOrEmpty(columnName))
+                {
+                    columnName = "id";
+                }
+                var memberExpression = Expression.PropertyOrField(pe, columnName);
+                _resolver.OrderBy<T>(memberExpression, desc);
+            }
+            return this;
+        }
 
         //public SqlExp<T> OrderByDescending(params Expression<Func<T, object>>[] expressions)
         //{
@@ -164,26 +195,27 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
         //    return this;
         //}
 
-        public SqlExp<T> OrderBy(Expression<Func<T, object>> expression, bool desc = false)
-        {
-            _resolver.OrderBy(expression, desc);
-            return this;
-        }
+        //public SqlExp<T> OrderByDescending(params string[] columnNames)
+        //{
 
-        public SqlExp<T> OrderBy(string columnName, bool desc = false)
-        {
-            var pe = Expression.Parameter(typeof(T));
-            if (string.IsNullOrEmpty(columnName))
-            {
-                columnName = "id";
-            }
-            var memberExpression = Expression.PropertyOrField(pe, columnName);
-            _resolver.OrderBy<T>(memberExpression, desc);
-            return this;
-        }
+        //    foreach (var columnName in columnNames)
+        //    {
+        //        var pe = Expression.Parameter(typeof(T));
+        //        // var member = typeof(T).GetProperty(columnName);
+        //        var memberExpression = Expression.PropertyOrField(pe, columnName);
+
+        //        // var memberFunctionExpression = Expression.Lambda<Func<T, object>>(memberExpression, pe);
+        //        _resolver.OrderBy<T>(memberExpression, true);
+
+        //    }
+
+        //    return this;
+        //}
+
         #endregion
 
         #region 查询
+
         public SqlExp<T> Select(params Expression<Func<T, object>>[] expressions)
         {
             foreach (var expression in expressions)
@@ -214,7 +246,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
             return this;
         }
 
-        public SqlExp<T> Count( string aliasName = "count")
+        public SqlExp<T> Count(string aliasName = "count")
         {
             _resolver.SelectWithFunction<T>(null, SelectFunction.COUNT, aliasName);
             return this;
@@ -269,12 +301,6 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
 
         #region 分组
 
-        //public SqlExp<T> GroupBy(Expression<Func<T, object>> expression)
-        //{
-        //    _resolver.GroupBy(expression);
-        //    return this;
-        //}
-
         public SqlExp<T> GroupBy(params Expression<Func<T, object>>[] expressions)
         {
             foreach (var expression in expressions)
@@ -293,7 +319,6 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
             }
             return this;
         }
-
         #endregion
     }
 }
