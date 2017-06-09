@@ -32,6 +32,26 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
             _schema = tabDef.Item1.TableAttribute?.Schema;
             this._parameterDic = new Dictionary<string, object>(); //new ExpandoObject();
         }
+        internal Builder(SqlType type, SqlTableDefine tableDefine, ISqlAdapter adapter)
+        {
+            _paramIndex = 0;
+
+            this._adapter = adapter;
+            this._type = type;
+            this._useField = true;
+
+            var tabDef = tableDefine;
+
+            var tname = tabDef.TableAttribute?.Name;
+            if (string.IsNullOrEmpty(tname))
+            {
+                tname = tabDef.Name;
+            }
+
+            _tableNames.Add(tname);
+            _schema = tabDef.TableAttribute?.Schema;
+            this._parameterDic = new Dictionary<string, object>(); //new ExpandoObject();
+        }
 
         private ISqlAdapter _adapter;
         private SqlType _type;

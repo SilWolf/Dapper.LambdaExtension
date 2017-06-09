@@ -33,7 +33,14 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
             _builder = new Builder.Builder(_type, entityType, AdapterFactory.GetAdapterInstance(_adapter));
             _resolver = new LambdaResolver(_builder);
         }
+        public SqlExpBase(SqlAdapterType adater, SqlTableDefine tableDefine)
+        {
+            _type = SqlType.Query;
+            _adapter = adater;
 
+            _builder = new Builder.Builder(_type, tableDefine, AdapterFactory.GetAdapterInstance(_adapter));
+            _resolver = new LambdaResolver(_builder);
+        }
         public string SqlString
         {
             get

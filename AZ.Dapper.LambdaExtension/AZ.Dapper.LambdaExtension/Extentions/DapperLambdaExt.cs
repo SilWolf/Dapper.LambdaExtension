@@ -72,7 +72,7 @@ namespace Dapper.LambdaExtension.Extentions
         public static int Insert(this IDbConnection db, SqlTableDefine tableDefine, List<SqlColumnDefine> columnDefines, IEnumerable<object> entity, IDbTransaction trans = null, int? commandTimeout = null)
         {
 
-            var sqllam = new SqlExp<object>(db.GetAdapter());
+            var sqllam = new SqlExp<object>(tableDefine,db.GetAdapter());
 
             sqllam = sqllam.Insert(tableDefine, columnDefines);
 

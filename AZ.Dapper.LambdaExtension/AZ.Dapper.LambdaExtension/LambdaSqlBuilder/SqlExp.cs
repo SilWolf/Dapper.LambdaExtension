@@ -20,7 +20,15 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
             //_builder = new Builder(_type, LambdaResolver.GetTableName<T>(), _defaultAdapter);
             //_resolver = new LambdaResolver(_builder);
         }
-
+        public SqlExp(SqlTableDefine tableDefine, SqlAdapterType type = SqlAdapterType.SqlServer, bool forCount = false)
+            : base(type, tableDefine)
+        {
+            useForCount = forCount;
+            //_type = SqlType.Query;
+            //GetAdapterInstance(type);
+            //_builder = new Builder(_type, LambdaResolver.GetTableName<T>(), _defaultAdapter);
+            //_resolver = new LambdaResolver(_builder);
+        }
 
 
         public SqlExp(Expression<Func<T, bool>> expression)

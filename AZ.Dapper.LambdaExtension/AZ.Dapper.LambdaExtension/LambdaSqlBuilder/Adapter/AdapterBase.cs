@@ -152,12 +152,12 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
             var tableName = tableDefine.Name;
             if (tableDefine.TableAttribute != null)
             {
-                if (tableDefine.TableAttribute.Name != null && !string.IsNullOrEmpty(tableDefine.TableAttribute.Name))
+                if (!string.IsNullOrEmpty(tableDefine.TableAttribute.Name))
                 {
                     tableName = _leftToken + tableDefine.TableAttribute.Name + _rightToken;
                 }
 
-                if (tableDefine.TableAttribute.Schema != null)
+                if (!string.IsNullOrEmpty(tableDefine.TableAttribute.Schema))
                 {
                     tableName = (_leftToken + tableDefine.TableAttribute.Schema + _rightToken + ".") + tableName;
                 }
