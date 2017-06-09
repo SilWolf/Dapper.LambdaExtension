@@ -36,7 +36,7 @@ namespace Dapper.LambdaExtension
 #if NETCOREAPP1_0
             var libList = DependencyContext.Default.CompileLibraries.ToList();
 
-
+            
             foreach (var library in libList)
             {
                 foreach (var libraryAssembly in library.Assemblies)
@@ -87,6 +87,7 @@ namespace Dapper.LambdaExtension
 
 
             var assemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
+             AppDomain.CurrentDomain.AssemblyLoad += CurrentDomain_AssemblyLoad;
             foreach (var assembly in assemblies)
             {
                 var mappedTypes = assembly.GetTypes().Where(
@@ -105,6 +106,32 @@ namespace Dapper.LambdaExtension
                 SqlMapper.SetTypeMap(mappedType, new CustomPropertyTypeMap(mappedType, _fu));
             }
         }
+
+#if NETCOREAPP1_0
+#else
+
+
+        private static void CurrentDomain_AssemblyLoad(object sender, AssemblyLoadEventArgs args)
+        {
+            var aliasType = typeof(DBColumnAttribute);
+            var mappedTypeList = new List<Type>();
+            var assembly = args.LoadedAssembly;
+
+            var mappedTypes = assembly.GetTypes().Where(
+                f =>
+                    f.GetProperties().Any(
+                        p =>
+                            p.GetCustomAttributes(false).Any(
+                                a => a.GetType().Name == aliasType.Name)));
+
+            mappedTypeList.AddRange(mappedTypes);
+
+            foreach (var mappedType in mappedTypeList)
+            {
+                SqlMapper.SetTypeMap(mappedType, new CustomPropertyTypeMap(mappedType, _fu));
+            }
+        }
+#endif
 
         static string GetColumnAttribute(MemberInfo member)
         {
