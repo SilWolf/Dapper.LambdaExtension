@@ -1,17 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using Dapper.LambdaExtension.LambdaSqlBuilder.Adapter;
 using Dapper.LambdaExtension.LambdaSqlBuilder.Entity;
 using Dapper.LambdaExtension.LambdaSqlBuilder.Resolver;
 using Dapper.LambdaExtension.LambdaSqlBuilder.Resolver.ExpressionTree;
 
 namespace Dapper.LambdaExtension.LambdaSqlBuilder
-{ 
+{
+    
     public class SqlExp<T> : SqlExpBase
     {
         private bool useForCount;
-        public SqlExp(SqlAdapterType type = SqlAdapterType.SqlServer, bool forCount = false)
+        public SqlExp(SqlAdapterType type = SqlAdapterType.SqlServer , bool forCount = false)
             : base(type, typeof(T))
         {
             useForCount = forCount;
@@ -20,8 +23,9 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
             //_builder = new Builder(_type, LambdaResolver.GetTableName<T>(), _defaultAdapter);
             //_resolver = new LambdaResolver(_builder);
         }
-        public SqlExp(SqlTableDefine tableDefine, SqlAdapterType type = SqlAdapterType.SqlServer, bool forCount = false)
-            : base(type, tableDefine)
+
+        public SqlExp(SqlTableDefine tableDefine, List<SqlColumnDefine> columnDefines, SqlAdapterType type = SqlAdapterType.SqlServer, bool forCount = false)
+            : base(type,tableDefine, columnDefines)
         {
             useForCount = forCount;
             //_type = SqlType.Query;
@@ -99,7 +103,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
             return this;
         }
 
-
+ 
         public SqlExp<T> Update(object obj)
         {
             _builder.UpdateSqlType(SqlType.Update);
@@ -153,7 +157,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
             _resolver.QueryByIsIn(false, expression, values);
             return this;
         }
-
+  
         public SqlExp<T> WhereNotIn(Expression<Func<T, object>> expression, SqlExpBase sqlQuery)
         {
             _builder.And();

@@ -17,7 +17,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
 
         public void OrderBy(string tableName, string fieldName, bool desc = false)
         {
-            var order = _adapter.Field(tableName, fieldName);
+            var order = $"{tableName}.{_adapter.Field(fieldName)}";
             if (desc) order += " DESC";
 
             _sortList.Add(order);

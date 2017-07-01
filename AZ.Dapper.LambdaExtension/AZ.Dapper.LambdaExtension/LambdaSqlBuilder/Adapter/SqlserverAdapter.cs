@@ -34,7 +34,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
         public SqlserverAdapter()
             : base(SqlConst.LeftTokens[0], SqlConst.RightTokens[0], SqlConst.ParamPrefixs[0])
         {
-
+             
         }
 
         public override string Field(string filedName)
@@ -56,9 +56,9 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
             }
             else
             {
-                tmpTablename = string.Format("{0}{1}{2}", _leftToken, tableName, _rightToken);
+                tmpTablename=string.Format("{0}{1}{2}", _leftToken, tableName, _rightToken);
             }
-
+ 
             if (!string.IsNullOrEmpty(schema))
             {
                 return _leftToken + schema + _rightToken + "." + tmpTablename;
@@ -69,15 +69,16 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
         public override string QueryPage(SqlEntity entity)
         {
             int pageSize = entity.PageSize;
-            if (entity.PageNumber < 1)
+            var pageNumber = entity.PageNumber - 1;
+            if (pageNumber < 1)
             {
                 return string.Format("SELECT TOP({4}) {0} FROM {1} {2} {3}", entity.Selection, entity.TableName, entity.Conditions, entity.OrderBy, pageSize);
             }
-
+            
             string innerQuery = string.Format("SELECT {0},ROW_NUMBER() OVER ({1}) AS RN FROM {2} {3}",
-                entity.Selection, entity.OrderBy, entity.TableName, entity.Conditions);
+                                            entity.Selection, entity.OrderBy, entity.TableName, entity.Conditions);
             return string.Format("SELECT TOP {0} * FROM ({1}) InnerQuery WHERE RN > {2} ORDER BY RN",
-                pageSize, innerQuery, pageSize * entity.PageNumber);
+                                 pageSize, innerQuery, pageSize * pageNumber);
         }
 
         public override string TableExistSql(string tableName, string tableSchema)

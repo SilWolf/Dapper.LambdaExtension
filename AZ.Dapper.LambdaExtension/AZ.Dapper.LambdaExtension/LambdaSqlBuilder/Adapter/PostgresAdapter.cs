@@ -39,7 +39,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
             int pageSize = entity.PageSize;
             int limit = pageSize * (entity.PageNumber - 1);
 
-            return string.Format("SELECT {0} FROM {1} {2} {3} LIMIT {4} offset {5}", entity.Selection, entity.TableName, entity.Conditions, entity.OrderBy, pageSize, limit);
+            return string.Format("SELECT {0} FROM {1} {2} {3} LIMIT {4} offset {5}", entity.Selection, entity.TableName, entity.Conditions, entity.OrderBy, pageSize,limit );
         }
         public override string Field(string filedName)
         {
@@ -48,15 +48,15 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
 
         public override string Field(string tableName, string fieldName)
         {
-            return string.Format("{0}.{1}", Table(tableName, ""), this.Field(fieldName)); //fieldName;
+            return string.Format("{0}.{1}", Table(tableName,""), this.Field(fieldName)); //fieldName;
         }
 
-        public override string Table(string tableName, string schema)
+        public override string Table(string tableName,string schema)
         {
             var tbname = string.Format("{0}{1}{2}", "", tableName, "");
             if (!string.IsNullOrEmpty(schema))
             {
-                return _leftToken + schema + _rightToken + "." + tbname;
+                return _leftToken + schema + _rightToken + "."+tbname;
             }
             return tbname;
         }
@@ -133,7 +133,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
                 {
                     length = 6;
                 }
-                fieldLength = length.ToString();
+                fieldLength=length.ToString();
             }
             return $"TIMESTAMP({fieldLength})";
         }

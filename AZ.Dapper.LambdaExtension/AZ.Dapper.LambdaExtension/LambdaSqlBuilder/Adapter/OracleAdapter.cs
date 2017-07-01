@@ -4,7 +4,7 @@ using Dapper.LambdaExtension.LambdaSqlBuilder.Entity;
 namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
 {
     
-    class OracleAdapter : AdapterBase
+    sealed class OracleAdapter : AdapterBase
     {
         public new string AutoIncrementDefinition { get; } = string.Empty;
         //public virtual string StringColumnDefinition { get; } = "VARCHAR(255)";
@@ -45,7 +45,7 @@ SELECT A.*, ROWNUM RN FROM (SELECT {0} FROM {1} {2} {3}) A WHERE ROWNUM <= {5})W
         public override string TableExistSql(string tableName, string tableSchema)
         {
             tableName = RemoveSchema(tableName);
-
+            
             var sql = $"SELECT count(*) FROM USER_TABLES WHERE TABLE_NAME = '{tableName}'";
 
             if (!string.IsNullOrEmpty(tableSchema))

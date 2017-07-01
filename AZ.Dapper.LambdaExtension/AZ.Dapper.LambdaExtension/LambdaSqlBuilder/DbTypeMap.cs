@@ -4,6 +4,7 @@ using System.Data;
 
 namespace Dapper.LambdaExtension.LambdaSqlBuilder
 {
+    
     public class DbTypeMap
     {
        // public bool ShouldQuoteValue;

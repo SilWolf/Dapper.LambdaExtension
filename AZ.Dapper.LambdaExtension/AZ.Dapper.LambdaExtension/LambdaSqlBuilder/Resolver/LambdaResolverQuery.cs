@@ -10,7 +10,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
     {
         public void ResolveQuery<T>(Expression<Func<T, bool>> expression)
         {
-            var expressionTree = ResolveQuery((dynamic)expression.Body);
+            var expressionTree = ResolveQuery<T>((dynamic)expression.Body);
             BuildSql(expressionTree);
         }
 
@@ -28,14 +28,30 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
             };
         }
 
+        //private Node ResolveQuery(BinaryExpression binaryExpression)
+        //{
+        //    return new OperationNode
+        //    {
+        //        Left = ResolveQuery((dynamic)binaryExpression.Left),
+        //        Operator = binaryExpression.NodeType,
+        //        Right = ResolveQuery((dynamic)binaryExpression.Right)
+        //    };
+        //}
         private Node ResolveQuery<T>(BinaryExpression binaryExpression)
         {
-            return new OperationNode
-            {
-                Left = ResolveQuery((dynamic)binaryExpression.Left),
-                Operator = binaryExpression.NodeType,
-                Right = ResolveQuery((dynamic)binaryExpression.Right)
-            };
+            var left = ResolveQuery<T>((dynamic) binaryExpression.Left);
+            var opera = binaryExpression.NodeType;
+            var right = ResolveQuery<T>((dynamic) binaryExpression.Right);
+
+            return new OperationNode {Left = left,Operator = opera,Right = right};
+
+
+            //return new OperationNode
+            //{
+            //    Left = ResolveQuery<T>((dynamic)binaryExpression.Left),
+            //    Operator = binaryExpression.NodeType,
+            //    Right = ResolveQuery<T>((dynamic)binaryExpression.Right)
+            //};
         }
 
         private Node ResolveQuery<T>(MethodCallExpression callExpression)
@@ -44,10 +60,8 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
             if (Enum.TryParse(callExpression.Method.Name, true, out callFunction))
             {
                 var member = callExpression.Object as MemberExpression;
-                //var fieldValue = (string)GetExpressionValue(callExpression.Arguments.First());
                 var tvalue = GetExpressionValue(callExpression.Arguments.First());
                 var fieldValue = Convert.ToString(tvalue);
-
                 return new LikeNode()
                            {
                                MemberNode = new MemberNode()
@@ -66,10 +80,9 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
             }
         }
 
-        private Node ResolveQuery<T>(MemberExpression memberExpression, MemberExpression rootExpression = null)
+        private Node ResolveQuery<T>(MemberExpression memberExpression, MemberExpression rootExpression)
         {
             rootExpression = rootExpression ?? memberExpression;
-
 
             if (rootExpression.Expression == null)
             {
@@ -107,10 +120,13 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
             }
         }
 
+
         #region Helpers
 
         private object GetExpressionValue(Expression expression)
         {
+           
+
             switch (expression.NodeType)
             {
                 case ExpressionType.Constant:

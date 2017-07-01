@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
- 
+using System.Reflection;
 using Dapper.LambdaExtension.LambdaSqlBuilder.Entity;
 using Dapper.LambdaExtension.LambdaSqlBuilder.Resolver.ExpressionTree;
 
-#if NETCOREAPP1_0
-using System.Reflection;
-#endif
 namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
 {
     partial class LambdaResolver
@@ -96,6 +93,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
 
         private void Select<T>(MemberExpression expression)
         {
+
 #if NETCOREAPP1_0
             if (expression.Type.GetTypeInfo().IsClass && expression.Type != typeof(String))
             {
@@ -104,7 +102,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
             else
                 _builder.Select(GetTableName<T>(), GetColumnName(expression));
 #else
-            if (expression.Type.IsClass && expression.Type != typeof(String))
+             if (expression.Type.IsClass && expression.Type != typeof(String))
             {
                 _builder.Select(GetTableName(expression.Type));
             }

@@ -6,8 +6,5 @@ using System.Reflection.Emit;
 
 namespace Dapper.LambdaExtension.Extentions
 {
-    public static class ObjectCopy
-    {
-        
-    }
+    
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using Dapper.LambdaExtension.LambdaSqlBuilder.Attributes;
 using Dapper.LambdaExtension.LambdaSqlBuilder.Entity;
 
 namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
@@ -32,7 +33,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
         {
 
         }
-
+        
         public override string QueryPage(SqlEntity entity)
         {
             int pageSize = entity.PageSize;

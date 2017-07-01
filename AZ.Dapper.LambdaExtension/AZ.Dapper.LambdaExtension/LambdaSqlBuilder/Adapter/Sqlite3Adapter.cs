@@ -68,5 +68,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
             }
             return $"CHAR({fieldLength})";
         }
+
+        
     }
 }

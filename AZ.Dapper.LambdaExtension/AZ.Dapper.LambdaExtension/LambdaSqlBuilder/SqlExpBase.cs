@@ -6,7 +6,7 @@ using Dapper.LambdaExtension.LambdaSqlBuilder.Resolver;
 
 namespace Dapper.LambdaExtension.LambdaSqlBuilder
 {
-  
+    
     public abstract class SqlExpBase
     {
         internal Builder.Builder _builder;
@@ -33,14 +33,16 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
             _builder = new Builder.Builder(_type, entityType, AdapterFactory.GetAdapterInstance(_adapter));
             _resolver = new LambdaResolver(_builder);
         }
-        public SqlExpBase(SqlAdapterType adater, SqlTableDefine tableDefine)
+
+        public SqlExpBase(SqlAdapterType adater, SqlTableDefine tableDefine,List<SqlColumnDefine> columnDefines)
         {
             _type = SqlType.Query;
             _adapter = adater;
-
-            _builder = new Builder.Builder(_type, tableDefine, AdapterFactory.GetAdapterInstance(_adapter));
+             
+            _builder = new Builder.Builder(_type, tableDefine,columnDefines, AdapterFactory.GetAdapterInstance(_adapter));
             _resolver = new LambdaResolver(_builder);
         }
+
         public string SqlString
         {
             get

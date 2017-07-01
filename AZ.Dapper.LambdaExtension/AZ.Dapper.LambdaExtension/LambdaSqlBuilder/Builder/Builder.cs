@@ -30,16 +30,19 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
 
             _tableNames.Add(tname);
             _schema = tabDef.Item1.TableAttribute?.Schema;
+            _tableDefine = tabDef.Item1;
+            _columnDefines = tabDef.Item2;
             this._parameterDic = new Dictionary<string, object>(); //new ExpandoObject();
         }
-        internal Builder(SqlType type, SqlTableDefine tableDefine, ISqlAdapter adapter)
+
+        internal Builder(SqlType type, SqlTableDefine tableDefine ,List<SqlColumnDefine> columnDefines,ISqlAdapter adapter)
         {
             _paramIndex = 0;
 
             this._adapter = adapter;
             this._type = type;
             this._useField = true;
-
+             
             var tabDef = tableDefine;
 
             var tname = tabDef.TableAttribute?.Name;
@@ -50,6 +53,8 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
 
             _tableNames.Add(tname);
             _schema = tabDef.TableAttribute?.Schema;
+            _tableDefine = tableDefine;
+            _columnDefines = columnDefines;
             this._parameterDic = new Dictionary<string, object>(); //new ExpandoObject();
         }
 
@@ -60,6 +65,8 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
 
         private Type _entityType;
 
+        private SqlTableDefine _tableDefine;
+        private List<SqlColumnDefine> _columnDefines;
 
         internal ISqlAdapter Adapter { get { return _adapter; } set { _adapter = value; } }
 
@@ -105,6 +112,15 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
             return sql;
         }
 
+        //public bool NeedOrderBy()
+        //{
+        //    if (_sortList.Count == 0 && _adapter is SqlserverAdapter)
+        //    {
+        //        return true;
+        //    }
+        //    return false;
+        //}
+
         public string QueryPage(int pageSize, int? pageNumber = null)
         {
             SqlEntity entity = GetSqlEntity();
@@ -112,7 +128,26 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
             if (pageNumber.HasValue)
             {
                 if (_sortList.Count == 0 && _adapter is SqlserverAdapter)
-                    throw new Exception("Pagination requires the ORDER BY statement to be specified");
+                {
+                    var key=_columnDefines.FirstOrDefault(p => p.KeyAttribute != null);
+                    if (key == null)
+                    {
+                        key = _columnDefines.FirstOrDefault(p => p.Name.ToUpper() == "ID" || p.AliasName == "ID");
+                    }
+                    if (key != null)
+                    {
+                        var orderbyname = string.IsNullOrEmpty(key.AliasName) ? key.Name : key.AliasName;
+
+                        OrderBy(entity.TableName, orderbyname);
+
+                        entity.OrderBy= GetForamtList(", ", "ORDER BY ", _sortList);
+                    }
+                    else
+                    {
+                        throw new Exception("Pagination requires the ORDER BY statement to be specified");
+                    }
+                }
+                 
                 entity.PageNumber = pageNumber.Value;
             }
             return _adapter.QueryPage(entity);
@@ -175,7 +210,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
 
                     if (!string.IsNullOrEmpty(cdef.AliasName))
                     {
-                        //s += " as " + _adapter.Field(cdef.Name);//use custome type mapped instead as.
+                        //s += " as " + _adapter.Field(cdef.Name);
                     }
                     else
                     {
@@ -244,7 +279,13 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
         {
             string paramId = this.GetParamId(fieldName);
             string key = _adapter.Field(tableName, fieldName);
+            
             string value = _adapter.Parameter(paramId);
+
+            if (_parameterDic.ContainsKey(value))
+            {
+                value = value + Guid.NewGuid().ToString("n");
+            }
             this.AddParameter(value, fieldValue);
             return string.Format("{0} {1} {2}", key, op, value);
         }
@@ -253,6 +294,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
         {
             string paramId = this.GetParamId(fieldName);
             string key = _adapter.Field(aliasName);
+             
             string value = _adapter.Parameter(paramId);
             if (_parameterDic.ContainsKey(value))
             {

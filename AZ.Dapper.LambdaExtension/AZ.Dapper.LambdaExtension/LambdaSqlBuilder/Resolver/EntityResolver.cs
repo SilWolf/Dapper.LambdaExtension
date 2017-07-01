@@ -37,7 +37,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
         public void ResolveInsert(bool key, SqlTableDefine tableDefine, List<SqlColumnDefine> columnDefines)
         {
             string tableName = GetTableName(tableDefine);
-            ResolveParameter(key, tableName, columnDefines);
+            ResolveParameter(key,tableName, columnDefines);
         }
 
         private void ResolveParameter<T>(string tableName, T entity)
@@ -66,7 +66,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
                     }
                 }
 
-                _builder.AddSection(tableName, item.Name, fieldAlias, _operationDictionary[ExpressionType.Equal], obj);
+                _builder.AddSection(tableName, item.Name,fieldAlias, _operationDictionary[ExpressionType.Equal], obj);
             }
         }
 
@@ -98,7 +98,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
                     }
                 }
 
-                _builder.AddSection(tableName, propname, fieldAlias, obj);
+                _builder.AddSection(tableName, propname,fieldAlias, obj);
             }
         }
 
@@ -106,10 +106,10 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
         {
             _builder.UpdateInsertKey(key);
 
-
+           
             foreach (var item in columnsDefines)
             {
-
+               
 
                 var propname = item.Name;
 
@@ -123,14 +123,14 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
                     continue;
                 }
 
+                 
+                    if (!string.IsNullOrEmpty(item.AliasName))
+                    {
+                        fieldAlias = item.AliasName;
+                    }
+                
 
-                if (!string.IsNullOrEmpty(item.AliasName))
-                {
-                    fieldAlias = item.AliasName;
-                }
-
-
-                _builder.AddSection(tableName, propname, fieldAlias, null);
+                _builder.AddSection(tableName, propname, fieldAlias,null);
             }
         }
 

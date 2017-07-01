@@ -10,7 +10,7 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <OutputPath>D:\WorkRoot\Open\github\Dapper.LambdaExtension\Release\NetStandard\</OutputPath>
-    <DefineConstants>TRACE;RELEASE;NETCOREAPP1_0;NETSTANDARD1_6</DefineConstants>
+    <DefineConstants>TRACE;RELEASE;NETCOREAPP1_0;RELEASE;NETSTANDARD1_6</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
@@ -68,6 +68,7 @@
     <PackageReference Include="System.Data.Common" Version="4.3.0" />
     <PackageReference Include="System.Reflection" Version="4.3.0" />
     <PackageReference Include="System.Reflection.Extensions" Version="4.3.0" />
+    <PackageReference Include="System.Reflection.Metadata" Version="1.4.2" />
   </ItemGroup>
 
   <ItemGroup>
