@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.12
+VisualStudioVersion = 15.0.26430.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AZ.Dapper.LambdaExtension", "AZ.Dapper.LambdaExtension\AZ.Dapper.LambdaExtension.csproj", "{8B94DAD8-CF44-4FF7-BF66-AA2A0E8B2A63}"
 EndProject
@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demos", "Demos", "{0601A551
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "testdemo", "testdemo\testdemo.csproj", "{946E6FE0-AB69-4E63-A105-2F1216D2CFA8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AZ.Dapper.LambdaExtension.Standard", "AZ.Dapper.LambdaExtension.Standard\AZ.Dapper.LambdaExtension.Standard.csproj", "{4D350316-2701-4699-A4EC-EF4723E4ADAF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AZ.Dapper.LambdaExtension.Standard", "AZ.Dapper.LambdaExtension.Standard\AZ.Dapper.LambdaExtension.Standard.csproj", "{4D350316-2701-4699-A4EC-EF4723E4ADAF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{F4EB99D1-E70B-4051-AC2D-4D7551DE2228}"
 EndProject

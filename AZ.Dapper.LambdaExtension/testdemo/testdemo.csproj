@@ -99,6 +99,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\MsSqlBase.cs" />
+    <Compile Include="Common\MsSqlCEBase.cs" />
     <Compile Include="Common\MysqlBase.cs" />
     <Compile Include="Common\NpgsqlBase.cs" />
     <Compile Include="Common\OraBase.cs" />
@@ -115,6 +116,7 @@
     <Compile Include="TestLogic\OraTestLogic.cs" />
     <Compile Include="TestLogic\PgTestLogiccs.cs" />
     <Compile Include="TestLogic\SqlAnywhereTestLogic.cs" />
+    <Compile Include="TestLogic\SqlCETestLogics.cs" />
     <Compile Include="TestLogic\SqliteTestLogic.cs" />
     <Compile Include="testmysqllogic.cs" />
   </ItemGroup>
@@ -129,6 +131,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="test.sdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Test2TableScript.sql" />
   </ItemGroup>
   <ItemGroup />
