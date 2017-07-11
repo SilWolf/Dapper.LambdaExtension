@@ -29,6 +29,7 @@
     <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Adapter\SqlAnyWhereAdapter.cs" Link="LambdaSqlBuilder\Adapter\SqlAnyWhereAdapter.cs" />
     <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Adapter\Sqlite3Adapter.cs" Link="LambdaSqlBuilder\Adapter\Sqlite3Adapter.cs" />
     <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Adapter\SqlserverAdapter.cs" Link="LambdaSqlBuilder\Adapter\SqlserverAdapter.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Adapter\SqlserverCEAdapter.cs" Link="LambdaSqlBuilder\Adapter\SqlserverCEAdapter.cs" />
     <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Attributes\DBColumnAttribute.cs" Link="LambdaSqlBuilder\Attributes\DBColumnAttribute.cs" />
     <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Attributes\DBCustomeDataTypeAttribute.cs" Link="LambdaSqlBuilder\Attributes\DBCustomeDataTypeAttribute.cs" />
     <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Attributes\DBIgnoreAttribute.cs" Link="LambdaSqlBuilder\Attributes\DBIgnoreAttribute.cs" />
