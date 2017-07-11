@@ -31,7 +31,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
         public override string CreateTablePrefix { get; } = "create table if not EXISTS ";
 
         public Sqlite3Adapter()
-            : base(SqlConst.LeftTokens[0], SqlConst.RightTokens[0], SqlConst.ParamPrefixs[0])
+            : base(SqlConst.LeftTokens[3], SqlConst.RightTokens[3], SqlConst.ParamPrefixs[0])
         {
 
         }
@@ -46,6 +46,15 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
         public override string Field(string tableName, string fieldName)
         {
             return this.Field(fieldName);
+        }
+        public override string Table(string tableName, string schema)
+        {
+            var tbname = string.Format("{0}{1}{2}", "", tableName, "");
+            if (!string.IsNullOrEmpty(schema))
+            {
+                return _leftToken + schema + "_" + tbname + _rightToken;
+            }
+            return tbname;
         }
 
         public override string TableExistSql(string tableName, string tableSchema)
