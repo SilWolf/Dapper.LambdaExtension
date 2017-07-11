@@ -1,0 +1,553 @@
+﻿<html xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:MSHelp="http://msdn.microsoft.com/mshelp" xmlns:mshelp="http://msdn.microsoft.com/mshelp" xmlns:ddue="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:msxsl="urn:schemas-microsoft-com:xslt"><head><META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8" /><META NAME="save" CONTENT="history" /><title>Microsoft SQL Server Compact 4.0 自述文件</title><style TYPE="text/css">
+      body
+      {
+      background: #FFFFFF;
+      color: #000000;
+      font-family:    Verdana;
+      font-size: medium;
+      font-style: normal;
+      font-weight: normal;
+      margin-top: 0;
+      margin-bottom:  0;
+      margin-left:    0;
+      margin-right:   0;
+      width:  100%;
+      }
+
+      div.#mainSection
+      {
+      font-size: 70%;
+      width: 100%;
+      padding-left:    10;
+      margin-right: 10;
+      }
+
+      div.#mainBody
+      {
+      font-size: 90%;
+      margin-top: 10;
+      padding-bottom: 20;
+      }
+
+      div.#header
+      {
+      background-color: #D2D2D2;
+      padding-top:    0;
+      padding-bottom: 0;
+      padding-left:   10;
+      padding-right:  0;
+      width:          100%;
+      }
+
+      div.#header table
+      {
+      border-bottom-color: #C8CDDE;
+      border-bottom-style: solid;
+      border-bottom-width: 1;
+      width:  100%;
+      }
+
+      span.#runningHeaderText
+      {
+      color: #003399;
+      font-size: 90%;
+      }
+
+      span.#nsrTitle
+      {
+      /*    color: #003399;*/
+      font-size: 120%;
+      font-weight: 600;
+      }
+
+      div.#header table td
+      {
+      color: #000000;
+      font-size: 70%;
+      margin-top: 0;
+      margin-bottom:  0;
+      padding-right: 20;
+      }
+
+      div.#header table tr.#headerTableRow3 td
+      {
+      padding-bottom: 2;
+      padding-top: 5;
+      }
+
+      div.#header table.#bottomTable
+      {
+      border-top-color: #FFFFFF;
+      border-top-style: solid;
+      border-top-width: 1;
+      text-align: left;
+      }
+
+      div.#footer
+      {
+      font-size: 90%;
+      margin-top: 0;
+      margin-bottom:  0;
+      margin-left:    -5;
+      margin-right:   0;
+      padding-top:    2;
+      padding-bottom: 2;
+      padding-left:   0;
+      padding-right:  0;
+      width:  100%;
+      }
+
+      hr.#footerHR
+      {
+      border-bottom-color: #EEEEFF;
+      border-bottom-style: solid;
+      border-bottom-width: 1;
+      border-top-color: C8CDDE;
+      border-top-style: solid;
+      border-top-width: 1;
+      height: 3;
+      color: #D2D2D2;
+      }
+
+      div.section
+      {
+      padding-top:    2;
+      padding-bottom: 2;
+      padding-right:  15;
+      width:  100%;
+      }
+
+      .heading
+      {
+      color:          #000000;
+      font-weight:    bold;
+      margin-top:     18;
+      margin-bottom:  8;
+      }
+
+      h1.heading
+      {
+      color: #000000;
+      font-size:  150%;
+      }
+
+      .subHeading
+      {
+      color:          #000000;
+      font-weight:    bold;
+      font-size:      150%;
+      margin-bottom:  4;
+      }
+
+      h2.subHeading
+      {
+      color:          #000000;
+      font-weight:    bold;
+      font-size:      130%;
+      }
+      h3.subHeading
+      {
+      color:  #000000;
+      font-size: 125%;
+      font-weight: bold;
+      }
+
+      h4.subHeading
+      {
+      color: #000000;
+      font-size: 110%;
+      font-weight: bold;
+      }
+
+      h4.procedureHeading
+      {
+      color: #000080;
+      font-size: 110%;
+      font-weight: bold;
+      }
+
+      h5.subHeading
+      {
+      color: #000000;
+      font-size: 100%;
+      font-weight: bold;
+      }
+
+      img
+      {
+      padding-bottom: 10;
+      }
+
+      img.toggle
+      {
+      border: 0;
+      margin-right: 5;
+      padding-bottom: 10;
+      }
+
+      img.copyCodeImage
+      {
+      border: 0;
+      margin: 1;
+      margin-right: 3;
+      padding-bottom: 10;
+      }
+
+      img.downloadCodeImage
+      {
+      border: 0;
+      margin-right: 3;
+      padding-bottom: 10;
+      }
+
+      img.viewCodeImage
+      {
+      border: 0;
+      margin-right: 3;
+      padding-bottom: 10;
+      }
+
+      img.note
+      {
+      border: 0;
+      margin-right: 3;
+      padding-bottom: 10;
+      }
+
+      img.#membersOptionsFilterImage
+      {
+      border: 0;
+      margin-left: 10;
+      vertical-align: middle;
+      padding-bottom: 10;
+      }
+
+      img.#toggleAllImage
+      {
+      margin-left: 4;
+      vertical-align: middle;
+      padding-bottom: 10;
+      }
+
+      div.#mainSection table
+      {
+      border: 0;
+      font-size: 100%;
+      width:  100%;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      }
+
+      div.#mainSection table tr
+      {
+      vertical-align: top;
+      }
+
+      div.#mainSection table th
+      {
+      text-align: left;
+      background: #D8D8D8;
+      border-bottom-color: #D8D8D8;
+      border-bottom-style: solid;
+      border-bottom-width: 1;
+      color: #000000;
+      padding-left: 5;
+      padding-right: 5;
+      }
+
+      div.#mainSection table td
+      {
+      background: #F2F2F2;
+      border-top-color: #D8D8D8;
+      border-top-style: solid;
+      border-top-width: 1;
+      padding-left: 5;
+      padding-right: 5;
+      }
+
+      div.#mainSection table td.imageCell
+      {
+      white-space: nowrap;
+      }
+
+      div.code
+      {
+      width: 98%;
+      }
+
+      div.code table
+      {
+      border: 0;
+      font-size: 95%;
+      margin-bottom: 5;
+      width: 100%
+      }
+
+      div.code table th
+      {
+      text-align: left;
+      background: #D8D8D8;
+      border-bottom-color: #D8D8D8;
+      border-bottom-style: solid;
+      border-bottom-width: 1;
+      color: #000000;
+      font-weight: bold;
+      padding-left: 5;
+      padding-right: 5;
+      }
+
+      div.code table td
+      {
+      background: #CCCCCC;
+      border-top-color: #D8D8D8;
+      border-top-style: solid;
+      border-top-width: 1;
+      padding-left: 5;
+      padding-right: 5;
+      padding-top: 5;
+      }
+
+      div.alert
+      {
+      margin-left: 10;
+      width: 98%;
+      }
+
+      div.alert table
+      {
+      border: 1;
+      font-size: 100%;
+      width:  100%;
+      border: solid 1 #DEDFEF;
+      }
+
+      div.alert table th
+      {
+      text-align: left;
+      background: #D8D8D8;
+      border-bottom-width: 0;
+      color: #000000;
+      padding-left: 5;
+      padding-right: 5;
+      border: solid 1 #DEDFEF;
+      }
+
+      div.alert table td
+      {
+      background: #FFFFFF;
+      border-top-color: #D8D8D8;
+      border-top-style: solid;
+      border-top-width: 1;
+      padding-left: 5;
+      padding-right: 5;
+      border: solid 1 #DEDFEF;
+      }
+
+      span.copyCode
+      {
+      color: #0000ff;
+      font-size: 90%;
+      font-weight: normal;
+      cursor: hand;
+      float: right;
+      display: inline;
+      text-align: right;
+      }
+
+      .downloadCode
+      {
+      color: #0000ff;
+      font-size: 90%;
+      font-weight: normal;
+      cursor: hand;
+      }
+
+      .viewCode
+      {
+      color: #0000ff;
+      font-size: 90%;
+      font-weight: normal;
+      cursor: hand;
+      }
+
+      div.code pre
+      {
+      font-family:    Monospace, Courier New, Courier;
+      font-size: 105%;
+      color:  #000000;
+      }
+
+      code
+      {
+      font-family:    Monospace, Courier New, Courier;
+      font-size: 105%;
+      color:  #000000;
+      }
+
+      dl
+      {
+      margin-top: 0;
+      padding-left:   1;
+      }
+
+      dd
+      {
+      margin-bottom:  0;
+      margin-left:    0;
+      padding-left:   20;
+      }
+
+      dd p
+      {
+      margin-top: 5;
+      }
+
+      ul
+      {
+      margin-left: 17;
+      list-style-type: disc;
+      }
+
+      ul ul
+      {
+      margin-bottom: 4;
+      margin-left: 17;
+      margin-top: 3;
+      list-style-type: disc;
+      }
+
+      ol
+      {
+      margin-left: 24;
+      list-style-type: decimal;
+      }
+
+      ol ol
+      {
+      margin-left: 24;
+      margin-top: 3;
+      list-style-type: lower-alpha;
+      }
+
+      li
+      {
+      margin-top: 0;
+      margin-bottom: 0;
+      padding-bottom: 0;
+      padding-top: 0;
+      margin-left: 5;
+      }
+
+      li p
+      {
+      margin-top: 0;
+      margin-bottom: 0;
+      }
+
+      p
+      {
+      margin-bottom: 15;
+      }
+
+      .tip
+      {
+      color:  #0000FF;
+      font-style: italic;
+      cursor:hand;
+      text-decoration:underline;
+      }
+
+      .math
+      {
+      font-family: Times New Roman;
+      font-size: 125%
+      }
+      .sourceCodeList
+      {
+      font-family: Verdana;
+      font-size: 90%;
+      }
+
+      pre.viewCode
+      {
+      width: 100%;
+      overflow: auto;
+      }
+
+      li:hover table, li.over table
+      {
+      background-color: #C0C0C0;
+      }
+
+      li:hover ul, li.over ul
+      {
+      background-color: #d2d2d2;
+      border: 1px solid #000;
+      display: block;
+      }
+    </style></head><body><div id="header"><table id="bottomTable" cellpadding="0" cellspacing="0"><tr><td align="left"><span id="nsrTitle">Microsoft SQL Server Compact 4.0 Service Pack 1 自述</span></td></tr></table></div><div id="mainSection"><div id="mainBody"><p>2011/10/27 17:55:22</p><div class="introduction"><p>可以从 <a href="http://go.microsoft.com/fwlink/?LinkId=231857">Microsoft 下载中心</a>下载本文件的最新版本。</p><p>SQL Server 文档小组欢迎您提交<a href="mailto:sqldocfb@microsoft.com?subject=SQL%20Server%20Compact%204.0%20readme%20file(\1:SQL\2:3.5.5386.0\3:SSC_RTW\4:readme_ssc\5:ReadmeSSC35.htm\6:\7:h\8:zh-CN\9:2007)&amp;body=---请在此键入意见，同时保留主题行。---">文档反馈</a>。我们会关注和调查所有文档问题，但此处不回答技术支持问题。若要获得与文档无关的技术问题的帮助，请参见<a href="http://go.microsoft.com/fwlink/?LinkId=231858">获取 SQL Server Compact 帮助</a>。请尽可能用英文向我们提交反馈。</p></div><a name="BKMK_Contents" /><h1 class="heading">目录</h1><div id="sectionSection0" class="section" name="collapseableSection" style=""><p><span sdata="link"><a href="#BKMK_1.0Introduction">1.0 简介</a></span></p><p><span sdata="link"><a href="#BKMK_1.1ObtainingSQLServerCompact4.0">1.1 获取 SQL Server Compact 4.0 SP1</a></span></p><p><span sdata="link"><a href="#BKMK_1.2SQLServerCompact4.0BooksOnline">1.2 SQL Server Compact 4.0 联机丛书及知识库文章</a></span></p><p><span sdata="link"><a href="#BKMK_2.0SupportedOperatingSystemsandPlatformsforSQLServerCompact4.0">2.0 SQL Server Compact 4.0 SP1 支持的操作系统和平台</a></span></p><p><span sdata="link"><a href="#BKMK_3.0KnownIssues">3.0 已知问题</a></span></p><p><span sdata="link"><a href="#BKMK_4.0AdditionalInformation">4.0 其他信息</a></span></p><p><span sdata="link"><a href="#BKMK_4.1GettingSQLServerCompactAssistance">4.1 获取 SQL Server Compact 帮助</a></span></p><p><span sdata="link"><a href="#BKMK_4.2ProvidingFeedbackonSQLServerCompact">4.2 提供有关 SQL Server Compact 的反馈</a></span></p><p>[返回到<span sdata="link"><a href="#BKMK_Contents">目录</a></span>]</p></div><a name="BKMK_1.0Introduction" /><h1 class="heading">1.0 简介</h1><div id="sectionSection1" class="section" name="collapseableSection" style=""><p>Microsoft&#174; SQL Server&#8482; Compact 4.0 SP1 是一个只占用少量内存的进程内数据库引擎，开发人员可利用它来生成适用于 Windows 台式机和启动 ASP.NET 网站的可靠应用程序。</p><a name="BKMK_1.1ObtainingSQLServerCompact4.0" /><h3 class="subHeading">1.1 获取 SQL Server Compact 4.0 SP1</h3><div class="subsection"><p>可通过从以下 Web 位置下载获得 SQL Server Compact 4.0 SP1：</p><ul><li><p>
+			<a href="http://go.microsoft.com/fwlink/?LinkId=231859">SQL Server Compact 4.0 SP1</a></p></li></ul><div class="alert"><table width="100%" cellspacing="0" cellpadding="0"><tr><th align="left"><b>重要提示</b></th></tr><tr><td><p>与以前版本的 SQL Server Compact 相比，SQL Server Compact 4.0 SP1 在 32 位和 64 位操作系统上的安装行为已发生变化。SQL Server Compact 4.0 SP1 在 32 位和 64 位操作系统上的安装如下所示：</p></td></tr></table></div><div class="caption" /><div class="tableSection"><table width="50%" cellspacing="2" cellpadding="5" frame="lhs"><tr>
+				<td style="width: 410px"><p><strong>版本</strong></p></td><td><p>
+				<strong>操作系统</strong></p></td><td><p><strong>结果</strong></p></td></tr><tr>
+					<td style="width: 410px"><p>32 位，SQL Server Compact 4.0 SP1</p></td><td><p>32 位</p></td><td><p>成功</p></td></tr><tr>
+					<td style="width: 410px"><p>64 位，SQL Server Compact 4.0 SP1</p></td><td><p>64 位</p></td><td><p>成功</p></td></tr><tr>
+					<td style="width: 410px"><p>32 位，SQL Server Compact 4.0 SP1</p></td><td><p>64 位</p></td><td><p>错误</p></td></tr><tr>
+					<td style="width: 410px"><p>64 位，SQL Server Compact 4.0 SP1</p></td><td><p>32 位</p></td><td><p>错误</p></td></tr></table></div><p>[返回到<span sdata="link"><a href="#BKMK_Contents">目录</a></span>]</p></div><a name="BKMK_1.2SQLServerCompact4.0BooksOnline" /><h3 class="subHeading">1.2 SQL Server Compact 4.0 联机丛书及知识库文章</h3><div class="subsection"><p>SQL Server Compact 4.0 联机丛书提供有关在 Windows 台式机和启动 ASP.NET 网站上开发、管理和部署 SQL Server Compact 4.0 和 SQL Server Compact 4.0 SP1 的详细信息。<a href="http://go.microsoft.com/fwlink/?LinkId=231860">知识库文章</a>中提供了有关 SQL Server Compact 4.0 SP1 的其他信息。SQL Server Compact 4.0 联机丛书不随 Visual Studio 2010 文档或 SQL Server 2008 R2 联机丛书一起安装，只能<a href="http://go.microsoft.com/fwlink/?LinkId=205581">通过 Web 从 Microsoft 下载中心下载</a>。</p>
+			</div></div><a name="BKMK_2.0SupportedOperatingSystemsandPlatformsforSQLServerCompact4.0" /><h1 class="heading">2.0 SQL Server Compact 4.0 SP1 支持的操作系统和平台</h1><div id="sectionSection2" class="section" name="collapseableSection" style=""><p>SQL Server Compact 4.0 SP1 支持下列操作系统。</p><div class="subsection"><h4 class="subHeading">Windows 台式机</h4><div class="subsection"><ul><li><p>Microsoft Windows XP Professional SP3</p></li><li><p>Microsoft Windows XP Home Edition SP3</p></li><li><p>Microsoft Windows XP Media Center Edition 2004 SP3</p></li><li><p>Microsoft Windows XP Media Center Edition 2005</p></li><li><p>Microsoft Windows XP Tablet PC Edition SP3</p></li><li><p>Microsoft Windows XP Embedded SP3</p></li><li><p>Microsoft Windows XP Professional x64 SP3</p></li><li><p>Windows Embedded for Point of Service SP3</p></li><li><p>Microsoft Windows Server 2003 Standard Edition SP2</p></li><li><p>Microsoft Windows Server 2003 Enterprise Edition SP2 </p></li><li><p>Microsoft Windows Server 2003 Datacenter Edition SP2 </p></li><li><p>Microsoft Windows Server 2003 R2 Standard Edition </p></li><li><p>Microsoft Windows Server 2003 R2 Enterprise Edition </p></li><li><p>Microsoft Windows Server 2003 R2 Datacenter Edition</p></li><li><p>Microsoft Windows Server 2003 x64 Standard Edition</p></li><li><p>Microsoft Windows Server 2003 x64 Enterprise x64 Edition</p></li><li><p>Microsoft Windows Server 2003 x64 Datacenter Edition</p></li><li><p>Microsoft Windows Server 2003 R2 x64 Standard Edition</p></li><li><p>Microsoft Windows Server 2003 R2 x64 Enterprise Edition</p></li><li><p>Microsoft Windows Server 2003 R2 x64 Datacenter Edition</p></li><li><p>Windows Vista Home Basic SP2</p></li><li><p>Windows Vista Home Premium SP2</p></li><li><p>Windows Vista Business SP2</p></li><li><p>Windows Vista Enterprise SP2</p></li><li><p>Windows Vista Ultimate SP2</p></li><li><p>Windows Vista Starter Edition SP2</p></li><li><p>Windows Vista Home Basic x64 SP2</p></li><li><p>Windows Vista Home Premium x64 SP2</p></li><li><p>Windows Vista Business x64 SP2</p></li><li><p>Windows Vista Enterprise x64 SP2</p></li><li><p>Windows Vista Ultimate x64 SP2</p></li><li><p>Windows Server 2008 Standard Server SP2</p></li><li><p>Windows Server 2008 Standard Server SP2（不带 Hyper-V）</p></li><li><p>Windows Server 2008 Enterprise SP2</p></li><li><p>Windows Server 2008 Enterprise SP2（不带 Hyper-V）</p></li><li><p>Windows Server 2008 Data Center SP2</p></li><li><p>Windows Server 2008 Data Center SP2（不带 Hyper-V）</p></li><li><p>Windows Server 2008 Web Edition SP2</p></li><li><p>Windows Server 2008 Standard Server SP2 x64</p></li><li><p>Windows Server 2008 Standard Server SP2 x64（不带 Hyper-V）</p></li><li><p>Windows Server 2008 Enterprise SP2 x64</p></li><li><p>Windows Server 2008 Enterprise SP2 x64（不带 Hyper-V）</p></li><li><p>Windows Server 2008 Data Center SP2 x64</p></li><li><p>Windows Server 2008 Data Center SP2 x64（不带 Hyper-V）</p></li><li><p>Windows Server 2008 Web Edition SP2 x64</p></li><li><p>Windows 7 Starter</p></li><li><p>Windows 7 Starter x64</p></li><li><p>Windows 7 Home Premium</p></li><li><p>Windows 7 Home Premium x64</p></li><li><p>Windows 7 Professional</p></li><li><p>Windows 7 Professional x64</p></li><li><p>Windows 7 Ultimate</p></li><li><p>Windows 7 Ultimate x64</p></li><li><p>Windows Server 2008 R2 Foundation x64</p></li><li><p>Windows Server 2008 R2 Standard x64</p></li><li><p>Windows Server 2008 R2 Enterprise x64</p></li><li><p>Windows Server 2008 R2 Datacenter x64</p></li><li><p>Windows Web Server 2008 R2 x64</p>
+				</li>
+				<li>
+				<p>Windows 8 开发人员预览版</p>
+				</li>
+				<li>
+				<p>Windows 8 开发人员预览版 (x64)</p></li></ul></div><h4 class="subHeading">.NET Framework</h4><div class="subsection"><ul><li><p>.NET Framework 3.5 SP1 Client Profile</p></li><li><p>.NET Framework 3.5 SP1</p></li><li><p>.NET 4 Framework Standalone 版本</p></li><li><p>.NET Framework 4 Client Profile</p></li><li><p>.NET Framework 4 Client Profile Standalone 版本</p>
+					</li>
+					<li>
+					<p>.NET Framework 4.5 Beta</p></li></ul><p>[返回到<span sdata="link"><a href="#BKMK_Contents">目录</a></span>]</p></div></div></div><a name="BKMK_3.0KnownIssues" /><h1 class="heading">3.0 已知问题</h1><div id="sectionSection3" class="section" name="collapseableSection" style=""><h3 class="subHeading">3.1</h3><div class="subsection"><p>SQL Server Compact 4.0 SP1 的本机二进制文件 (DLL) 需要 Microsoft Visual C++ 2008 Runtime Libraries（x86 和 x64）Service Pack 1 才能正常工作。在使用安装程序文件安装 SQL Server Compact 4.0 SP1 时，同时还会安装 Visual C++ 2008 SP1 Runtime Libraries。如果将 SQL Server Compact 4.0 <a name="BKMK_3.0KnownIssues0" />SP1 </a>专门部署在 application 文件夹中，则务必使用位于 %Program Files%\Microsoft SQL Server Compact Edition\v4.0\Private 的 x86 和 amd64 文件夹来部署 SQL Server Compact 的本机二进制文件，因为 x86 和 amd64 文件夹包含 SQL Server Compact 以及 <a name="BKMK_3.0KnownIssues3" />Microsoft Visual C++ 2008 Runtime Libraries（x86 和 x64） Service Pack 1</a> 所需要的本机二进制文件。有关详细信息，请参阅 <a href="http://go.microsoft.com/fwlink/?LinkId=232343">SQL Server Compact 4.0 联机丛书</a>。<a name="BKMK_3.0KnownIssues4" />Microsoft Visual C++ 2008 Runtime Libraries（x86 和 x64）Service Pack 1</a> 也由以下应用程序安装：&nbsp;</p>
+			<ol>
+				<li>
+				<p>安装 .NET Framework 3.5 SP1 还会安装 Visual C++ 2008 SP1 Runtime Libraries</p></li><li><p>Visual C++ 2008 SP1 Runtime Libraries 可以从下面的位置下载和安装：<br /><a href="http://go.microsoft.com/fwlink/?LinkId=204989">Visual C++ 2008</a></p></li></ol><p>请注意，安装 .NET Framework 2.0、.NET Framework 3.0 或 .NET Framework 4 或 .NET Framework 4.5 Beta 将不会安装 Visual C++ 2008 Runtime Libraries（x86 和 x64），Service Pack 1。</p></div><h3 class="subHeading">3.2</h3><div class="subsection"><p>
+				如果 SQL Server Compact Runtime 4.0 <a name="BKMK_3.0KnownIssues1" />SP1 </a>安装程序在未安装有 .NET Framework 的计算机上运行，则安装将会继续进行并且不会报错，但某些步骤将不会执行。它可能在此类计算机上导致错误。未执行的步骤是：</p><ul><li><p>用于 .NET 的 machine.config 条目将不具有作为数据访问接口的用于 SQL Server Compact 的条目。</p></li><li><p>SQL Server Compact 运行时的相关程序集将不放置于全局程序集缓存中。</p></li></ul><p>如果用户执行以下步骤，也可能会发生上述情况：</p><ul><li><p>安装 SQL Server Compact 4.0 <a name="BKMK_3.0KnownIssues2" />SP1 </a>运行时</p></li><li><p>安装 .NET Framework 3.5 SP1 或 4.0 或 4.5 Beta</p></li></ul><p>若要解决此问题，请在 .NET Framework 安装后重新安装/修复 SQL Server Compact 运行时。</p></div><h3 class="subHeading">3.3</h3><div class="subsection"><p>SQL Server Compact 4.0 SP1 不识别 <span sdata="langKeyword" value="SqlCeConnection"><span class="keyword">SqlCeConnection</span></span> 类的 <span sdata="langKeyword" value="Encrypt"><span class="keyword">Encrypt</span></span> 属性，您不应使用此属性来加密数据库文件。</p><div class="alert"><table width="100%" cellspacing="0" cellpadding="0"><tr><th align="left"><b>注意</b></th></tr><tr><td><p>在 SQL Server Compact 3.5 版中已弃用 <span sdata="langKeyword" value="Encrypt"><span class="keyword">Encrypt</span></span> 属性。SQL Server Compact 4.0 SP1 只是为了向后兼容才保留了此属性。</p></td></tr></table></div><p>使用 <span sdata="langKeyword" value="SqlCeConnection"><span class="keyword">SqlCeConnection</span></span> 类的 <span sdata="langKeyword" value="Encryption Mode"><span class="keyword">Encryption Mode</span></span> 属性对 SQL Server Compact 4.0 SP1 数据库文件进行加密。下面的示例演示 <span sdata="langKeyword" value="Encryption Mode"><span class="keyword">Encryption Mode</span></span> 属性的用法。</p><ul><li><p>创建新的加密 SQL Server Compact 4.0 SP1 数据库：</p><p>C#：</p><div class="code"><span codeLanguage="other"><table width="100%" cellspacing="0" cellpadding="0"><tr><th> </th></tr><tr><td colspan="2"><pre>SqlCeEngine engine = new SqlCeEngine("Data Source=Northwind.sdf;encryption mode=platform default;Password=&lt;enterStrongPasswordHere&gt;;");
+engine.CreateDatabase();</pre></td></tr></table></span></div><p>Visual Basic：</p><div class="code"><span codeLanguage="other"><table width="100%" cellspacing="0" cellpadding="0"><tr><th> </th></tr><tr><td colspan="2"><pre>Dim engine As SqlCeEngine = New SqlCeEngine("Data Source=Northwind.sdf;encryption mode=platform default;Password=&lt;enterStrongPasswordHere&gt;;")
+engine.CreateDatabase()</pre></td></tr></table></span></div></li><li><p>更改现有 SQL Server Compact 4.0 SP1 数据库的加密模式：</p><p>C#：</p><div class="code"><span codeLanguage="other"><table width="100%" cellspacing="0" cellpadding="0"><tr><th> </th></tr><tr><td colspan="2"><pre>SqlCeEngine engine = new SqlCeEngine("Data Source=Northwind.sdf;Password=&lt;enterStrongPasswordHere&gt;;");
+engine.Compact("Data Source=Northwind.sdf;encryption mode= enginedefault;Password=&lt;enterStrongPasswordHere&gt;;");</pre></td></tr></table></span></div><p>Visual Basic：</p><div class="code"><span codeLanguage="other"><table width="100%" cellspacing="0" cellpadding="0"><tr><th> </th></tr><tr><td colspan="2"><pre>Dim engine As SqlCeEngine = New SqlCeEngine("Data Source=Northwind.sdf;Password=&lt;enterStrongPasswordHere&gt;;") 
+engine.Compact("Data Source=Northwind.sdf;encryption mode= engine default;Password=&lt;enterStrongPasswordHere&gt;;")</pre></td></tr></table></span></div></li><li><p>加密未加密的 SQL Server Compact 4.0 SP1 数据库：
+</p><p>C#：</p><div class="code"><span codeLanguage="other"><table width="100%" cellspacing="0" cellpadding="0"><tr><th> </th></tr><tr><td colspan="2"><pre>SqlCeEngine engine = new SqlCeEngine("Data Source=Northwind.sdf");
+engine.Compact("Data Source=Northwind.sdf;encryption mode=platform default;Password=&lt;enterStrongPasswordHere&gt;;");</pre></td></tr></table></span></div><p>Visual Basic：</p><div class="code"><span codeLanguage="other"><table width="100%" cellspacing="0" cellpadding="0"><tr><th> </th></tr><tr><td colspan="2"><pre>Dim engine As SqlCeEngine = New SqlCeEngine("Data Source=Northwind.sdf;") 
+engine.Compact("Data Source=Northwind.sdf;encryption mode=platform default;Password=&lt;enterStrongPasswordHere&gt;;"</pre></td></tr></table></span></div></li></ul></div><h3 class="subHeading">3.4</h3><div class="subsection"><p>应显式设置 <span class="parameter" sdata="paramReference">SqlDbType</span> 或 <span class="parameter" sdata="paramReference">DbType</span> 之类参数的 SQL Server Compact 4.0 SP1 数据类型。
+</p><p>如果未显式设置 <span class="parameter" sdata="paramReference">SqlDbType</span> 或 <span class="parameter" sdata="paramReference">DbType</span> 之类参数的数据类型，将会引发异常。若要解决此问题，请显式设置 <span class="parameter" sdata="paramReference">SqlDbType</span> 或 <span class="parameter" sdata="paramReference">DbType</span> 之类参数的数据类型。这对 BLOB 数据类型（image 和 ntext）很重要。代码示例显示如下：</p><p>C#：</p><div class="code"><span codeLanguage="other"><table width="100%" cellspacing="0" cellpadding="0"><tr><th> </th></tr><tr><td colspan="2"><pre>SqlCeEngine engine = new SqlCeEngine(connString);
+engine.CreateDatabase();
+engine.Dispose();
+
+SqlCeConnection conn = new SqlCeConnection(connString);
+conn.Open();
+
+SqlCeCommand cmd = conn.CreateCommand();
+cmd.CommandText = "CREATE TABLE BlobTable(name nvarchar(128), blob ntext);";
+cmd.ExecuteNonQuery();
+
+cmd.CommandText = "INSERT INTO BlobTable(name, blob) VALUES (@name, @blob);";
+SqlCeParameter paramName = cmd.Parameters.Add("name", SqlDbType.NVarChar, 128);
+SqlCeParameter paramBlob = cmd.Parameters.Add("blob", SqlDbType.NText);
+paramName.Value = "Name1";
+paramBlob.Value = "Name1".PadLeft(4001);
+
+cmd.ExecuteNonQuery();</pre></td></tr></table></span></div><p>Visual Basic：</p><div class="code"><span codeLanguage="other"><table width="100%" cellspacing="0" cellpadding="0"><tr><th> </th></tr><tr><td colspan="2"><pre>Dim engine As SqlCeEngine = New SqlCeEngine(connString)
+engine.CreateDatabase()
+engine.Dispose()
+
+Dim conn As SqlCeConnection = New SqlCeConnection(connString)
+conn.Open()
+
+Dim cmd As SqlCeCommand = conn.CreateCommand()
+cmd.CommandText = "CREATE TABLE BlobTable(name nvarchar(128), blob ntext);"
+cmd.ExecuteNonQuery() 
+
+cmd.CommandText = "INSERT INTO BlobTable(name, blob) VALUES (@name, @blob);"
+Dim paramName As SqlCeParameter
+Dim paramBlob As SqlCeParameter
+paramName = cmd.Parameters.Add("name", SqlDbType.NVarChar, 128)
+paramBlob = cmd.Parameters.Add("blob", SqlDbType.NText)
+paramName.Value = "Name1"
+paramBlob.Value = "Name1".PadLeft(4001)
+
+cmd.ExecuteNonQuery()</pre></td></tr></table></span></div></div><h3 class="subHeading">3.5</h3><div class="subsection"><p>SQL Server Compact 4.0 SP1 版本不支持使用 Microsoft Sync Framework、合并复制或远程数据访问 (RDA) 之类的技术将数据与 SQL Server 同步。</p></div><h3 class="subHeading">3.6</h3><div class="subsection"><p>如果在 SQL Server Compact SP1 架构中存在重复的约束名称，则生成用于 SQL Server Compact SP1 的实体数据模型将失败。</p><p>在 SQL Server Compact 中，约束名称在表中是唯一的，这可以允许在数据库中存在重复的约束名称。此行为与 SQL Server 不同，在 SQL Server 中，约束名称在整个数据库中是唯一的。如果某一 SQL Server Compact 架构具有重复的引用完整性（主键 – 外键关系）约束名称，则使用 ADO.NET Entity Framework 的实体模型向导生成实体数据模型将失败。可通过更改重复的约束名称（例如通过向约束名称添加表名），使其在数据库中唯一，解决上述问题。</p><p>[返回到<span sdata="link"><a href="#BKMK_Contents">目录</a></span>]</p></div></div><a name="BKMK_4.0AdditionalInformation" /><h1 class="heading">4.0 其他信息</h1><div id="sectionSection4" class="section" name="collapseableSection" style=""><p>本节介绍如何获取有关 SQL Server Compact 的帮助以及如何提供反馈信息。</p><a name="BKMK_4.1GettingSQLServerCompactAssistance" /><h3 class="subHeading">4.1 获取 SQL Server Compact 帮助</h3><div class="subsection"><p>有关详细信息，请参阅 <a href="http://go.microsoft.com/fwlink/?LinkId=205142">SQL Server Compact 论坛</a>和 <a href="http://go.microsoft.com/fwlink/?LinkId=205143">SQL Server Compact 团队博客</a>。</p></div><a name="BKMK_4.2ProvidingFeedbackonSQLServerCompact" /><h3 class="subHeading">4.2 提供有关 SQL Server Compact 的反馈</h3><div class="subsection"><p>提供有关 SQL Server Compact 的建议和 Bug 报告：</p><ul><li><p>在 <a href="http://go.microsoft.com/fwlink/?LinkId=205144">MSDN 产品反馈网站</a>提交有关 SQL Server Compact 的功能或用户界面的建议和文件 Bug 报告。</p></li><li><p>使用 SQL Server Compact 联机丛书中的反馈功能发送有关此文档的建议或错误报告。</p></li></ul><p>[返回到<span sdata="link"><a href="#BKMK_Contents">目录</a></span>]</p><p>&#169; 2011 Microsoft Corporation。保留所有权利。</p></div></div></div><div id="footer" /></div></body></html>

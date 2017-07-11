@@ -63,7 +63,10 @@ namespace Dapper.LambdaExtension.Extentions
             {
                 return SqlAdapterType.SqlAnyWhere;
             }
-
+            if (typeName.Contains("SqlCeConnection"))
+            {
+                return SqlAdapterType.SqlServerCE;
+            }
             return SqlAdapterType.SqlServer;
         }
 

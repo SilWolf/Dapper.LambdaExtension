@@ -20,6 +20,8 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
                     return new PostgresAdapter();
                 case SqlAdapterType.SqlAnyWhere:
                     return new SqlAnyWhereAdapter();
+                    case SqlAdapterType.SqlServerCE:
+                        return new SqlserverCEAdapter();
                 default:
                     throw new ArgumentException("The specified Sql Adapter was not recognized");
             }

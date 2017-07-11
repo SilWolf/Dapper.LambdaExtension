@@ -55,6 +55,7 @@
     <Compile Include="LambdaSqlBuilder\Adapter\Sqlite3Adapter.cs" />
     <Compile Include="LambdaSqlBuilder\Adapter\SqlserverAdapter.cs" />
     <Compile Include="LambdaSqlBuilder\Adapter\SqlAnyWhereAdapter.cs" />
+    <Compile Include="LambdaSqlBuilder\Adapter\SqlserverCEAdapter.cs" />
     <Compile Include="LambdaSqlBuilder\Attributes\DBColumnAttribute.cs" />
     <Compile Include="LambdaSqlBuilder\Attributes\DBCustomeDataTypeAttribute.cs" />
     <Compile Include="LambdaSqlBuilder\Attributes\DBIgnoreAttribute.cs" />
