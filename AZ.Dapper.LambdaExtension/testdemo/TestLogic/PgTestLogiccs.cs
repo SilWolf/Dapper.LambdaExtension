@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Dapper;
+using Dapper.Contrib.Extensions;
 using Dapper.LambdaExtension.Extentions;
 using testdemo.Entities;
 
@@ -43,7 +45,7 @@ namespace testdemo.TestLogic
         {
             using (var db = GetConnection())
             {
-                return db.Insert(item);
+                return DapperLambdaExt.Insert(db, item);
             }
 
         }
@@ -53,7 +55,7 @@ namespace testdemo.TestLogic
         {
             using (var db = GetConnection())
             {
-                var ecount = db.Query<Test2>(null).ToList().Count;
+                var ecount = DapperLambdaExt.Query<Test2>(db, null).ToList().Count;
 
                 if (count > ecount)
                 {
@@ -66,7 +68,7 @@ namespace testdemo.TestLogic
                             Name = prefix + i.ToString()
                         };
 
-                        db.Insert(item);
+                        DapperLambdaExt.Insert(db, item);
                     }
                 }
 
@@ -80,6 +82,15 @@ namespace testdemo.TestLogic
             using (var db = GetConnection())
             {
                 db.CreateTable<Test2>();
+            }
+        }
+
+        public void testNObuffer()
+        {
+            using (var db = GetConnection())
+            {
+                //扩展方法,为了不缓存要执行的SQL语句,比如大量的拼接插入values类语句,如果要缓存的话,是会造成内存一直增长的问题
+                db.Execute("", flag: CommandFlags.NoCache);
             }
         }
     }
