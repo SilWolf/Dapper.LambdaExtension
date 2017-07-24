@@ -256,6 +256,7 @@ namespace Dapper.LambdaExtension.Extentions
         }
 
 
+       
         /// <summary>
         /// //扩展方法,为了不缓存要执行的SQL语句,比如大量的拼接插入values类语句,如果要缓存的话,是会造成内存一直增长的问题,使用:flag:Nocache,之后,可避免缓存
         /// </summary>
@@ -267,7 +268,7 @@ namespace Dapper.LambdaExtension.Extentions
         /// <param name="commandType"></param>
         /// <param name="flag"></param>
         /// <returns></returns>
-        public static int Execute(this IDbConnection cnn, string sql, object param = null, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = null, CommandFlags flag=CommandFlags.Buffered)
+        public static int ExecuteNoCache(this IDbConnection cnn, string sql, object param = null, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = null, CommandFlags flag=CommandFlags.Buffered)
         {
             CommandDefinition command = new CommandDefinition(sql, param, transaction, commandTimeout, commandType, flag, new CancellationToken());
           
