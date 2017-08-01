@@ -3,7 +3,7 @@ using Dapper.LambdaExtension.LambdaSqlBuilder.Entity;
 
 namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
 {
-    
+
     class Sqlite3Adapter : AdapterBase
     {
         public override string AutoIncrementDefinition { get; } = "AUTOINCREMENT";
@@ -31,7 +31,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
         public override string CreateTablePrefix { get; } = "create table if not EXISTS ";
 
         public Sqlite3Adapter()
-            : base(SqlConst.LeftTokens[3], SqlConst.RightTokens[3], SqlConst.ParamPrefixs[0])
+            : base(SqlConst.LeftTokens[0], SqlConst.RightTokens[0], SqlConst.ParamPrefixs[0])
         {
 
         }
@@ -47,6 +47,16 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
         {
             return this.Field(fieldName);
         }
+
+        public override string TableExistSql(string tableName, string tableSchema)
+        {
+            var table = Table(tableName, tableSchema);
+            var sql = $"SELECT COUNT(*) FROM sqlite_master where type='table' and name='{table}'";
+
+            return sql;
+        }
+
+
         public override string Table(string tableName, string schema)
         {
             if (tableName.StartsWith(_leftToken) && tableName.EndsWith(_rightToken))
@@ -59,13 +69,6 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
                 return _leftToken + schema + "_" + tbname + _rightToken;
             }
             return tbname;
-        }
-
-        public override string TableExistSql(string tableName, string tableSchema)
-        {
-            var sql = $"SELECT COUNT(*) FROM sqlite_master where type='table' and name='{tableName}'";
-
-            return sql;
         }
 
         protected override string DbTypeBoolean(string fieldLength)
@@ -82,6 +85,6 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
             return $"CHAR({fieldLength})";
         }
 
-        
+
     }
 }
