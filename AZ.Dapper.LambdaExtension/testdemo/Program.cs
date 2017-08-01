@@ -16,10 +16,11 @@ namespace testdemo
             // Test2();
             var npglogic = new PgTestLogic();
 
-            //npglogic.CreateTest3();
+            npglogic.CreateTest3();
 
-            npglogic.InsertTest3(new Test3() {VName = "test111"});
+            //npglogic.InsertTest3(new Test3() {VName = "test111"});
 
+            npglogic.ExecuteTestInsert3();
 
             var test3 = npglogic.GeTest3();
 
@@ -27,7 +28,7 @@ namespace testdemo
 
            // npglogic.UpdateTest3(test3);
 
-            npglogic.DeleteTest3(test3);
+           // npglogic.DeleteTest3(test3);
 
             Console.ReadLine();
         }

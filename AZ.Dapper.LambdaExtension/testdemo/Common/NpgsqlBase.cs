@@ -11,7 +11,9 @@ namespace testdemo
 {
     public class NpgsqlBase
     {
-        protected string Connstr = "server=192.168.1.21;User Id=postgres;password=;database=testdb;Encoding=UTF-8;";//"data source=192.168.1.21;Database=testdb;Password=plus123456;User ID=postgres;";
+        //protected string Connstr = "server=192.168.1.21;User Id=postgres;password=;database=testdb;Encoding=UTF-8;";//"data source=192.168.1.21;Database=testdb;Password=plus123456;User ID=postgres;";
+
+        protected string Connstr = "server=localhost;User Id=postgres;password=ZeroPlus2013;database=testdb;Encoding=UTF-8;";//"data source=192.168.1.21;Database=testdb;Password=plus123456;User ID=postgres;";
 
         public NpgsqlBase()
         {
