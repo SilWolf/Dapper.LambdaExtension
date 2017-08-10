@@ -66,7 +66,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
                            {
                                MemberNode = new MemberNode()
                                        {
-                                           TableName = GetTableName(member),
+                                           TableName = GetTableName<T>(),//(member),
                                            FieldName = GetColumnName(callExpression.Object)
                                        },
                                Method = callFunction,

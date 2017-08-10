@@ -74,10 +74,10 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
                 return type.Name;
         }
 
-        private   string GetTableName(MemberExpression expression)
-        {
-            return GetTableName(expression.Member.DeclaringType);
-        }
+        //private   string GetTableName(MemberExpression expression)
+        //{
+        //    return GetTableName(expression.Member.DeclaringType);
+        //}
 
         public string GetTableName(SqlTableDefine tableDefine)
         {
