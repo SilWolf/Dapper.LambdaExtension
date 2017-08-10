@@ -85,13 +85,13 @@ namespace testdemo.TestLogic
             }
         }
 
-        public void testNObuffer()
-        {
-            using (var db = GetConnection())
-            {
-                //扩展方法,为了不缓存要执行的SQL语句,比如大量的拼接插入values类语句,如果要缓存的话,是会造成内存一直增长的问题
-                db.Execute("", flag: CommandFlags.NoCache);
-            }
-        }
+        //public void testNObuffer()
+        //{
+        //    using (var db = GetConnection())
+        //    {
+        //        //扩展方法,为了不缓存要执行的SQL语句,比如大量的拼接插入values类语句,如果要缓存的话,是会造成内存一直增长的问题
+        //        db.ExecuteNoCache("", flag: CommandFlags.NoCache);
+        //    }
+        //}
     }
 }

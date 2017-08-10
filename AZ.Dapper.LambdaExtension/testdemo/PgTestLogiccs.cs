@@ -50,6 +50,29 @@ namespace testdemo
             }
         }
 
+        public void ExecuteTestInsert3()
+        {
+            //INSERT INTO o_test3  ("v_name") VALUES(@VName)
+
+            using (var db = GetConnection())
+            {
+                var trans = db.BeginTransaction();
+                try
+                {
+                    var sql = "INSERT INTO o_test3  (\"v_name\") VALUES('78787878');";
+
+                    var ret =trans.Connection.ExecuteNoCache(sql, null,null, null, null, CommandFlags.NoCache);
+                   // trans.Commit();
+                    Console.WriteLine("  test3 inserted."+ret);
+                }
+                catch (Exception ex)
+                {
+                    trans.Rollback();
+                    Console.WriteLine(ex.Message + ex.StackTrace);
+                }
+            }
+        }
+
         public void UpdateTest3(Test3 item)
         {
             using (var db = GetConnection())
