@@ -56,11 +56,11 @@
     <Compile Include="LambdaSqlBuilder\Adapter\SqlserverCEAdapter.cs" />
     <Compile Include="LambdaSqlBuilder\Adapter\SqlserverAdapter.cs" />
     <Compile Include="LambdaSqlBuilder\Adapter\SqlAnyWhereAdapter.cs" />
-    <Compile Include="LambdaSqlBuilder\Attributes\ZPColumnAttribute.cs" />
-    <Compile Include="LambdaSqlBuilder\Attributes\ZPCustomeDataTypeAttribute.cs" />
-    <Compile Include="LambdaSqlBuilder\Attributes\ZPIgnoreAttribute.cs" />
-    <Compile Include="LambdaSqlBuilder\Attributes\ZPKeyAttribute.cs" />
-    <Compile Include="LambdaSqlBuilder\Attributes\ZPTableAttribute.cs" />
+    <Compile Include="LambdaSqlBuilder\Attributes\DBColumnAttribute.cs" />
+    <Compile Include="LambdaSqlBuilder\Attributes\DBCustomeDataTypeAttribute.cs" />
+    <Compile Include="LambdaSqlBuilder\Attributes\DBIgnoreAttribute.cs" />
+    <Compile Include="LambdaSqlBuilder\Attributes\DBKeyAttribute.cs" />
+    <Compile Include="LambdaSqlBuilder\Attributes\DBTableAttribute.cs" />
     <Compile Include="LambdaSqlBuilder\Builder\Builder.cs" />
     <Compile Include="LambdaSqlBuilder\Builder\BuilderCommon.cs" />
     <Compile Include="LambdaSqlBuilder\Builder\BuilderField.cs" />

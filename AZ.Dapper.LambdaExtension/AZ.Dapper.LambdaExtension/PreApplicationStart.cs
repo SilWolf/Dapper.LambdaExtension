@@ -31,7 +31,7 @@ namespace Dapper.LambdaExtension
 
             _initialized = true;
 
-            var aliasType = typeof(ZPColumnAttribute);
+            var aliasType = typeof(DBColumnAttribute);
 
             var mappedTypeList = new List<Type>();
 
@@ -78,7 +78,7 @@ namespace Dapper.LambdaExtension
 
                 AppDomain.CurrentDomain.AssemblyLoad += (sender, args) =>
                 {
-                    var aliasType2 = typeof(ZPColumnAttribute);
+                    var aliasType2 = typeof(DBColumnAttribute);
                     var mappedTypeList2 = new List<Type>();
                     var assembly = args.LoadedAssembly;
 
@@ -133,14 +133,14 @@ namespace Dapper.LambdaExtension
             if (!EnvHelper.IsNetFX)
             {
 
-                var attrib = member.GetCustomAttribute<ZPColumnAttribute>(false);
-                //var attrib = (ZPColumnAttribute)Attribute.GetCustomAttribute(member, typeof(ZPColumnAttribute), false);
+                var attrib = member.GetCustomAttribute<DBColumnAttribute>(false);
+                //var attrib = (DBColumnAttribute)Attribute.GetCustomAttribute(member, typeof(DBColumnAttribute), false);
                 return attrib == null ? member.Name : attrib.Name;//if not define zpcolumn attribute on an propertity/field then use it's own name.
 
             }
             else
             {
-                var attrib = member.GetCustomAttribute<ZPColumnAttribute>(false);// (ZPColumnAttribute)Attribute.GetCustomAttribute(member, typeof(ZPColumnAttribute), false);
+                var attrib = member.GetCustomAttribute<DBColumnAttribute>(false);// (DBColumnAttribute)Attribute.GetCustomAttribute(member, typeof(DBColumnAttribute), false);
                 return attrib == null ? member.Name : attrib.Name;//if not define zpcolumn attribute on an propertity/field then use it's own name.
 
             }

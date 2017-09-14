@@ -20,19 +20,19 @@ namespace Dapper.LambdaExtension.Helpers
             //处理表定义
             var name = type.Name;
 
-            ZPTableAttribute tableAttr=new ZPTableAttribute("");
+            DBTableAttribute tableAttr=new DBTableAttribute("");
  
 
             if (EnvHelper.IsNetFX)
             {
 #if NETCOREAPP1_0 ||NETSTANDARD1_6
 #else
-                tableAttr = type.GetCustomAttribute<ZPTableAttribute>();
+                tableAttr = type.GetCustomAttribute<DBTableAttribute>();
 #endif
             }
             else
             {
-                tableAttr = type.GetTypeInfo().GetCustomAttribute<ZPTableAttribute>();
+                tableAttr = type.GetTypeInfo().GetCustomAttribute<DBTableAttribute>();
             }
 
             var sqlTableDef = new SqlTableDefine(tableAttr, name);
@@ -44,13 +44,13 @@ namespace Dapper.LambdaExtension.Helpers
 
             foreach (var cp in columns)
             {
-                var ignore = cp.GetCustomAttribute<ZPIgnoreAttribute>();
+                var ignore = cp.GetCustomAttribute<DBIgnoreAttribute>();
 
                 if (ignore == null)
                 {
-                    var keyAttr = cp.GetCustomAttribute<ZPKeyAttribute>();
-                    var columnAttr = cp.GetCustomAttribute<ZPColumnAttribute>();
-                    var dataTypeAttr = cp.GetCustomAttribute<ZPCustomeDataTypeAttribute>();
+                    var keyAttr = cp.GetCustomAttribute<DBKeyAttribute>();
+                    var columnAttr = cp.GetCustomAttribute<DBColumnAttribute>();
+                    var dataTypeAttr = cp.GetCustomAttribute<DBCustomeDataTypeAttribute>();
 
                     var cname = cp.Name;
 

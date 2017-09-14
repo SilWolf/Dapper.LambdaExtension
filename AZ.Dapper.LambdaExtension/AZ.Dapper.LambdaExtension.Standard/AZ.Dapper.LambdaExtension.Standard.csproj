@@ -41,11 +41,11 @@
     <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Adapter\Sqlite3Adapter.cs" Link="LambdaSqlBuilder\Adapter\Sqlite3Adapter.cs" />
     <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Adapter\SqlserverAdapter.cs" Link="LambdaSqlBuilder\Adapter\SqlserverAdapter.cs" />
     <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Adapter\SqlserverCEAdapter.cs" Link="LambdaSqlBuilder\Adapter\SqlserverCEAdapter.cs" />
-    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Attributes\ZPColumnAttribute.cs" Link="LambdaSqlBuilder\Attributes\ZPColumnAttribute.cs" />
-    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Attributes\ZPCustomeDataTypeAttribute.cs" Link="LambdaSqlBuilder\Attributes\ZPCustomeDataTypeAttribute.cs" />
-    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Attributes\ZPIgnoreAttribute.cs" Link="LambdaSqlBuilder\Attributes\ZPIgnoreAttribute.cs" />
-    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Attributes\ZPKeyAttribute.cs" Link="LambdaSqlBuilder\Attributes\ZPKeyAttribute.cs" />
-    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Attributes\ZPTableAttribute.cs" Link="LambdaSqlBuilder\Attributes\ZPTableAttribute.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Attributes\DBColumnAttribute.cs" Link="LambdaSqlBuilder\Attributes\DBColumnAttribute.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Attributes\DBCustomeDataTypeAttribute.cs" Link="LambdaSqlBuilder\Attributes\DBCustomeDataTypeAttribute.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Attributes\DBIgnoreAttribute.cs" Link="LambdaSqlBuilder\Attributes\DBIgnoreAttribute.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Attributes\DBKeyAttribute.cs" Link="LambdaSqlBuilder\Attributes\DBKeyAttribute.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Attributes\DBTableAttribute.cs" Link="LambdaSqlBuilder\Attributes\DBTableAttribute.cs" />
     <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Builder\Builder.cs" Link="LambdaSqlBuilder\Builder\Builder.cs" />
     <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Builder\BuilderCommon.cs" Link="LambdaSqlBuilder\Builder\BuilderCommon.cs" />
     <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Builder\BuilderField.cs" Link="LambdaSqlBuilder\Builder\BuilderField.cs" />

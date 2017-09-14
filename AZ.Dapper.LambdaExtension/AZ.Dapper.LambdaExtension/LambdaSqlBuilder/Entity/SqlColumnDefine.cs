@@ -17,16 +17,16 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Entity
 
         public bool NullAble { get; set; }
 
-        public ZPColumnAttribute ColumnAttribute { get; set; }
+        public DBColumnAttribute ColumnAttribute { get; set; }
 
-        public ZPKeyAttribute KeyAttribute { get; set; }
+        public DBKeyAttribute KeyAttribute { get; set; }
         [Obsolete]
-        public ZPCustomeDataTypeAttribute DataTypeAttribute { get; set; }
+        public DBCustomeDataTypeAttribute DataTypeAttribute { get; set; }
 
 
-        public ZPIgnoreAttribute IgnoreAttribute { get; set; }
+        public DBIgnoreAttribute IgnoreAttribute { get; set; }
 
-        public SqlColumnDefine(string name, string aliasName, object value,Type valueType, bool nullAble, ZPColumnAttribute columnAttr, ZPKeyAttribute keyAttr, ZPCustomeDataTypeAttribute customeDataTypeAttr, ZPIgnoreAttribute ignoreAttr=null)
+        public SqlColumnDefine(string name, string aliasName, object value,Type valueType, bool nullAble, DBColumnAttribute columnAttr, DBKeyAttribute keyAttr, DBCustomeDataTypeAttribute customeDataTypeAttr, DBIgnoreAttribute ignoreAttr=null)
         {
             Name = name;
             AliasName = aliasName;
@@ -39,7 +39,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Entity
             NullAble = nullAble;
         }
 
-        public SqlColumnDefine( ZPColumnAttribute columnAttribute, ZPKeyAttribute keyAttribute = null )
+        public SqlColumnDefine( DBColumnAttribute columnAttribute, DBKeyAttribute keyAttribute = null )
         {
             Name = columnAttribute.Name;
             AliasName = columnAttribute.Name;
