@@ -3,7 +3,7 @@ using Dapper.LambdaExtension.LambdaSqlBuilder.Entity;
 
 namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
 {
-
+    
     class Sqlite3Adapter : AdapterBase
     {
         public override string AutoIncrementDefinition { get; } = "AUTOINCREMENT";
@@ -66,7 +66,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
             var tbname = string.Format("{0}{1}{2}", "", tableName, "");
             if (!string.IsNullOrEmpty(schema))
             {
-                return _leftToken + schema + "_" + tbname + _rightToken;
+                return _leftToken + schema  + "_" + tbname + _rightToken;
             }
             return tbname;
         }
@@ -85,6 +85,6 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
             return $"CHAR({fieldLength})";
         }
 
-
+        
     }
 }

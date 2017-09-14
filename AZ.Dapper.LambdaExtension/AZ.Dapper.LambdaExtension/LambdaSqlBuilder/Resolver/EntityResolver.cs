@@ -52,8 +52,8 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
                 var fieldAlias = propname;
 
                 //resolve custome column name
-                var colAttr = item.GetCustomAttribute<DBColumnAttribute>();
-                var colIgnore = item.GetCustomAttribute<DBIgnoreAttribute>();
+                var colAttr = item.GetCustomAttribute<ZPColumnAttribute>();
+                var colIgnore = item.GetCustomAttribute<ZPIgnoreAttribute>();
                 if (colIgnore != null)
                 {
                     continue;
@@ -84,8 +84,8 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
                 var fieldAlias = propname;
 
                 //resolve custome column name
-                var colAttr = item.GetCustomAttribute<DBColumnAttribute>();
-                var colIgnore = item.GetCustomAttribute<DBIgnoreAttribute>();
+                var colAttr = item.GetCustomAttribute<ZPColumnAttribute>();
+                var colIgnore = item.GetCustomAttribute<ZPIgnoreAttribute>();
                 if (colIgnore != null)
                 {
                     continue;
@@ -139,10 +139,10 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
             Type type = typeof(T);// entity.GetType();
             var ps = type.GetProperties().Where(m =>
             {
-                var obj = m.GetCustomAttributes(typeof(DBKeyAttribute), false).FirstOrDefault();
+                var obj = m.GetCustomAttributes(typeof(ZPKeyAttribute), false).FirstOrDefault();
                 if (obj != null)
                 {
-                    DBKeyAttribute key = obj as DBKeyAttribute;
+                    ZPKeyAttribute key = obj as ZPKeyAttribute;
                     return !key.Increment;
                 }
                 return true;

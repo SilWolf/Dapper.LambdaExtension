@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using Dapper.LambdaExtension.Helpers;
 using Dapper.LambdaExtension.LambdaSqlBuilder.Attributes;
 using Dapper.LambdaExtension.LambdaSqlBuilder.Entity;
 
 namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
 {
-    
+
     partial class LambdaResolver
     {
         private Dictionary<ExpressionType, string> _operationDictionary = new Dictionary<ExpressionType, string>()
@@ -29,55 +30,70 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
         }
 
         #region helpers
-        public   string GetColumnName<T>(Expression<Func<T, object>> selector)
+        public string GetColumnName<T>(Expression<Func<T, object>> selector)
         {
             return GetColumnName(GetMemberExpression(selector.Body));
         }
 
-        public   string GetColumnName(Expression expression)
+        public string GetColumnName(Expression expression)
         {
             var member = GetMemberExpression(expression);
-#if NETCOREAPP1_0
-            var column = member.Member.GetCustomAttributes(false).OfType<DBColumnAttribute>().FirstOrDefault();//.GetCustomAttributes(false).OfType<DBColumnAttribute>().FirstOrDefault();
-#else
-            var column = member.Member.GetCustomAttributes(false).OfType<DBColumnAttribute>().FirstOrDefault();
-#endif
+
+            ZPColumnAttribute column;
+
+            if (!EnvHelper.IsNetFX)
+            {
+                column = member.Member.GetCustomAttributes(false).OfType<ZPColumnAttribute>()
+                    .FirstOrDefault(); //.GetCustomAttributes(false).OfType<ZPColumnAttribute>().FirstOrDefault();
+            }
+            else
+            {
+                column = member.Member.GetCustomAttributes(false).OfType<ZPColumnAttribute>().FirstOrDefault();
+            }
+
             if (column != null)
                 return column.Name;
             else
                 return member.Member.Name;
         }
 
-        public   string GetTableName<T>()
+        public string GetTableName<T>()
         {
             return GetTableName(typeof(T));
         }
 
-        public   string GetTableName(Type type)
+        public string GetTableName(Type type)
         {
-#if NETCOREAPP1_0
-            var column = type.GetTypeInfo().GetCustomAttributes(false).OfType<DBTableAttribute>().FirstOrDefault();//.GetCustomAttributes(false).OfType<DBColumnAttribute>().FirstOrDefault();
-#else
-            var column = type.GetCustomAttributes(false).OfType<DBTableAttribute>().FirstOrDefault();
-#endif
-            if (column != null)
+            ZPTableAttribute table;
+            if (!EnvHelper.IsNetFX)
             {
-                var tname = column.Name;
+                table = type.GetTypeInfo().GetCustomAttributes(false).OfType<ZPTableAttribute>()
+                    .FirstOrDefault(); //.GetCustomAttributes(false).OfType<ZPColumnAttribute>().FirstOrDefault();
+            }
+            else
+            {
+                table = type.GetTypeInfo().GetCustomAttributes(false).OfType<ZPTableAttribute>().FirstOrDefault(); ;
+                
+            }
+
+            if (table != null)
+            {
+                var tname = table.Name;
                 if (string.IsNullOrEmpty(tname))
                 {
                     tname = type.Name;
                 }
 
-                return _builder.Adapter.Table(tname, column.Schema);
+                return _builder.Adapter.Table(tname, table.Schema);
             }
             else
                 return type.Name;
         }
 
-        //private   string GetTableName(MemberExpression expression)
-        //{
-        //    return GetTableName(expression.Member.DeclaringType);
-        //}
+        private string GetTableName(MemberExpression expression)
+        {
+            return GetTableName(expression.Member.DeclaringType);
+        }
 
         public string GetTableName(SqlTableDefine tableDefine)
         {
@@ -116,6 +132,6 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
             throw new ArgumentException("Member expression expected");
         }
 
-#endregion
+        #endregion
     }
 }

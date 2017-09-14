@@ -8,11 +8,9 @@ using Dapper.LambdaExtension.Helpers;
 using Dapper.LambdaExtension.LambdaSqlBuilder.Adapter;
 using Dapper.LambdaExtension.LambdaSqlBuilder.Attributes;
 using Dapper.LambdaExtension.LambdaSqlBuilder.Entity;
-#if ZEROPLUS
-  using ZeroPlus.Dapper;
-#else
+ 
   using Dapper;
-#endif
+ 
 
 namespace Dapper.LambdaExtension.Extentions
 {

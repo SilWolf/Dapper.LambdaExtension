@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.Serialization;
-
+ 
 using System.Text;
 using System.Threading;
 using Dapper.LambdaExtension.LambdaSqlBuilder;
@@ -33,7 +33,7 @@ namespace Dapper.LambdaExtension.Extentions
             }
             return sb.ToString();
         }
-        public static IEnumerable<T> Query<T>(this IDbConnection db, Expression<Func<T, bool>> wherExpression = null, IDbTransaction trans = null, int? commandTimeout = null)
+        public static IEnumerable<T> Query<T>(this IDbConnection db, Expression<Func<T, bool>> wherExpression=null, IDbTransaction trans = null, int? commandTimeout = null)
         {
             var sqllam = new SqlExp<T>(db.GetAdapter());
 
@@ -41,10 +41,10 @@ namespace Dapper.LambdaExtension.Extentions
             {
                 sqllam = sqllam.Where(wherExpression);
             }
-
-            return db.Query<T>(sqllam.SqlString, sqllam.Parameters, trans, commandTimeout: commandTimeout);
+ 
+            return db.Query<T>(sqllam.SqlString, sqllam.Parameters,trans,commandTimeout:commandTimeout);
         }
-
+ 
 
         public static T QueryFirstOrDefault<T>(this IDbConnection db, Expression<Func<T, bool>> wherExpression = null, IDbTransaction trans = null, int? commandTimeout = null)
         {
@@ -55,28 +55,28 @@ namespace Dapper.LambdaExtension.Extentions
             {
                 sqllam = sqllam.Where(wherExpression);
             }
-
+ 
             return db.QueryFirstOrDefault<T>(sqllam.SqlString, sqllam.Parameters, trans, commandTimeout: commandTimeout);
 
         }
 
-        public static int Insert<T>(this IDbConnection db, T entity, IDbTransaction trans = null, int? commandTimeout = null)
+        public static int Insert<T>(this IDbConnection db, T entity,IDbTransaction trans=null,int? commandTimeout=null)
         {
 
             var sqllam = new SqlExp<T>(db.GetAdapter());
 
-
-            sqllam = sqllam.Insert(entity);
-
-            return db.Execute(sqllam.SqlString, entity, trans, commandTimeout, CommandType.Text);
+             
+                sqllam = sqllam.Insert(entity);
+ 
+            return db.Execute(sqllam.SqlString,entity,trans,commandTimeout,CommandType.Text);
 
         }
 
-        public static int Insert(this IDbConnection db, SqlTableDefine tableDefine, List<SqlColumnDefine> columnDefines, IEnumerable<object> entity, IDbTransaction trans = null, int? commandTimeout = null)
+        public static int Insert(this IDbConnection db,SqlTableDefine tableDefine,List<SqlColumnDefine> columnDefines, IEnumerable<object> entity, IDbTransaction trans = null, int? commandTimeout = null)
         {
 
-            var sqllam = new SqlExp<object>(tableDefine, columnDefines, db.GetAdapter());
-
+            var sqllam = new SqlExp<object>(tableDefine,columnDefines,db.GetAdapter());
+ 
             sqllam = sqllam.Insert(tableDefine, columnDefines);
 
             return db.Execute(sqllam.SqlString, entity, trans, commandTimeout, CommandType.Text);
@@ -90,7 +90,7 @@ namespace Dapper.LambdaExtension.Extentions
 
 
             sqllam = sqllam.Insert(entitys.FirstOrDefault());
-
+ 
             return db.Execute(sqllam.SqlString, entitys, trans, commandTimeout, CommandType.Text);
 
         }
@@ -101,10 +101,12 @@ namespace Dapper.LambdaExtension.Extentions
 
 
             sqllam = sqllam.Update(entity);
-
+ 
             return db.Execute(sqllam.SqlString, entity, trans, commandTimeout, CommandType.Text);
 
         }
+
+        
 
 
         public static int UpdateList<T>(this IDbConnection db, IEnumerable<T> entitys, IDbTransaction trans = null, int? commandTimeout = null)
@@ -114,11 +116,24 @@ namespace Dapper.LambdaExtension.Extentions
 
 
             sqllam = sqllam.Update(entitys.FirstOrDefault());
-
+ 
             return db.Execute(sqllam.SqlString, entitys, trans, commandTimeout, CommandType.Text);
 
         }
 
+      
+
+        public static int DeleteList<T>(this IDbConnection db, IEnumerable<T> engityList, IDbTransaction trans = null, int? commandTimeout = null)
+        {
+
+            var sqllam = new SqlExp<T>(db.GetAdapter());
+
+
+            sqllam = sqllam.Delete();
+ 
+            return db.Execute(sqllam.SqlString, engityList, trans, commandTimeout, CommandType.Text);
+
+        }
 
 
 
@@ -134,19 +149,7 @@ namespace Dapper.LambdaExtension.Extentions
 
         }
 
-        public static int DeleteList<T>(this IDbConnection db, IEnumerable<T> engityList, IDbTransaction trans = null, int? commandTimeout = null)
-        {
-
-            var sqllam = new SqlExp<T>(db.GetAdapter());
-
-
-            sqllam = sqllam.Delete();
-
-            return db.Execute(sqllam.SqlString, engityList, trans, commandTimeout, CommandType.Text);
-
-        }
-
-        public static int Delete<T>(this IDbConnection db, Expression<Func<T, bool>> deleteExpression, IDbTransaction trans = null, int? commandTimeout = null)
+        public static int Delete<T>(this IDbConnection db, Expression<Func<T,bool>> deleteExpression, IDbTransaction trans = null, int? commandTimeout = null)
         {
             if (deleteExpression == null)
             {
@@ -157,15 +160,28 @@ namespace Dapper.LambdaExtension.Extentions
 
 
             sqllam = sqllam.Delete(deleteExpression);
+ 
 
+            return db.Execute(sqllam.SqlString, sqllam.Parameters, trans, commandTimeout, CommandType.Text);
+
+        }
+
+        public static int Delete<T>(this IDbConnection db, Action<SqlExp<T>> action, IDbTransaction trans = null, int? commandTimeout = null)
+        {
+          
+            var sqllam = new SqlExp<T>(db.GetAdapter());
+ 
+            sqllam = sqllam.Delete();
+
+            action?.Invoke(sqllam);
 
             return db.Execute(sqllam.SqlString, sqllam.Parameters, trans, commandTimeout, CommandType.Text);
 
         }
 
 
-        public static PagedResult<T> PagedQuery<T>(this IDbConnection db, int pageSize, int pageNumber, Expression<Func<T, bool>> whereExpression = null, Expression<Func<T, object>> groupByexpression = null, IDbTransaction trans = null, int? commandTimeout = null, Expression<Func<T, object>> orderbyExpression = null)
-            where T : class
+        public static PagedResult<T> PagedQuery<T>(this IDbConnection db,int pageSize,int pageNumber, Expression<Func<T, bool>> whereExpression = null, Expression<Func<T, object>> groupByexpression=null, IDbTransaction trans = null, int? commandTimeout = null, Expression<Func<T, object>> orderbyExpression = null)
+            where T:class
         {
 
             var sqllam = new SqlExp<T>(db.GetAdapter());
@@ -183,18 +199,18 @@ namespace Dapper.LambdaExtension.Extentions
 
             if (groupByexpression != null)
             {
-                sqllam = sqllam.GroupBy(groupByexpression);
+                sqllam=sqllam.GroupBy(groupByexpression);
             }
 
             countSqlam = countSqlam.Count();
 
             var countRet = db.Query<int>(countSqlam.SqlString, countSqlam.Parameters).FirstOrDefault();
-
+ 
             var sqlstring = sqllam.QueryPage(pageSize, pageNumber);
 
-            var retlist = db.Query<T>(sqlstring, sqllam.Parameters, trans, commandTimeout: commandTimeout);
+            var retlist = db.Query<T>(sqlstring, sqllam.Parameters,trans,commandTimeout:commandTimeout);
 
-            return new PagedResult<T>(retlist, countRet, pageSize, pageNumber);
+            return new PagedResult<T>(retlist, countRet,pageSize,pageNumber);
 
         }
         public static IEnumerable<T> Query<T>(this IDbConnection db, Action<SqlExp<T>> action, IDbTransaction trans = null, int? commandTimeout = null)
@@ -208,40 +224,40 @@ namespace Dapper.LambdaExtension.Extentions
             return db.Query<T>(sqllam.SqlString, sqllam.Parameters, trans, commandTimeout: commandTimeout);
 
         }
-        public static PagedResult<T> PagedQuery<T>(this IDbConnection db, int pageSize, int pageNumber, Action<SqlExp<T>> action, IDbTransaction trans = null, int? commandTimeout = null) where T : class
+        public static PagedResult<T> PagedQuery<T>(this IDbConnection db, int pageSize, int pageNumber, Action<SqlExp<T>> action, IDbTransaction trans = null, int? commandTimeout = null) where T :class
         {
 
             var sqllam = new SqlExp<T>(db.GetAdapter());
 
-            var countSqlam = new SqlExp<T>(db.GetAdapter(), true);
+            var countSqlam= new SqlExp<T>(db.GetAdapter(),true);
 
             action?.Invoke(sqllam);
 
             action?.Invoke(countSqlam);
 
             countSqlam = countSqlam.Count();
+            
 
+            var countRet =  db.Query<int>(countSqlam.SqlString, countSqlam.Parameters, trans, commandTimeout: commandTimeout).FirstOrDefault();
+ 
+            
+           var sqlstring = sqllam.QueryPage(pageSize, pageNumber);
 
-            var countRet = db.Query<int>(countSqlam.SqlString, countSqlam.Parameters, trans, commandTimeout: commandTimeout).FirstOrDefault();
-
-
-            var sqlstring = sqllam.QueryPage(pageSize, pageNumber);
-
-            var retlist = db.Query<T>(sqlstring, sqllam.Parameters, trans, commandTimeout: commandTimeout);
-
+            var retlist = db.Query<T>(sqlstring, sqllam.Parameters,trans,commandTimeout:commandTimeout);
+ 
             return new PagedResult<T>(retlist, countRet, pageSize, pageNumber);
 
         }
 
-        public static IEnumerable<TResult> Query<TEntity, TResult>(this IDbConnection db, Action<SqlExp<TEntity>> action = null,
+        public static IEnumerable<TResult> Query<TEntity,TResult>(this IDbConnection db, Action<SqlExp<TEntity>> action = null,
             IDbTransaction trans = null, int? commandTimeout = null) where TEntity : class
         {
             var sqllam = new SqlExp<TEntity>(db.GetAdapter());
 
             action?.Invoke(sqllam);
 
-            return db.Query<TResult>(sqllam.SqlString, sqllam.Parameters, trans, commandTimeout: commandTimeout);
-
+          return   db.Query<TResult>(sqllam.SqlString, sqllam.Parameters, trans, commandTimeout:commandTimeout);
+ 
         }
 
         public static TResult ExecuteScalar<TEntity, TResult>(this IDbConnection db, Action<SqlExp<TEntity>> action = null,
@@ -250,13 +266,11 @@ namespace Dapper.LambdaExtension.Extentions
             var sqllam = new SqlExp<TEntity>(db.GetAdapter());
 
             action?.Invoke(sqllam);
-
+ 
             return db.ExecuteScalar<TResult>(sqllam.SqlString, sqllam.Parameters, trans, commandTimeout);
-
+ 
         }
 
-
-       
         /// <summary>
         /// //扩展方法,为了不缓存要执行的SQL语句,比如大量的拼接插入values类语句,如果要缓存的话,是会造成内存一直增长的问题,使用:flag:Nocache,之后,可避免缓存
         /// </summary>
@@ -268,13 +282,11 @@ namespace Dapper.LambdaExtension.Extentions
         /// <param name="commandType"></param>
         /// <param name="flag"></param>
         /// <returns></returns>
-        public static int ExecuteNoCache(this IDbConnection cnn, string sql, object param = null, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = null, CommandFlags flag=CommandFlags.Buffered)
+        public static int ExecuteNoCache(this IDbConnection cnn, string sql, object param = null, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = null, CommandFlags flag = CommandFlags.Buffered)
         {
             CommandDefinition command = new CommandDefinition(sql, param, transaction, commandTimeout, commandType, flag, new CancellationToken());
-          
+
             return cnn.Execute(command);
         }
-
-
     }
 }

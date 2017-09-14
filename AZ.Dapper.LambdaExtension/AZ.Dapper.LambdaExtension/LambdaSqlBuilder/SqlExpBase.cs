@@ -14,6 +14,8 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
         internal SqlType _type;
         internal SqlAdapterType _adapter;
 
+        public string JoinSubAliasTableName { get; internal set; }
+
         internal Type _entityType;
 
         public Builder.Builder SqlBuilder { get { return _builder; } }

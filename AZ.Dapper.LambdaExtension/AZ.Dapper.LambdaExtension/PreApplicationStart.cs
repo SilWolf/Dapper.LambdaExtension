@@ -2,26 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-
-using System.Text;
-using System.Threading.Tasks;
+ 
 //using System.Web;
 using Dapper.LambdaExtension.LambdaSqlBuilder.Attributes;
+ 
+using Dapper.LambdaExtension.Helpers;
+#if NETCOREAPP1_0 || NETSTANDARD1_6
 
-using Dapper;
-
-#if NETCOREAPP1_0
-using System.Reflection.Metadata;
 using Microsoft.Extensions.DependencyModel;
-using System.Reflection.PortableExecutable;
-using System.Reflection.Metadata.Ecma335;
 #endif
 
 //[assembly: PreApplicationStartMethod(typeof(Dapper.LambdaExtension.PreApplicationStart), "RegisterTypeMaps")]
 
 namespace Dapper.LambdaExtension
 {
-
+     
     public static class PreApplicationStart
     {
         static Func<Type, string, PropertyInfo> _fu = (type, columnName) => type.GetProperties().FirstOrDefault(prop => GetColumnAttribute(prop) == columnName);
@@ -36,120 +31,119 @@ namespace Dapper.LambdaExtension
 
             _initialized = true;
 
-            var aliasType = typeof(DBColumnAttribute);
+            var aliasType = typeof(ZPColumnAttribute);
 
             var mappedTypeList = new List<Type>();
 
-#if NETCOREAPP1_0
-            var libList = DependencyContext.Default.CompileLibraries.ToList();
-
-
-            foreach (var library in libList)
+            if (!EnvHelper.IsNetFX)
             {
-                foreach (var libraryAssembly in library.Assemblies)
+#if NETCOREAPP1_0 || NETSTANDARD1_6
+                try
                 {
-                    var assembly = Assembly.Load(new AssemblyName(libraryAssembly));
-                    var types = assembly.GetExportedTypes().ToList();
-                    var mappedtypes = types.Where(f =>
-                 f.GetProperties().Any(
-                     p =>
-                     p.GetCustomAttributes(false).Any(
-                         a => a.GetType().Name == aliasType.Name)));
+ 
+                    var runLiblist = DependencyContext.Default.RuntimeLibraries.ToList();
 
-                    mappedTypeList.AddRange(mappedtypes);
+
+                    foreach (var rl in runLiblist)
+                    {
+                        var assemlist = rl.GetDefaultAssemblyNames(DependencyContext.Default).ToList();
+                        foreach (var asm in assemlist)
+                        {
+                            var assem = Assembly.Load(asm);
+                            var types = assem.GetExportedTypes().ToList();
+                            var mappedtypes = types.Where(f =>
+                                f.GetProperties().Any(
+                                    p =>
+                                        p.GetCustomAttributes(false).Any(
+                                            a => a.GetType().Name == aliasType.Name)));
+
+                            mappedTypeList.AddRange(mappedtypes);
+                        }
+                    }
+ 
+ 
                 }
-
-            }
-
-            var runLiblist = DependencyContext.Default.RuntimeLibraries.ToList();
-
-
-            var tempTypes = Assembly.GetEntryAssembly().GetExportedTypes();
-            var mappedtypesList = tempTypes.Where(f =>
-          f.GetProperties().Any(
-              p =>
-              p.GetCustomAttributes(false).Any(
-                  a => a.GetType().Name == aliasType.Name))).ToList();
-
-            mappedTypeList.AddRange(mappedtypesList);
-
-
-
-            foreach (var library in runLiblist)
-            {
-                foreach (var assembly in library.Assemblies)
+                catch (Exception ex)
                 {
-                    var assem = Assembly.Load(assembly.Name);
-                    var types = assem.GetExportedTypes().ToList();
-                    var mappedtypes = types.Where(f =>
-            f.GetProperties().Any(
-                p =>
-                p.GetCustomAttributes(false).Any(
-                    a => a.GetType().Name == aliasType.Name)));
-
-                    mappedTypeList.AddRange(mappedtypes);
+                    Console.WriteLine(ex.Message);
                 }
-            }
-#else
-
-
-            var assemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
-
-             AppDomain.CurrentDomain.AssemblyLoad += CurrentDomain_AssemblyLoad;
-        
-            foreach (var assembly in assemblies)
-            {
-                var mappedTypes = assembly.GetTypes().Where(
-                 f =>
-                 f.GetProperties().Any(
-                     p =>
-                     p.GetCustomAttributes(false).Any(
-                         a => a.GetType().Name == aliasType.Name)));
-
-                mappedTypeList.AddRange(mappedTypes);
-            }
 #endif
+            }
+            else
+            {
 
+#if NETCOREAPP1_0 || NETSTANDARD1_6
+#else
+                var assemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
+
+                AppDomain.CurrentDomain.AssemblyLoad += (sender, args) =>
+                {
+                    var aliasType2 = typeof(ZPColumnAttribute);
+                    var mappedTypeList2 = new List<Type>();
+                    var assembly = args.LoadedAssembly;
+
+                    var mappedTypes = assembly.GetExportedTypes().Where(
+                        f =>
+                            f.GetProperties().Any(
+                                p =>
+                                    p.GetCustomAttributes(false).Any(
+                                        a => a.GetType().Name == aliasType2.Name)));
+
+                    mappedTypeList2.AddRange(mappedTypes);
+
+                    foreach (var mappedType in mappedTypeList2)
+                    {
+                        SqlMapper.SetTypeMap(mappedType, new CustomPropertyTypeMap(mappedType, _fu));
+                    }
+                }; //CurrentDomain_AssemblyLoad};
+
+                
+
+                foreach (var assembly in assemblies)
+                {
+                    try
+                    {
+                        var mappedTypes = assembly.GetExportedTypes().Where(
+                            f =>
+                                f.GetProperties().Any(
+                                    p =>
+                                        p.GetCustomAttributes(false).Any(
+                                            a => a.GetType().Name == aliasType.Name)));
+
+                        mappedTypeList.AddRange(mappedTypes);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                }
+#endif
+            }
             foreach (var mappedType in mappedTypeList)
             {
                 SqlMapper.SetTypeMap(mappedType, new CustomPropertyTypeMap(mappedType, _fu));
             }
-        }
-#if NETCOREAPP1_0
-#else
-        private static void CurrentDomain_AssemblyLoad(object sender, AssemblyLoadEventArgs args)
-        {
-            var aliasType = typeof(DBColumnAttribute);
-            var mappedTypeList = new List<Type>();
-            var assembly = args.LoadedAssembly;
-             
-                var mappedTypes = assembly.GetTypes().Where(
-                    f =>
-                        f.GetProperties().Any(
-                            p =>
-                                p.GetCustomAttributes(false).Any(
-                                    a => a.GetType().Name == aliasType.Name)));
 
-                mappedTypeList.AddRange(mappedTypes);
-           
-            foreach (var mappedType in mappedTypeList)
-            {
-                SqlMapper.SetTypeMap(mappedType, new CustomPropertyTypeMap(mappedType, _fu));
-            }
         }
-#endif
+ 
+
         static string GetColumnAttribute(MemberInfo member)
         {
             if (member == null) return null;
+            if (!EnvHelper.IsNetFX)
+            {
 
-#if NETCOREAPP1_0
-            var attrib = member.GetCustomAttribute<DBColumnAttribute>(false);
-            //var attrib = (DBColumnAttribute)Attribute.GetCustomAttribute(member, typeof(DBColumnAttribute), false);
-            return attrib == null ? member.Name : attrib.Name;//if not define DBcolumn attribute on an propertity/field then use it's own name.
-#else
-             var attrib = (DBColumnAttribute)Attribute.GetCustomAttribute(member, typeof(DBColumnAttribute), false);
-            return attrib == null ? member.Name : attrib.Name;//if not define DBcolumn attribute on an propertity/field then use it's own name.
-#endif
+                var attrib = member.GetCustomAttribute<ZPColumnAttribute>(false);
+                //var attrib = (ZPColumnAttribute)Attribute.GetCustomAttribute(member, typeof(ZPColumnAttribute), false);
+                return attrib == null ? member.Name : attrib.Name;//if not define zpcolumn attribute on an propertity/field then use it's own name.
+
+            }
+            else
+            {
+                var attrib = member.GetCustomAttribute<ZPColumnAttribute>(false);// (ZPColumnAttribute)Attribute.GetCustomAttribute(member, typeof(ZPColumnAttribute), false);
+                return attrib == null ? member.Name : attrib.Name;//if not define zpcolumn attribute on an propertity/field then use it's own name.
+
+            }
         }
 
     }

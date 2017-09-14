@@ -19,11 +19,22 @@ namespace Dapper.LambdaExtension.Helpers
         {
             //处理表定义
             var name = type.Name;
-#if NETCOREAPP1_0
-            var tableAttr = type.GetTypeInfo().GetCustomAttribute<DBTableAttribute>();
+
+            ZPTableAttribute tableAttr=new ZPTableAttribute("");
+ 
+
+            if (EnvHelper.IsNetFX)
+            {
+#if NETCOREAPP1_0 ||NETSTANDARD1_6
 #else
-            var tableAttr = type.GetCustomAttribute<DBTableAttribute>();
-#endif 
+                tableAttr = type.GetCustomAttribute<ZPTableAttribute>();
+#endif
+            }
+            else
+            {
+                tableAttr = type.GetTypeInfo().GetCustomAttribute<ZPTableAttribute>();
+            }
+
             var sqlTableDef = new SqlTableDefine(tableAttr, name);
 
             //处理列定义
@@ -33,13 +44,13 @@ namespace Dapper.LambdaExtension.Helpers
 
             foreach (var cp in columns)
             {
-                var ignore = cp.GetCustomAttribute<DBIgnoreAttribute>();
+                var ignore = cp.GetCustomAttribute<ZPIgnoreAttribute>();
 
                 if (ignore == null)
                 {
-                    var keyAttr = cp.GetCustomAttribute<DBKeyAttribute>();
-                    var columnAttr = cp.GetCustomAttribute<DBColumnAttribute>();
-                    var dataTypeAttr = cp.GetCustomAttribute<DBCustomeDataTypeAttribute>();
+                    var keyAttr = cp.GetCustomAttribute<ZPKeyAttribute>();
+                    var columnAttr = cp.GetCustomAttribute<ZPColumnAttribute>();
+                    var dataTypeAttr = cp.GetCustomAttribute<ZPCustomeDataTypeAttribute>();
 
                     var cname = cp.Name;
 
@@ -93,23 +104,32 @@ namespace Dapper.LambdaExtension.Helpers
         {
             // edit by cheery 2017-2-21
             // 如果是引用类型，默认允许空
-#if NETCOREAPP1_0
-            if (!theType.GetTypeInfo().IsValueType)
-#else
 
-            if (!theType.IsValueType)
-#endif
+            bool isValueType = false;
+            if (!EnvHelper.IsNetFX)
+            {
+                isValueType = theType.GetTypeInfo().IsValueType;
+            }
+            else
+            {
+                isValueType = theType.GetTypeInfo().IsValueType;
+            }
+            if (!isValueType)
             {
                 return true;
             }
+ 
 
             var isgenericType = false;
-#if NETCOREAPP1_0
-            isgenericType = theType.GetTypeInfo().IsGenericType;
-#else
-
-            isgenericType = theType.IsGenericType;
-#endif
+            if (!EnvHelper.IsNetFX)
+            {
+                isgenericType = theType.GetTypeInfo().IsGenericType;
+            }
+            else
+            {
+                isgenericType = theType.GetTypeInfo().IsGenericType;
+            }
+ 
             return (isgenericType && theType.GetGenericTypeDefinition() == typeof(Nullable<>));
         }
     }

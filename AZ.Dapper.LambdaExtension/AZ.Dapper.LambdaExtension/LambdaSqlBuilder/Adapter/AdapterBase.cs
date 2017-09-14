@@ -3,16 +3,14 @@ using System.Collections.Generic;
 using System.Data;
 using Dapper.LambdaExtension.LambdaSqlBuilder.Entity;
 using System.Reflection;
-#if NETCOREAPP1_0
-using System.Reflection.Metadata;
-using Microsoft.Extensions.DependencyModel;
-using System.Reflection.PortableExecutable;
-using System.Reflection.Metadata.Ecma335;
-#endif
+using Dapper.LambdaExtension.Helpers;
+
+//using Microsoft.Extensions.DependencyModel;
+ 
 
 namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
 {
-
+    
     abstract class AdapterBase : ISqlAdapter
     {
         internal string _leftToken;
@@ -66,9 +64,9 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
             }
 
             string innerQuery = string.Format("SELECT {0},ROW_NUMBER() OVER ({1}) AS RN FROM {2} {3}",
-                entity.Selection, entity.OrderBy, entity.TableName, entity.Conditions);
+                                            entity.Selection, entity.OrderBy, entity.TableName, entity.Conditions);
             return string.Format("SELECT TOP {0} * FROM ({1}) InnerQuery WHERE RN > {2} ORDER BY RN",
-                pageSize, innerQuery, pageSize * entity.PageNumber);
+                                 pageSize, innerQuery, pageSize * entity.PageNumber);
         }
         public string Insert(bool key, SqlEntity entity)
         {
@@ -230,8 +228,8 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
 
         public virtual string TableExistSql(string tableName, string tableSchema)
         {
-            var sql = $"SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '{tableName}'";
-            if (!string.IsNullOrEmpty(tableSchema))
+            var sql= $"SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '{tableName}'";
+            if ( !string.IsNullOrEmpty(tableSchema))
             {
                 sql += $" AND TABLE_SCHEMA = '{tableSchema}'";
             }
@@ -247,11 +245,11 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
             }
 
             var sql = $" DROP TABLE {tablename}";
-
+           
             return sql;
         }
 
-        public virtual string TruncateTableSql(string tableName, string tableSchema)
+        public virtual  string TruncateTableSql(string tableName, string tableSchema)
         {
             var tablename = tableName;
             if (!string.IsNullOrEmpty(tableSchema))
@@ -329,7 +327,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
         // 增加对filed length的解析
         public virtual string GetColumnDefinition(SqlColumnDefine columnDefinition)
         {
-
+             
 
             DbType? dbType;
             if (columnDefinition.ColumnAttribute?.DbType != null)
@@ -343,12 +341,17 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
 
                     if (!DbTypeMap.ColumnDbTypeMap.ContainsKey(columnDefinition.ValueType))
                     {
-#if NETCOREAPP1_0
-                        if (columnDefinition.ValueType.GetTypeInfo().IsEnum)
-#else
+                        var isEnum = false;
+                        if (!EnvHelper.IsNetFX)
+                        {
+                            isEnum = columnDefinition.ValueType.GetTypeInfo().IsEnum;
+                        }
+                        else
+                        {
+                            isEnum = columnDefinition.ValueType.GetTypeInfo().IsEnum;
+                        }
 
-                        if (columnDefinition.ValueType.IsEnum)
-#endif
+                        if (isEnum)
                         {
                             dbType = DbType.Int32;
                         }
@@ -356,6 +359,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
                         {
                             dbType = DbType.String;
                         }
+ 
                     }
                     else
                     {
@@ -380,7 +384,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
                     fieldLength = string.IsNullOrEmpty(fieldLength) ? "255" : fieldLength;
                     columnTypeString = DbTypeAnsiStringFixedLength(fieldLength);
                     break;
-                case DbType.Binary:
+                    case DbType.Binary:
                     columnTypeString = DbTypeBinary(fieldLength);
                     break;
                 case DbType.Boolean:
@@ -467,7 +471,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
             return columnTypeString;
         }
 
-        #region DbType Mapping To DB Column Definition String
+#region DbType Mapping To DB Column Definition String
         /// see https://msdn.microsoft.com/en-us/library/system.data.dbtype(v=vs.110).aspx
         /// <summary>
         /// DbType.AnsiString
@@ -740,6 +744,6 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
         {
             return $"XML";
         }
-        #endregion
+#endregion
     }
 }

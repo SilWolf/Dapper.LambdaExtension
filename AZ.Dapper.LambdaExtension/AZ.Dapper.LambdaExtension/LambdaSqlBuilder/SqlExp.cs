@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using Dapper.LambdaExtension.LambdaSqlBuilder.Adapter;
+using Dapper.LambdaExtension.LambdaSqlBuilder.Builder;
 using Dapper.LambdaExtension.LambdaSqlBuilder.Entity;
 using Dapper.LambdaExtension.LambdaSqlBuilder.Resolver;
 using Dapper.LambdaExtension.LambdaSqlBuilder.Resolver.ExpressionTree;
@@ -14,6 +15,9 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
     public class SqlExp<T> : SqlExpBase
     {
         private bool useForCount;
+
+
+
         public SqlExp(SqlAdapterType type = SqlAdapterType.SqlServer , bool forCount = false)
             : base(type, typeof(T))
         {
@@ -185,6 +189,16 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
             return this;
         }
 
+
+        public virtual SqlExp<T> OrderBySubQuery<T2>(string subAlias,Expression<Func<T2, object>> expression, bool desc = false)
+        {
+            if (!useForCount)
+            {
+                _resolver.OrderBySubQuery(subAlias, expression, desc);
+            }
+            return this;
+        }
+
         public SqlExp<T> OrderBy(string columnName, bool desc = false)
         {
             if (!useForCount)
@@ -235,7 +249,15 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
             return this;
         }
 
-        public SqlExp<T> Select(params Expression<Func<T, SqlColumnEntity>>[] expressions)
+        public SqlExp<T> SelectSubQuery<T2>(string subQueryAlias,params Expression<Func<T2, object>>[] expressions)
+        {
+            foreach (var expression in expressions)
+                _resolver.SelectSubQuery<T2>(expression,subQueryAlias);
+
+            return this;
+        }
+
+        public SqlExp<T> SelectEntity(params Expression<Func<T, SqlColumnEntity>>[] expressions)
         {
             foreach (var expression in expressions)
                 _resolver.Select(expression);
@@ -292,21 +314,132 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
 
         #region 连接 Join
 
-        public SqlExp<TResult> Join<T2, TKey, TResult>(SqlExp<T2> joinQuery,
+        public SqlExp<T2> Join<T2, TKey>(Action<SqlExp<T2>> joinQuery,
             Expression<Func<T, TKey>> primaryKeySelector,
-            Expression<Func<T2, TKey>> foreignKeySelector,
-            Func<T, T2, TResult> selection)
+            Expression<Func<T2, TKey>> foreignKeySelector, JoinType joinType = JoinType.Join,
+            params Expression<Func<T2, object>>[] selections)
         {
-            var query = new SqlExp<TResult>(_builder, _resolver);
-            _resolver.Join<T, T2, TKey>(primaryKeySelector, foreignKeySelector);
+            var query = new SqlExp<T2>(_builder, _resolver);
+     
+            joinQuery?.Invoke(query);
+
+            query.Select(selections);
+
+            _resolver.Join<T, T2, TKey>(primaryKeySelector, foreignKeySelector, joinType);
             return query;
         }
 
-        public SqlExp<T2> Join<T2>(Expression<Func<T, T2, bool>> expression)
+        public SqlExp<T2> Join<T2>(Expression<Func<T, T2, bool>> expression,JoinType joinType = JoinType.Join)
         {
             var joinQuery = new SqlExp<T2>(_builder, _resolver);
-            _resolver.Join(expression);
+            _resolver.Join(expression, joinType);
+           
             return joinQuery;
+        }
+
+
+        public SqlExp<T2> JoinSubQuery<T2, TKey>(Action<SqlExp<T2>> action, Expression<Func<T, T2, bool>> expression,JoinType joinType=JoinType.Join)
+        {
+            var joinQuery = new SqlExp<T2>(this._adapter);
+
+            action?.Invoke(joinQuery);
+            _resolver.JoinSubQuery(joinQuery, expression, joinType);
+
+            return joinQuery;
+        }
+        public SqlExp<T2> JoinSubQuery<T2, TKey>(Action<SqlExp<T2>> joinQuery,
+            Expression<Func<T, TKey>> primaryKeySelector,
+            Expression<Func<T2, TKey>> foreignKeySelector, JoinType joinType = JoinType.Join,
+            params Expression<Func<T2, object>>[] selections)
+        {
+            var query = new SqlExp<T2>(_adapter);
+
+            joinQuery?.Invoke(query);
+
+            _resolver.JoinSubQuery<T, T2, TKey>(query, primaryKeySelector, foreignKeySelector, joinType);
+
+           // query.Select(selections);
+
+            this.SelectSubQuery(query.JoinSubAliasTableName, selections);
+
+
+          
+            return query;
+        }
+
+
+
+
+        public SqlExp<T2> LeftJoin<T2, TKey>(Action<SqlExp<T2>> joinQuery,
+            Expression<Func<T, TKey>> primaryKeySelector,
+            Expression<Func<T2, TKey>> foreignKeySelector,
+            params Expression<Func<T2, object>>[] selections)
+        {
+            var query = new SqlExp<T2>(_builder, _resolver);
+
+            joinQuery?.Invoke(query);
+
+            query.Select(selections);
+
+            _resolver.Join<T, T2, TKey>(primaryKeySelector, foreignKeySelector,JoinType.LeftJoin);
+            return query;
+        }
+
+        public SqlExp<T2> LeftJoin<T2>(Expression<Func<T, T2, bool>> expression)
+        {
+            var joinQuery = new SqlExp<T2>(_builder, _resolver);
+            _resolver.Join(expression,JoinType.LeftJoin);
+
+            return joinQuery;
+        }
+
+        public SqlExp<T2> LeftJoinSubQuery<T2, TKey>(Action<SqlExp<T2>> action, Expression<Func<T, T2, bool>> expression)
+        {
+            return JoinSubQuery<T2, TKey>(action, expression, JoinType.LeftJoin);
+        }
+        public SqlExp<T2> LeftJoinSubQuery<T2, TKey>(Action<SqlExp<T2>> action,
+            Expression<Func<T, TKey>> primaryKeySelector,
+            Expression<Func<T2, TKey>> foreignKeySelector,
+            params Expression<Func<T2, object>>[] selections)
+        {
+            return JoinSubQuery(action, primaryKeySelector, foreignKeySelector, JoinType.LeftJoin, selections);
+        }
+
+
+
+        public SqlExp<T2> InnerJoin<T2, TKey>(Action<SqlExp<T2>> joinQuery,
+            Expression<Func<T, TKey>> primaryKeySelector,
+            Expression<Func<T2, TKey>> foreignKeySelector,
+            params Expression<Func<T2, object>>[] selections)
+        {
+            var query = new SqlExp<T2>(_builder, _resolver);
+
+            joinQuery?.Invoke(query);
+
+            query.Select(selections);
+
+            _resolver.Join<T, T2, TKey>(primaryKeySelector, foreignKeySelector, JoinType.InnerJoin);
+            return query;
+        }
+
+        public SqlExp<T2> InnerJoin<T2>(Expression<Func<T, T2, bool>> expression)
+        {
+            var joinQuery = new SqlExp<T2>(_builder, _resolver);
+            _resolver.Join(expression, JoinType.InnerJoin);
+
+            return joinQuery;
+        }
+
+        public SqlExp<T2> InnerJoinSubQuery<T2, TKey>(Action<SqlExp<T2>> action, Expression<Func<T, T2, bool>> expression)
+        {
+            return JoinSubQuery<T2, TKey>(action, expression, JoinType.InnerJoin);
+        }
+        public SqlExp<T2> InnerJoinSubQuery<T2, TKey>(Action<SqlExp<T2>> action,
+            Expression<Func<T, TKey>> primaryKeySelector,
+            Expression<Func<T2, TKey>> foreignKeySelector,
+            params Expression<Func<T2, object>>[] selections)
+        {
+            return JoinSubQuery(action, primaryKeySelector, foreignKeySelector, JoinType.InnerJoin, selections);
         }
 
         #endregion
@@ -317,6 +450,13 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
         {
             foreach (var expression in expressions)
                 _resolver.GroupBy(expression);
+            return this;
+        }
+
+        public SqlExp<T> GroupBySubQuery<T2>(string subAlias,params Expression<Func<T2, object>>[] expressions)
+        {
+            foreach (var expression in expressions)
+                _resolver.GroupBySubQuery(expression, subAlias);
             return this;
         }
 

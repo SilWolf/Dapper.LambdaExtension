@@ -6,12 +6,12 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Entity
     
     public class SqlTableDefine
     {
-        public DBTableAttribute TableAttribute { get; set; }
+        public ZPTableAttribute TableAttribute { get; set; }
 
         public string Name { get; set; }
  
 
-        public SqlTableDefine(DBTableAttribute tableAttr,string name )
+        public SqlTableDefine(ZPTableAttribute tableAttr,string name )
         {
             TableAttribute = tableAttr;
             if (tableAttr != null)
@@ -28,7 +28,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Entity
             }
         }
 
-        public SqlTableDefine(DBTableAttribute tableAttr)
+        public SqlTableDefine(ZPTableAttribute tableAttr)
         {
             TableAttribute = tableAttr;
         }

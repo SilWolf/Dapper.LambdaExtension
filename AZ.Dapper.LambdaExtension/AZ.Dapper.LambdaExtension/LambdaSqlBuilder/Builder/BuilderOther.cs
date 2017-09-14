@@ -1,15 +1,68 @@
-﻿using Dapper.LambdaExtension.LambdaSqlBuilder.Resolver.ExpressionTree;
+﻿using System;
+using System.ComponentModel;
+using Dapper.LambdaExtension.LambdaSqlBuilder.Resolver.ExpressionTree;
 
 namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
 {
     partial class Builder
     {
-        public void Join(string originalTableName, string joinTableName, string leftField, string rightField)
+        public void Join(string originalTableName, string joinTableName, string leftField, string rightField,JoinType joinType)
         {
-            var joinString = string.Format("JOIN {0} ON {1} = {2}",
+            var joinTypeStr = "JOIN";
+            switch (joinType)
+            {
+                case JoinType.InnerJoin:
+                    joinTypeStr = "INNER JOIN";
+                    break;
+                case JoinType.LeftJoin:
+                    joinTypeStr = "LEFT JOIN";
+                    break;
+                case JoinType.RightJoin:
+                    joinTypeStr = "RIGHT JOIN";
+                    break;
+                default:
+                    joinTypeStr = "JOIN";
+                    break;
+            }
+
+            var joinString = string.Format("{3} {0} ON {1} = {2}",
                                            _adapter.Table(joinTableName,""),
                                            _adapter.Field(originalTableName, leftField),
-                                           _adapter.Field(joinTableName, rightField));
+                                           _adapter.Field(joinTableName, rightField),joinTypeStr);
+            _tableNames.Add(joinTableName);
+            _joinExpressions.Add(joinString);
+            _splitColumns.Add(rightField);
+        }
+
+        public void JoinSub(SqlExpBase sqlExp,string originalTableName, string joinTableName, string leftField, string rightField, JoinType joinType)
+        {
+            var joinTypeStr = "JOIN";
+            switch (joinType)
+            {
+                case JoinType.InnerJoin:
+                    joinTypeStr = "INNER JOIN";
+                    break;
+                case JoinType.LeftJoin:
+                    joinTypeStr = "LEFT JOIN";
+                    break;
+                case JoinType.RightJoin:
+                    joinTypeStr = "RIGHT JOIN";
+                    break;
+                default:
+                    joinTypeStr = "JOIN";
+                    break;
+            }
+
+            var aliasTname = $"join_" + DateTime.Now.Ticks;
+
+            sqlExp.JoinSubAliasTableName = aliasTname;
+
+            var subQueryStr = sqlExp.SqlString;
+
+            var joinString = string.Format("{3} ({0}) {4} ON {1} = {4}.{2}",
+                subQueryStr,
+                _adapter.Field(originalTableName, leftField),
+                 _adapter.Field(rightField), joinTypeStr,aliasTname);
             _tableNames.Add(joinTableName);
             _joinExpressions.Add(joinString);
             _splitColumns.Add(rightField);
@@ -53,4 +106,6 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
             _groupingList.Add(_adapter.Field(tableName, fieldName));
         }
     }
+
+  
 }
