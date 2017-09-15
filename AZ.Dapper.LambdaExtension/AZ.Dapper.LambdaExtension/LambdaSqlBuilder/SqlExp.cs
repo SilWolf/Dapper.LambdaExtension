@@ -78,10 +78,10 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
 
         #region Insert Update Delete 操作
 
-        public SqlExp<T> Insert(T entity, bool key = false)
+        public SqlExp<T> Insert( bool key = false)
         {
             _builder.UpdateSqlType(SqlType.Insert);
-            _resolver.ResolveInsert<T>(key, entity);
+            _resolver.ResolveInsert<T>(key);
             return this;
         }
 
@@ -100,10 +100,10 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
             return this;
         }
 
-        public SqlExp<T> Update(T entity)
+        public SqlExp<T> Update()
         {
             _builder.UpdateSqlType(SqlType.Update);
-            _resolver.ResolveUpdate<T>(entity);
+            _resolver.ResolveUpdate<T>();
             return this;
         }
 

@@ -10,10 +10,10 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
 {
     partial class LambdaResolver
     {
-        public void ResolveUpdate<T>(T entity)
+        public void ResolveUpdate<T>()
         {
             string tableName = GetTableName<T>();
-            ResolveParameter<T>(tableName, entity);
+            ResolveParameter<T>(tableName);
         }
 
         public void ResolveUpdate(Type type, object obj)
@@ -22,16 +22,16 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
             ResolveParameter<object>(tableName, obj);
         }
 
-        public void ResolveInsert<T>(bool key, T entity)
+        public void ResolveInsert<T>(bool key)
         {
             string tableName = GetTableName<T>();
-            ResolveParameter<T>(key, tableName, entity);
+            ResolveParameter<T>(key, tableName);
         }
 
         public void ResolveInsert(bool key, Type type, object obj)
         {
             string tableName = GetTableName(type);
-            ResolveParameter<object>(key, tableName, obj);
+            ResolveParameter<object>(key, tableName);
         }
 
         public void ResolveInsert(bool key, SqlTableDefine tableDefine, List<SqlColumnDefine> columnDefines)
@@ -40,20 +40,20 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
             ResolveParameter(key,tableName, columnDefines);
         }
 
-        private void ResolveParameter<T>(string tableName, T entity)
+        private void ResolveParameter<T>(string tableName)
         {
-            var ps = GetPropertyInfos<T>(entity);
+            var ps = GetPropertyInfos<T>();
             foreach (PropertyInfo item in ps)
             {
-                object obj = item.GetValue(entity, null);
+                //object obj = item.GetValue(entity, null);
 
                 var propname = item.Name;
 
                 var fieldAlias = propname;
 
                 //resolve custome column name
-                var colAttr = item.GetCustomAttribute<DBColumnAttribute>();
-                var colIgnore = item.GetCustomAttribute<DBIgnoreAttribute>();
+                var colAttr = item.GetCustomAttribute<ZPColumnAttribute>();
+                var colIgnore = item.GetCustomAttribute<ZPIgnoreAttribute>();
                 if (colIgnore != null)
                 {
                     continue;
@@ -66,26 +66,24 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
                     }
                 }
 
-                _builder.AddSection(tableName, item.Name,fieldAlias, _operationDictionary[ExpressionType.Equal], obj);
+                _builder.AddSection(tableName, item.Name,fieldAlias, _operationDictionary[ExpressionType.Equal],null);
             }
         }
 
-        private void ResolveParameter<T>(bool key, string tableName, T entity)
+        private void ResolveParameter<T>(string tableName,object objs)
         {
-            _builder.UpdateInsertKey(key);
-
-            var ps = GetPropertyInfos<T>(entity);
+            var ps = GetPropertyInfos<T>();
             foreach (PropertyInfo item in ps)
             {
-                object obj = item.GetValue(entity, null);
+                object obj = item.GetValue(objs, null);
 
                 var propname = item.Name;
 
                 var fieldAlias = propname;
 
                 //resolve custome column name
-                var colAttr = item.GetCustomAttribute<DBColumnAttribute>();
-                var colIgnore = item.GetCustomAttribute<DBIgnoreAttribute>();
+                var colAttr = item.GetCustomAttribute<ZPColumnAttribute>();
+                var colIgnore = item.GetCustomAttribute<ZPIgnoreAttribute>();
                 if (colIgnore != null)
                 {
                     continue;
@@ -98,7 +96,39 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
                     }
                 }
 
-                _builder.AddSection(tableName, propname,fieldAlias, obj);
+                _builder.AddSection(tableName, item.Name, fieldAlias, _operationDictionary[ExpressionType.Equal], obj);
+            }
+        }
+
+        private void ResolveParameter<T>(bool key, string tableName)
+        {
+            _builder.UpdateInsertKey(key);
+
+            var ps = GetPropertyInfos<T>();
+            foreach (PropertyInfo item in ps)
+            {
+               //z object obj = item.GetValue(entity, null);
+
+                var propname = item.Name;
+
+                var fieldAlias = propname;
+
+                //resolve custome column name
+                var colAttr = item.GetCustomAttribute<ZPColumnAttribute>();
+                var colIgnore = item.GetCustomAttribute<ZPIgnoreAttribute>();
+                if (colIgnore != null)
+                {
+                    continue;
+                }
+                if (colAttr != null)
+                {
+                    if (!string.IsNullOrEmpty(colAttr.Name))
+                    {
+                        fieldAlias = colAttr.Name;
+                    }
+                }
+
+                _builder.AddSection(tableName, propname,fieldAlias, null);
             }
         }
 
@@ -134,15 +164,32 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
             }
         }
 
-        private IEnumerable<PropertyInfo> GetPropertyInfos<T>(T entity)
+        //private IEnumerable<PropertyInfo> GetPropertyInfos<T>(T entity)
+        //{
+        //    Type type = typeof(T);// entity.GetType();
+        //    var ps = type.GetProperties().Where(m =>
+        //    {
+        //        var obj = m.GetCustomAttributes(typeof(ZPKeyAttribute), false).FirstOrDefault();
+        //        if (obj != null)
+        //        {
+        //            ZPKeyAttribute key = obj as ZPKeyAttribute;
+        //            return !key.Increment;
+        //        }
+        //        return true;
+        //    });
+
+        //    return ps;
+        //}
+
+        private IEnumerable<PropertyInfo> GetPropertyInfos<T>()
         {
             Type type = typeof(T);// entity.GetType();
             var ps = type.GetProperties().Where(m =>
             {
-                var obj = m.GetCustomAttributes(typeof(DBKeyAttribute), false).FirstOrDefault();
+                var obj = m.GetCustomAttributes(typeof(ZPKeyAttribute), false).FirstOrDefault();
                 if (obj != null)
                 {
-                    DBKeyAttribute key = obj as DBKeyAttribute;
+                    ZPKeyAttribute key = obj as ZPKeyAttribute;
                     return !key.Increment;
                 }
                 return true;

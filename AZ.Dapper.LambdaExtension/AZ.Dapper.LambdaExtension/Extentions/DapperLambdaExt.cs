@@ -66,7 +66,7 @@ namespace Dapper.LambdaExtension.Extentions
             var sqllam = new SqlExp<T>(db.GetAdapter());
 
              
-                sqllam = sqllam.Insert(entity);
+                sqllam = sqllam.Insert();
  
             return db.Execute(sqllam.SqlString,entity,trans,commandTimeout,CommandType.Text);
 
@@ -85,11 +85,15 @@ namespace Dapper.LambdaExtension.Extentions
 
         public static int InsertList<T>(this IDbConnection db, IEnumerable<T> entitys, IDbTransaction trans = null, int? commandTimeout = null)
         {
+            if (!entitys.Any())
+            {
+                return 0;
+            }
 
             var sqllam = new SqlExp<T>(db.GetAdapter());
 
 
-            sqllam = sqllam.Insert(entitys.FirstOrDefault());
+            sqllam = sqllam.Insert();
  
             return db.Execute(sqllam.SqlString, entitys, trans, commandTimeout, CommandType.Text);
 
@@ -100,7 +104,7 @@ namespace Dapper.LambdaExtension.Extentions
             var sqllam = new SqlExp<T>(db.GetAdapter());
 
 
-            sqllam = sqllam.Update(entity);
+            sqllam = sqllam.Update();
  
             return db.Execute(sqllam.SqlString, entity, trans, commandTimeout, CommandType.Text);
 
@@ -111,11 +115,15 @@ namespace Dapper.LambdaExtension.Extentions
 
         public static int UpdateList<T>(this IDbConnection db, IEnumerable<T> entitys, IDbTransaction trans = null, int? commandTimeout = null)
         {
+            if (!entitys.Any())
+            {
+                return 0;
+            }
 
             var sqllam = new SqlExp<T>(db.GetAdapter());
 
 
-            sqllam = sqllam.Update(entitys.FirstOrDefault());
+            sqllam = sqllam.Update();
  
             return db.Execute(sqllam.SqlString, entitys, trans, commandTimeout, CommandType.Text);
 
@@ -125,6 +133,10 @@ namespace Dapper.LambdaExtension.Extentions
 
         public static int DeleteList<T>(this IDbConnection db, IEnumerable<T> engityList, IDbTransaction trans = null, int? commandTimeout = null)
         {
+            if (!engityList.Any())
+            {
+                return 0;
+            }
 
             var sqllam = new SqlExp<T>(db.GetAdapter());
 
