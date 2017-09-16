@@ -106,6 +106,11 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
         {
             Select<T>(expression.Body);
         }
+        public void Select<T,TAlias>(Expression<Func<T, object>> expression, Expression<Func<TAlias, object>> aliasExpression)
+        {
+            var aliasName = GetColumnName(aliasExpression);
+            Select<T>(expression.Body, aliasName);
+        }
 
         public void SelectSubQuery<T2>(Expression<Func<T2, object>> expression,string subAlias)
         {
@@ -116,6 +121,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
         {
             Select<T>(expression.Body);
         }
+
 
         private void Select<T>(Expression expression)
         {
@@ -131,6 +137,26 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
                 case ExpressionType.New:
                     foreach (MemberExpression memberExp in (expression as NewExpression).Arguments)
                         Select<T>(memberExp);
+                    break;
+                default:
+                    throw new ArgumentException("Invalid expression");
+            }
+        }
+
+        private void Select<T2>(Expression expression,string alias)
+        {
+            switch (expression.NodeType)
+            {
+                case ExpressionType.Parameter:
+                    _builder.Select(GetTableName(expression.Type));
+                    break;
+                case ExpressionType.Convert:
+                case ExpressionType.MemberAccess:
+                    Select<T2>(GetMemberExpression(expression),alias);
+                    break;
+                case ExpressionType.New:
+                    foreach (MemberExpression memberExp in (expression as NewExpression).Arguments)
+                        Select<T2>(memberExp,alias);
                     break;
                 default:
                     throw new ArgumentException("Invalid expression");
@@ -182,6 +208,31 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
  
         }
 
+        private void Select<T>(MemberExpression expression,string alias)
+        {
+
+            if (!EnvHelper.IsNetFX)
+            {
+                if (expression.Type.GetTypeInfo().IsClass && expression.Type != typeof(String))
+                {
+                    _builder.Select(GetTableName(expression.Type));
+                }
+                else
+                    _builder.Select(GetTableName<T>(), GetColumnName(expression),alias);
+            }
+            else
+            {
+                if (expression.Type.GetTypeInfo().IsClass && expression.Type != typeof(String))
+                {
+                    _builder.Select(GetTableName(expression.Type));
+                }
+                else
+                    _builder.Select(GetTableName<T>(), GetColumnName(expression),alias);
+            }
+
+
+        }
+
         private void SelectSubQuery<T2>(MemberExpression expression,string subAlias)
         {
 
@@ -217,6 +268,25 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
             }
 
             _builder.Select(GetTableName<T>(), fieldName, selectFunction, aliasName);
+        }
+
+        public void SelectWithFunction<T,TMain>(Expression<Func<T, object>> expression, SelectFunction selectFunction, Expression<Func<TMain, object>> aliasProp)
+        {
+            var fieldName = "*";
+
+            if (expression != null)
+            {
+                fieldName = GetColumnName(GetMemberExpression(expression.Body));
+            }
+
+            var aliasFieldName = "";
+
+            if (aliasProp != null)
+            {
+                aliasFieldName = GetColumnName(GetMemberExpression<TMain>(aliasProp.Body));
+            }
+
+            _builder.Select(GetTableName<T>(), fieldName, selectFunction, aliasFieldName);
         }
 
         public void GroupBy<T>(Expression<Func<T, object>> expression)

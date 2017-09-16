@@ -87,6 +87,11 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
             _selectionList.Add(_adapter.Field(tableName, fieldName));
         }
 
+        public void Select(string tableName, string fieldName,string aliasName)
+        {
+            _selectionList.Add(_adapter.Field(tableName, fieldName)+" AS "+aliasName);
+        }
+
         public void Select(string tableName, string fieldName, SelectFunction selectFunction, string aliasName)
         {
             string name = string.IsNullOrEmpty(aliasName) ? fieldName : aliasName;

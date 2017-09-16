@@ -22,7 +22,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
             : base(type, typeof(T))
         {
             useForCount = forCount;
-            //_type = SqlType.Query;
+            _type = SqlType.Query;
             //GetAdapterInstance(type);
             //_builder = new Builder(_type, LambdaResolver.GetTableName<T>(), _defaultAdapter);
             //_resolver = new LambdaResolver(_builder);
@@ -32,7 +32,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
             : base(type,tableDefine, columnDefines)
         {
             useForCount = forCount;
-            //_type = SqlType.Query;
+            _type = SqlType.Query;
             //GetAdapterInstance(type);
             //_builder = new Builder(_type, LambdaResolver.GetTableName<T>(), _defaultAdapter);
             //_resolver = new LambdaResolver(_builder);
@@ -242,23 +242,60 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
 
         #region 查询
 
-        public SqlExp<T> Select(params Expression<Func<T, object>>[] expressions)
+        public SqlExp<T> Select(params Expression<Func<T,object>>[] expressions)
         {
+            if (_type != SqlType.Query)
+            {
+                _type = SqlType.Query;
+            }
+
             foreach (var expression in expressions)
                 _resolver.Select(expression);
             return this;
         }
 
-        public SqlExp<T> SelectSubQuery<T2>(string subQueryAlias,params Expression<Func<T2, object>>[] expressions)
+        public SqlExp<T> Select<TAlias>(Expression<Func<T, object>> expression,
+            Expression<Func<TAlias, object>> aliasExpression)
         {
-            foreach (var expression in expressions)
-                _resolver.SelectSubQuery<T2>(expression,subQueryAlias);
-
+            if (_type != SqlType.Query)
+            {
+                _type = SqlType.Query;
+            }
+           
+            _resolver.Select(expression,aliasExpression);
             return this;
         }
 
+        public SqlExp<T> SelectAll()
+        {
+            if (_type != SqlType.Query)
+            {
+                _type = SqlType.Query;
+            }
+
+             _builder.SelectAll();
+            return this;
+        }
+
+        public SqlExp<T> SelectSubQuery<T2>(SqlExpBase sqlExp,params Expression<Func<T2, object>>[] expressions)
+        {
+            if (_type != SqlType.Query)
+            {
+                _type = SqlType.Query;
+            }
+            foreach (var expression in expressions)
+                _resolver.SelectSubQuery<T2>(expression, sqlExp.JoinSubAliasTableName);
+
+            return this;
+        }
+ 
+
         public SqlExp<T> SelectEntity(params Expression<Func<T, SqlColumnEntity>>[] expressions)
         {
+            if (_type != SqlType.Query)
+            {
+                _type = SqlType.Query;
+            }
             foreach (var expression in expressions)
                 _resolver.Select(expression);
             return this;
@@ -277,6 +314,12 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
         public SqlExp<T> Count(Expression<Func<T, object>> expression, string aliasName = "count")
         {
             _resolver.SelectWithFunction(expression, SelectFunction.COUNT, aliasName);
+            return this;
+        }
+
+        public SqlExp<T> Count<TMain>(Expression<Func<T, object>> expression, Expression<Func<TMain,object>> aliasProp)
+        {
+            _resolver.SelectWithFunction<T,TMain>(expression, SelectFunction.COUNT, aliasProp);
             return this;
         }
 
@@ -360,7 +403,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
 
            // query.Select(selections);
 
-            this.SelectSubQuery(query.JoinSubAliasTableName, selections);
+            this.SelectSubQuery(query, selections);
 
 
           

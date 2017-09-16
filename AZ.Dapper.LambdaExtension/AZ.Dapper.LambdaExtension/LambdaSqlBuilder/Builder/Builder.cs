@@ -200,31 +200,35 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
         {
             if (_selectionList.Count == 0)
             {
-                var columnList = new List<string>();
+                //var columnList = new List<string>();
 
-                var entityDef = _entityType.GetEntityDefines();
+                SelectAll();
 
-                foreach (var cdef in entityDef.Item2)
-                {
-                    var s = _adapter.Field(cdef.AliasName);
-
-                    if (!string.IsNullOrEmpty(cdef.AliasName))
-                    {
-                        //s += " as " + _adapter.Field(cdef.Name);
-                    }
-                    else
-                    {
-                        s = _adapter.Field(cdef.Name);
-                    }
-                    columnList.Add(s);
-                }
-
-                return string.Join(",", columnList);
-
+                return string.Join(",", _selectionList);
             }
             //return string.Format("{0}.*", _adapter.Table(_tableNames.First()));
             else
                 return string.Join(", ", _selectionList);
+        }
+
+        public void SelectAll()
+        {
+            var entityDef = _entityType.GetEntityDefines();
+
+            foreach (var cdef in entityDef.Item2)
+            {
+                var s = _adapter.Field(cdef.AliasName);
+
+                if (!string.IsNullOrEmpty(cdef.AliasName))
+                {
+                    //s += " as " + _adapter.Field(cdef.Name);
+                }
+                else
+                {
+                    s = _adapter.Field(cdef.Name);
+                }
+                _selectionList.Add(s);
+            }
         }
 
         private string GetForamtList(string join, string head, List<string> list)

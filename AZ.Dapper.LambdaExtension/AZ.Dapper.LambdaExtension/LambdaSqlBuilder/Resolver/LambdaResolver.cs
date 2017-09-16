@@ -39,16 +39,16 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
         {
             var member = GetMemberExpression(expression);
 
-            DBColumnAttribute column;
+            ZPColumnAttribute column;
 
             if (!EnvHelper.IsNetFX)
             {
-                column = member.Member.GetCustomAttributes(false).OfType<DBColumnAttribute>()
-                    .FirstOrDefault(); //.GetCustomAttributes(false).OfType<DBColumnAttribute>().FirstOrDefault();
+                column = member.Member.GetCustomAttributes(false).OfType<ZPColumnAttribute>()
+                    .FirstOrDefault(); //.GetCustomAttributes(false).OfType<ZPColumnAttribute>().FirstOrDefault();
             }
             else
             {
-                column = member.Member.GetCustomAttributes(false).OfType<DBColumnAttribute>().FirstOrDefault();
+                column = member.Member.GetCustomAttributes(false).OfType<ZPColumnAttribute>().FirstOrDefault();
             }
 
             if (column != null)
@@ -64,15 +64,15 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
 
         public string GetTableName(Type type)
         {
-            DBTableAttribute table;
+            ZPTableAttribute table;
             if (!EnvHelper.IsNetFX)
             {
-                table = type.GetTypeInfo().GetCustomAttributes(false).OfType<DBTableAttribute>()
-                    .FirstOrDefault(); //.GetCustomAttributes(false).OfType<DBColumnAttribute>().FirstOrDefault();
+                table = type.GetTypeInfo().GetCustomAttributes(false).OfType<ZPTableAttribute>()
+                    .FirstOrDefault(); //.GetCustomAttributes(false).OfType<ZPColumnAttribute>().FirstOrDefault();
             }
             else
             {
-                table = type.GetTypeInfo().GetCustomAttributes(false).OfType<DBTableAttribute>().FirstOrDefault(); ;
+                table = type.GetTypeInfo().GetCustomAttributes(false).OfType<ZPTableAttribute>().FirstOrDefault(); ;
                 
             }
 
@@ -120,6 +120,19 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
         }
 
         private static MemberExpression GetMemberExpression(Expression expression)
+        {
+            switch (expression.NodeType)
+            {
+                case ExpressionType.MemberAccess:
+                    return expression as MemberExpression;
+                case ExpressionType.Convert:
+                    return GetMemberExpression((expression as UnaryExpression).Operand);
+            }
+
+            throw new ArgumentException("Member expression expected");
+        }
+
+        private static MemberExpression GetMemberExpression<T>(Expression expression)
         {
             switch (expression.NodeType)
             {
