@@ -239,14 +239,16 @@ namespace testdemo.TestLogic
 
             using (var db = GetConnection())
             {
-              var list=  db.Query<Matrix, VMatrix>(sql =>
+              var list=  db.PagedQuery<Matrix, VMatrix>(10,3,sql =>
                     {
                         sql.Where(p => p.ParameterCount > 1);
+
+                        sql.OrderBy(p => p.Id);
                     },exp => GetVMatrix(exp)
-                ).ToList();
+                );
 
 
-                var first = list.FirstOrDefault();
+             
 
             }
         }
@@ -297,6 +299,7 @@ namespace testdemo.TestLogic
                         sql.MaxSubQuery<VEParameterChild>(sqlchild, p => p.Frequency, v => v.MaxFrequency);
 
                         sql.GroupBy(p => p.MatrixId);
+                         
 
                     }, p => p.Id, v => v.MatrixId,JoinType.LeftOuterJoin);
 

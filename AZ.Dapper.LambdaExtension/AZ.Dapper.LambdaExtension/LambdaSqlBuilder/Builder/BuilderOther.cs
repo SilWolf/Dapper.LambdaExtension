@@ -64,6 +64,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
             var aliasTname = $"join_" + DateTime.Now.Ticks;
 
             sqlExp.JoinSubAliasTableName = aliasTname;
+    
             JoinSubAliasTableName = aliasTname;
             var subQueryStr = sqlExp.SqlString;
 

@@ -127,10 +127,14 @@ namespace ConsoleApp1
             //    Console.WriteLine($"{item.Id}_{item.c_name}_{item.Count}");
             //}
 
-            var msLogic=new MssqlTestLogic();
+            var msLogic = new MssqlTestLogic();
 
             msLogic.TestSubSubQuery();
 
+
+            //var msLogic = new PgTestLogic();
+
+            //msLogic.TestSubSubQuery();
 
             Console.ReadLine();
         }

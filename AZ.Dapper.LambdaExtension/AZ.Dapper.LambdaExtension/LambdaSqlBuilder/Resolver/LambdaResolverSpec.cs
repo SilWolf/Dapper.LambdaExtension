@@ -73,11 +73,28 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
             {
                 var arguments = (body as NewExpression).Arguments;
                 foreach (MemberExpression memberExp in arguments)
-                    OrderBy<T>(memberExp, desc);
+                {
+                    if (_builder._isSubQuery)
+                    {
+                        OrderBySubQuery<T>(_builder.JoinSubAliasTableName,memberExp, desc);
+                    }
+                    else
+                    {
+                        OrderBy<T>(memberExp, desc);
+                    }
+                }
+                   
             }
             else
             {
-                OrderBy<T>(GetMemberExpression(body), desc);
+                if (_builder._isSubQuery)
+                {
+                    OrderBySubQuery<T>(_builder.JoinSubAliasTableName, GetMemberExpression(body), desc);
+                }
+                else
+                {
+                    OrderBy<T>(GetMemberExpression(body), desc);
+                }
             }
         }
 
