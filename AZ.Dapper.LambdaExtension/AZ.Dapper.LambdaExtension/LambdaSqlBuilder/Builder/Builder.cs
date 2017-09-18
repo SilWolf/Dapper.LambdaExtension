@@ -155,6 +155,38 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
             return _adapter.QueryPage(entity);
         }
 
+        public string QuerySubPage(int pageSize,string aliasTable, int? pageNumber = null)
+        {
+            SqlEntity entity = GetSqlEntity();
+            entity.PageSize = pageSize;
+            if (pageNumber.HasValue)
+            {
+                if (_sortList.Count == 0 && _adapter is SqlserverAdapter)
+                {
+                    var key = _columnDefines.FirstOrDefault(p => p.KeyAttribute != null);
+                    if (key == null)
+                    {
+                        key = _columnDefines.FirstOrDefault(p => p.Name.ToUpper() == "ID" || p.AliasName == "ID");
+                    }
+                    if (key != null)
+                    {
+                        var orderbyname = string.IsNullOrEmpty(key.AliasName) ? key.Name : key.AliasName;
+
+                        OrderBy(aliasTable, orderbyname);
+
+                        entity.OrderBy = GetForamtList(", ", "ORDER BY ", _sortList);
+                    }
+                    else
+                    {
+                        throw new Exception("Pagination requires the ORDER BY statement to be specified");
+                    }
+                }
+
+                entity.PageNumber = pageNumber.Value;
+            }
+            return _adapter.QueryPage(entity);
+        }
+
         public void Clear()
         {
             if (_joinExpressions.Count > 0)
@@ -235,6 +267,11 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
                 }
                 _selectionList.Add(s);
             }
+        }
+
+        public void SelectSub()
+        {
+            
         }
 
         private string GetForamtList(string join, string head, List<string> list)

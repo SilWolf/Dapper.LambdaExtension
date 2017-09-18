@@ -276,6 +276,18 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
             _builder.Select(GetTableName<T>(), fieldName, selectFunction, aliasName);
         }
 
+        public void SelectWithFunction<T>(Expression<Func<T, object>> expression, SelectFunction selectFunction, string aliasName,string tableAlias)
+        {
+            var fieldName = "*";
+
+            if (expression != null)
+            {
+                fieldName = GetColumnName(GetMemberExpression(expression.Body));
+            }
+
+            _builder.Select(tableAlias, fieldName, selectFunction, aliasName);
+        }
+
         public void SelectWithFunction<T,TMain>(Expression<Func<T, object>> expression, SelectFunction selectFunction, Expression<Func<TMain, object>> aliasProp)
         {
             var fieldName = "*";

@@ -63,6 +63,11 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
             return _builder.QueryPage(pageSize, pageNumber);
         }
 
+        public string QuerySubPage(int pageSize, int? pageNumber = null)
+        {
+            return _builder.QuerySubPage(pageSize, JoinSubAliasTableName, pageNumber);
+        }
+
         public IDictionary<string, object> Parameters
         {
             get

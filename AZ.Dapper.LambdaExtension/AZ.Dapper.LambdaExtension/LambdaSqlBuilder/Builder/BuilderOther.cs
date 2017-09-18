@@ -79,13 +79,13 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
         public void QuerySub(SqlExpBase sqlExp)
         {
              
-            var aliasTname = $"query_" + DateTime.Now.Ticks;
-            JoinSubAliasTableName = aliasTname;
-            sqlExp.JoinSubAliasTableName = aliasTname;
+            //var aliasTname = $"query_" + DateTime.Now.Ticks;
+            JoinSubAliasTableName = sqlExp.JoinSubAliasTableName;
+            //sqlExp.JoinSubAliasTableName = aliasTname;
 
             var subQueryStr = sqlExp.SqlString;
 
-            var subTableString = string.Format("({0}) AS {1}", subQueryStr,aliasTname);
+            var subTableString = string.Format("({0}) AS {1}", subQueryStr,sqlExp.JoinSubAliasTableName);
            
             _tableNames.Clear();
             _tableNames.Add(subTableString);
@@ -131,6 +131,20 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
             var selectionString = string.Format("{0}({1}) AS {2}", selectFunction.ToString(), fname, name);
             _selectionList.Add(selectionString);
         }
+
+        //public void SelectSubSql(string tableName, string fieldName, SelectFunction selectFunction, string aliasName)
+        //{
+        //    string name = string.IsNullOrEmpty(aliasName) ? fieldName : aliasName;
+        //    name = _adapter.Field(name);
+
+        //    var fname = fieldName;
+        //    if (fieldName != "*")
+        //    {
+        //        fname = _adapter.Field(tableName, fieldName);
+        //    }
+        //    var selectionString = string.Format("{0}({1}) AS {2}", selectFunction.ToString(), fname, name);
+        //    _selectionList.Add(selectionString);
+        //}
 
         public void GroupBy(string tableName, string fieldName)
         {

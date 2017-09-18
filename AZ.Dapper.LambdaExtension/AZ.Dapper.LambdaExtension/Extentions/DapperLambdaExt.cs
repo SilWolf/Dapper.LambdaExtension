@@ -544,33 +544,26 @@ namespace Dapper.LambdaExtension.Extentions
         public static PagedResult<TResult> PagedQuery<TEntity, TResult>(this IDbConnection db, int pageSize, int pageNumber, Action<SqlExp<TResult>> action , Action<SqlExp<TEntity>> subAction ,
             IDbTransaction trans = null, int? commandTimeout = null) where TEntity : class where TResult:class
         {
-
+ 
             var sqllam = new SqlExp<TEntity>(db.GetAdapter());
-
-            //var sqllam = new SqlExp<T>(db.GetAdapter());
-
-            var countSqlam = new SqlExp<TEntity>(db.GetAdapter(), true);
-
+ 
             subAction?.Invoke(sqllam);
 
-            //subAction?.Invoke(countSqlam);
-
-   
-            //action?.Invoke(sqllam);
-
-            //subAction?.Invoke(sqllamSub);
-
-            //sqllam.SubQuery(action);
-
+ 
             var sqlLamMain = new SqlExp<TResult>(db.GetAdapter());
 
             sqlLamMain.SubQuery(sqllam);
 
-            action.Invoke(sqlLamMain);
+            action?.Invoke(sqlLamMain);
 
+            var countSqlam = new SqlExp<TResult>(db.GetAdapter(), true);
 
-            countSqlam = countSqlam.Count();
-            int countRet;
+            countSqlam.SubQuery(sqllam);
+
+            action?.Invoke(countSqlam);
+           
+            countSqlam = countSqlam.Count<TResult>(sqlLamMain);
+            int countRet=0;
             try
             {
 
@@ -590,10 +583,10 @@ namespace Dapper.LambdaExtension.Extentions
                 throw new DapperLamException(ex.Message, ex, countSqlam.SqlString){Parameters = countSqlam.Parameters};
             }
 
-            var sqlstring = sqlLamMain.QueryPage(pageSize, pageNumber);
+            var sqlstring = sqlLamMain.QuerySubPage(pageSize, pageNumber);
             try
             {
-                var retlist = db.Query<TResult>(sqlstring, sqllam.Parameters, trans, commandTimeout: commandTimeout);
+                var retlist = db.Query<TResult>(sqlstring, sqlLamMain.Parameters, trans, commandTimeout: commandTimeout);
                 return new PagedResult<TResult>(retlist, countRet, pageSize, pageNumber);
             }
             catch (Exception ex)
@@ -601,12 +594,12 @@ namespace Dapper.LambdaExtension.Extentions
                 if (Debugger.IsAttached)
                 {
                     Debug.WriteLine(ex.Message + ex.StackTrace);
-                    Debug.WriteLine(sqlLamMain.SqlString);
+                    Debug.WriteLine(sqlstring);
                 }
 
                 Console.WriteLine(ex.Message + ex.StackTrace);
-                Console.WriteLine(sqlLamMain.SqlString);
-                throw new DapperLamException(ex.Message, ex, sqlLamMain.SqlString) { Parameters = sqlLamMain.Parameters };
+                Console.WriteLine(sqlstring);
+                throw new DapperLamException(ex.Message, ex, sqlstring) { Parameters = sqlLamMain.Parameters };
             }
         }
 

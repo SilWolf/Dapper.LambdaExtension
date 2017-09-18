@@ -334,6 +334,12 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
             _resolver.SelectWithFunction<T>(null, SelectFunction.COUNT, aliasName);
             return this;
         }
+        public SqlExp<T> Count<TResult>(SqlExp<TResult> subExp,string aliasName = "count")
+        {
+            
+            _resolver.SelectWithFunction<T>(null, SelectFunction.COUNT, aliasName,subExp.JoinSubAliasTableName);
+            return this;
+        }
 
         public SqlExp<T> Sum(Expression<Func<T, object>> expression, string aliasName = "")
         {
@@ -476,8 +482,10 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
 
         public SqlExp<T2> SubQuery<T2>(SqlExp<T2> subQuery)
         {
-            
-           
+            var aliasTname = $"query_" + DateTime.Now.Ticks;
+            JoinSubAliasTableName = aliasTname;
+
+            subQuery.JoinSubAliasTableName = aliasTname;
             this._childSqlExps.Add(subQuery);
 
             _resolver.SubQuery<T2>(subQuery);
