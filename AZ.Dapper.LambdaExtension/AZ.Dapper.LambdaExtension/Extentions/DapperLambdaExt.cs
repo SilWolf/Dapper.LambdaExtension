@@ -56,7 +56,7 @@ namespace Dapper.LambdaExtension.Extentions
 
                 Console.WriteLine(ex.Message + ex.StackTrace);
                 Console.WriteLine(sqllam.SqlString);
-                throw ex;
+                throw new DapperLamException(ex.Message, ex, sqllam.SqlString);
             }
         }
 
@@ -84,7 +84,7 @@ namespace Dapper.LambdaExtension.Extentions
 
                 Console.WriteLine(ex.Message + ex.StackTrace);
                 Console.WriteLine(sqllam.SqlString);
-                throw ex;
+                throw new DapperLamException(ex.Message, ex, sqllam.SqlString);
             }
         }
 
@@ -110,7 +110,7 @@ namespace Dapper.LambdaExtension.Extentions
 
                 Console.WriteLine(ex.Message + ex.StackTrace);
                 Console.WriteLine(sqllam.SqlString);
-                throw ex;
+                throw new DapperLamException(ex.Message, ex, sqllam.SqlString);
             }
         }
 
@@ -134,7 +134,7 @@ namespace Dapper.LambdaExtension.Extentions
 
                 Console.WriteLine(ex.Message + ex.StackTrace);
                 Console.WriteLine(sqllam.SqlString);
-                throw ex;
+                throw new DapperLamException(ex.Message, ex, sqllam.SqlString);
             }
         }
 
@@ -163,7 +163,7 @@ namespace Dapper.LambdaExtension.Extentions
 
                 Console.WriteLine(ex.Message + ex.StackTrace);
                 Console.WriteLine(sqllam.SqlString);
-                throw ex;
+                throw new DapperLamException(ex.Message, ex, sqllam.SqlString);
             }
         }
         public static int Update<T>(this IDbConnection db, T entity, IDbTransaction trans = null, int? commandTimeout = null)
@@ -188,7 +188,7 @@ namespace Dapper.LambdaExtension.Extentions
 
                 Console.WriteLine(ex.Message + ex.StackTrace);
                 Console.WriteLine(sqllam.SqlString);
-                throw ex;
+                throw new DapperLamException(ex.Message, ex, sqllam.SqlString);
             }
         }
 
@@ -221,7 +221,7 @@ namespace Dapper.LambdaExtension.Extentions
 
                 Console.WriteLine(ex.Message + ex.StackTrace);
                 Console.WriteLine(sqllam.SqlString);
-                throw ex;
+                throw new DapperLamException(ex.Message, ex, sqllam.SqlString);
             }
         }
 
@@ -253,7 +253,7 @@ namespace Dapper.LambdaExtension.Extentions
 
                 Console.WriteLine(ex.Message + ex.StackTrace);
                 Console.WriteLine(sqllam.SqlString);
-                throw ex;
+                throw new DapperLamException(ex.Message, ex, sqllam.SqlString);
             }
         }
 
@@ -280,7 +280,7 @@ namespace Dapper.LambdaExtension.Extentions
 
                 Console.WriteLine(ex.Message + ex.StackTrace);
                 Console.WriteLine(sqllam.SqlString);
-                throw ex;
+                throw new DapperLamException(ex.Message, ex, sqllam.SqlString);
             }
         }
 
@@ -310,7 +310,7 @@ namespace Dapper.LambdaExtension.Extentions
 
                 Console.WriteLine(ex.Message + ex.StackTrace);
                 Console.WriteLine(sqllam.SqlString);
-                throw ex;
+                throw new DapperLamException(ex.Message, ex, sqllam.SqlString);
             }
         }
 
@@ -337,7 +337,7 @@ namespace Dapper.LambdaExtension.Extentions
 
                 Console.WriteLine(ex.Message + ex.StackTrace);
                 Console.WriteLine(sqllam.SqlString);
-                throw ex;
+                throw new DapperLamException(ex.Message, ex, sqllam.SqlString);
             }
         }
 
@@ -390,7 +390,7 @@ namespace Dapper.LambdaExtension.Extentions
 
                 Console.WriteLine(ex.Message + ex.StackTrace);
                 Console.WriteLine(sqlstring);
-                throw ex;
+                throw new DapperLamException(ex.Message, ex, sqlstring);
             }
 
         }
@@ -415,7 +415,7 @@ namespace Dapper.LambdaExtension.Extentions
 
                 Console.WriteLine(ex.Message + ex.StackTrace);
                 Console.WriteLine(sqllam.SqlString);
-                throw ex;
+                throw new DapperLamException(ex.Message, ex, sqllam.SqlString);
             }
 
         }
@@ -455,7 +455,7 @@ namespace Dapper.LambdaExtension.Extentions
 
                 Console.WriteLine(ex.Message + ex.StackTrace);
                 Console.WriteLine(sqlstring);
-                throw ex;
+                throw new DapperLamException(ex.Message, ex, sqlstring);
             }
         }
 
@@ -493,7 +493,7 @@ namespace Dapper.LambdaExtension.Extentions
 
                 Console.WriteLine(ex.Message + ex.StackTrace);
                 Console.WriteLine(sqlstring);
-                throw ex;
+                throw new DapperLamException(ex.Message, ex,sqlstring);
             }
         }
 
@@ -546,7 +546,7 @@ namespace Dapper.LambdaExtension.Extentions
 
                 Console.WriteLine(ex.Message + ex.StackTrace);
                 Console.WriteLine(sqlLamMain.SqlString);
-                throw ex;
+                throw new DapperLamException(ex.Message, ex, sqlLamMain.SqlString);
             }
         }
 
@@ -572,7 +572,7 @@ namespace Dapper.LambdaExtension.Extentions
 
                 Console.WriteLine(ex.Message + ex.StackTrace);
                 Console.WriteLine(sqllam.SqlString);
-                throw ex;
+                throw new DapperLamException(ex.Message, ex, sqllam.SqlString);
             }
         }
 
@@ -611,7 +611,7 @@ namespace Dapper.LambdaExtension.Extentions
 
                 Console.WriteLine(ex.Message + ex.StackTrace);
                 Console.WriteLine(sqlLamMain.SqlString);
-                throw ex;
+                throw new DapperLamException(ex.Message,ex,sqlLamMain.SqlString);
             }
         }
 
@@ -637,7 +637,7 @@ namespace Dapper.LambdaExtension.Extentions
 
                 Console.WriteLine(ex.Message + ex.StackTrace);
                 Console.WriteLine(sqllam.SqlString);
-                throw ex;
+                throw new DapperLamException(ex.Message, ex, sqllam.SqlString);
             }
         }
 
