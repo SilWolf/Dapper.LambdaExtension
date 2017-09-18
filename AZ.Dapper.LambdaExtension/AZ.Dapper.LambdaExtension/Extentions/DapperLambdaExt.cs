@@ -419,6 +419,8 @@ namespace Dapper.LambdaExtension.Extentions
             }
 
         }
+ 
+
         public static PagedResult<T> PagedQuery<T>(this IDbConnection db, int pageSize, int pageNumber, Action<SqlExp<T>> action, IDbTransaction trans = null, int? commandTimeout = null) where T : class
         {
 
@@ -457,6 +459,97 @@ namespace Dapper.LambdaExtension.Extentions
             }
         }
 
+        public static PagedResult<TResult> PagedQuery<T,TResult>(this IDbConnection db, int pageSize, int pageNumber, Action<SqlExp<T>> action, IDbTransaction trans = null, int? commandTimeout = null) where T : class  where TResult:class
+        {
+
+            var sqllam = new SqlExp<T>(db.GetAdapter());
+
+            var countSqlam = new SqlExp<T>(db.GetAdapter(), true);
+
+            action?.Invoke(sqllam);
+
+            action?.Invoke(countSqlam);
+
+            countSqlam = countSqlam.Count();
+
+
+            var countRet = db.Query<int>(countSqlam.SqlString, countSqlam.Parameters, trans, commandTimeout: commandTimeout).FirstOrDefault();
+
+
+            var sqlstring = sqllam.QueryPage(pageSize, pageNumber);
+
+            try
+            {
+                var retlist = db.Query<TResult>(sqlstring, sqllam.Parameters, trans, commandTimeout: commandTimeout);
+                return new PagedResult<TResult>(retlist, countRet, pageSize, pageNumber);
+            }
+            catch (Exception ex)
+            {
+                if (Debugger.IsAttached)
+                {
+                    Debug.WriteLine(ex.Message + ex.StackTrace);
+                    Debug.WriteLine(sqlstring);
+                }
+
+                Console.WriteLine(ex.Message + ex.StackTrace);
+                Console.WriteLine(sqlstring);
+                throw ex;
+            }
+        }
+
+
+        public static PagedResult<TResult> PagedQuery<TEntity, TResult>(this IDbConnection db, int pageSize, int pageNumber, Action<SqlExp<TResult>> action , Action<SqlExp<TEntity>> subAction ,
+            IDbTransaction trans = null, int? commandTimeout = null) where TEntity : class where TResult:class
+        {
+
+            var sqllam = new SqlExp<TEntity>(db.GetAdapter());
+
+            //var sqllam = new SqlExp<T>(db.GetAdapter());
+
+            var countSqlam = new SqlExp<TEntity>(db.GetAdapter(), true);
+
+            subAction?.Invoke(sqllam);
+
+            subAction?.Invoke(countSqlam);
+
+            countSqlam = countSqlam.Count();
+
+
+            var countRet = db.Query<int>(countSqlam.SqlString, countSqlam.Parameters, trans, commandTimeout: commandTimeout).FirstOrDefault();
+
+
+            //action?.Invoke(sqllam);
+
+            //subAction?.Invoke(sqllamSub);
+
+            //sqllam.SubQuery(action);
+
+            var sqlLamMain = new SqlExp<TResult>(db.GetAdapter());
+
+            sqlLamMain.SubQuery(sqllam);
+
+            action.Invoke(sqlLamMain);
+
+            var sqlstring = sqlLamMain.QueryPage(pageSize, pageNumber);
+            try
+            {
+                var retlist = db.Query<TResult>(sqlstring, sqllam.Parameters, trans, commandTimeout: commandTimeout);
+                return new PagedResult<TResult>(retlist, countRet, pageSize, pageNumber);
+            }
+            catch (Exception ex)
+            {
+                if (Debugger.IsAttached)
+                {
+                    Debug.WriteLine(ex.Message + ex.StackTrace);
+                    Debug.WriteLine(sqlLamMain.SqlString);
+                }
+
+                Console.WriteLine(ex.Message + ex.StackTrace);
+                Console.WriteLine(sqlLamMain.SqlString);
+                throw ex;
+            }
+        }
+
         public static IEnumerable<TResult> Query<TEntity, TResult>(this IDbConnection db, Action<SqlExp<TEntity>> action = null,
             IDbTransaction trans = null, int? commandTimeout = null) where TEntity : class
         {
@@ -482,6 +575,46 @@ namespace Dapper.LambdaExtension.Extentions
                 throw ex;
             }
         }
+
+        public static IEnumerable<TResult> Query<TEntity, TResult>(this IDbConnection db, Action<SqlExp<TResult>> action,Action<SqlExp<TEntity>> subAction,IDbTransaction trans = null, int? commandTimeout = null) where TEntity : class
+        {
+
+            var sqllamSub = new SqlExp<TEntity>(db.GetAdapter());
+
+         
+
+            //action?.Invoke(sqllam);
+
+            subAction?.Invoke(sqllamSub);
+
+            //sqllam.SubQuery(action);
+
+            var sqlLamMain=new SqlExp<TResult>(db.GetAdapter());
+
+            sqlLamMain.SubQuery(sqllamSub);
+
+            action?.Invoke(sqlLamMain);
+
+             
+
+            try
+            {
+                return db.Query<TResult>(sqlLamMain.SqlString, sqlLamMain.Parameters, trans, commandTimeout: commandTimeout);
+            }
+            catch (Exception ex)
+            {
+                if (Debugger.IsAttached)
+                {
+                    Debug.WriteLine(ex.Message + ex.StackTrace);
+                    Debug.WriteLine(sqlLamMain.SqlString);
+                }
+
+                Console.WriteLine(ex.Message + ex.StackTrace);
+                Console.WriteLine(sqlLamMain.SqlString);
+                throw ex;
+            }
+        }
+
 
         public static TResult ExecuteScalar<TEntity, TResult>(this IDbConnection db, Action<SqlExp<TEntity>> action = null,
           IDbTransaction trans = null, int? commandTimeout = null) where TEntity : class

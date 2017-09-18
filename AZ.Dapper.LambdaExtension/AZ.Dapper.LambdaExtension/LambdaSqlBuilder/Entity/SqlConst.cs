@@ -10,6 +10,9 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Entity
         public static string[] ParamPrefixs = new string[] { "@", ":", "?", "$" };
 
         public static string QuerySQLFormatString = @"SELECT {0} FROM {1} {2} {3} {4} {5}";
+
+        public static string QuerySubSQLFormatString = @"SELECT {0} FROM {1} {2} {3} {4} {5}";
+
         public static string InsertSQLFormatString = @"INSERT INTO {0} ({1}) VALUES({2})";
         public static string UpdateSQLFormatString = @"UPDATE {0} SET {1} {2}";
         public static string DeleteSQLFormatString = @"DELETE FROM {0} {1}";

@@ -60,6 +60,12 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
             _builder.JoinSub(t2SqlExp,GetTableName<T1>(), GetTableName<T2>(), GetColumnName(leftExpression), GetColumnName(rightExpression), joinType);
         }
 
+        public void SubQuery<T2>(SqlExp<T2> t2SqlExp)
+        {
+            _builder._isSubQuery = true;
+            _builder.QuerySub(t2SqlExp);
+        }
+
         public void OrderBy<T>(Expression<Func<T, object>> expression, bool desc = false)
         {
             var body = expression.Body;
@@ -287,6 +293,25 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
             }
 
             _builder.Select(GetTableName<T>(), fieldName, selectFunction, aliasFieldName);
+        }
+
+        public void SelectWithFunctionSubQuery<T, TMain>(Expression<Func<T, object>> expression, SelectFunction selectFunction, Expression<Func<TMain, object>> aliasProp,string subAlias)
+        {
+            var fieldName = "*";
+
+            if (expression != null)
+            {
+                fieldName = GetColumnName(GetMemberExpression(expression.Body));
+            }
+
+            var aliasFieldName = "";
+
+            if (aliasProp != null)
+            {
+                aliasFieldName = GetColumnName(GetMemberExpression<TMain>(aliasProp.Body));
+            }
+
+            _builder.Select(subAlias, fieldName, selectFunction, aliasFieldName);
         }
 
         public void GroupBy<T>(Expression<Func<T, object>> expression)

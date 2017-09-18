@@ -133,6 +133,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
         {
             return And(expression);
         }
+ 
 
         public SqlExp<T> And(Expression<Func<T, bool>> expression)
         {
@@ -323,6 +324,11 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
             return this;
         }
 
+        public SqlExp<T> Count<TSub>(SqlExpBase subExp,Expression<Func<T, object>> expression, Expression<Func<TSub, object>> aliasProp)
+        {
+            _resolver.SelectWithFunctionSubQuery<T, TSub>(expression, SelectFunction.COUNT, aliasProp,subExp.JoinSubAliasTableName);
+            return this;
+        }
         public SqlExp<T> Count(string aliasName = "count")
         {
             _resolver.SelectWithFunction<T>(null, SelectFunction.COUNT, aliasName);
@@ -335,9 +341,37 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
             return this;
         }
 
+        public SqlExp<T> Sum<TMain>(Expression<Func<T, object>> expression, Expression<Func<TMain, object>> aliasProp)
+        {
+            _resolver.SelectWithFunction(expression, SelectFunction.SUM, aliasProp);
+            return this;
+        }
+
+        public SqlExp<T> SumSubQuery<TSub>(SqlExpBase subExp,Expression<Func<T, object>> expression, Expression<Func<TSub, object>> aliasProp)
+        {
+      
+            _resolver.SelectWithFunctionSubQuery(expression, SelectFunction.SUM, aliasProp, subExp.JoinSubAliasTableName);
+            return this;
+        }
+
         public SqlExp<T> Max(Expression<Func<T, object>> expression, string aliasName = "")
         {
             _resolver.SelectWithFunction(expression, SelectFunction.MAX, aliasName);
+            return this;
+        }
+
+        public SqlExp<T> Max<TMain>(Expression<Func<T, object>> expression, Expression<Func<TMain, object>> subExpression)
+        {
+            _resolver.SelectWithFunction<T, TMain>(expression, SelectFunction.MAX,subExpression);
+            return this;
+        }
+
+ 
+
+        public SqlExp<T> MaxSubQuery<TSub>(SqlExpBase subExp,Expression<Func<TSub, object>> expression, Expression<Func<T, object>> mainExpression)
+        {
+   
+            _resolver.SelectWithFunctionSubQuery<TSub, T>(expression, SelectFunction.MAX, mainExpression, subExp.JoinSubAliasTableName);
             return this;
         }
 
@@ -347,9 +381,33 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
             return this;
         }
 
+        public SqlExp<T> Min<TMain>(Expression<Func<T, object>> expression, Expression<Func<TMain, object>> subExpression)
+        {
+            _resolver.SelectWithFunction(expression, SelectFunction.MIN, subExpression);
+            return this;
+        }
+
+        public SqlExp<T> MinSubQuery<TSub>(SqlExpBase subExp, Expression<Func<T, object>> expression, Expression<Func<TSub, object>> subExpression)
+        {
+            _resolver.SelectWithFunctionSubQuery(expression, SelectFunction.MIN, subExpression, subExp.JoinSubAliasTableName);
+            return this;
+        }
+
         public SqlExp<T> Average(Expression<Func<T, object>> expression, string aliasName = "")
         {
             _resolver.SelectWithFunction(expression, SelectFunction.AVG, aliasName);
+            return this;
+        }
+
+        public SqlExp<T> Average<TMain>(Expression<Func<T, object>> expression, Expression<Func<TMain, object>> subExpression)
+        {
+            _resolver.SelectWithFunction(expression, SelectFunction.AVG, subExpression);
+            return this;
+        }
+
+        public SqlExp<T> AverageSubQuery<TSub>(SqlExpBase subExp, Expression<Func<T, object>> expression, Expression<Func<TSub, object>> subExpression)
+        {
+            _resolver.SelectWithFunctionSubQuery(expression, SelectFunction.AVG, subExpression,subExp.JoinSubAliasTableName);
             return this;
         }
 
@@ -372,6 +430,8 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
             return query;
         }
 
+
+
         public SqlExp<T2> Join<T2>(Expression<Func<T, T2, bool>> expression,JoinType joinType = JoinType.Join)
         {
             var joinQuery = new SqlExp<T2>(_builder, _resolver);
@@ -388,6 +448,8 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
             action?.Invoke(joinQuery);
             _resolver.JoinSubQuery(joinQuery, expression, joinType);
 
+            this._childSqlExps.Add(joinQuery);
+
             return joinQuery;
         }
         public SqlExp<T2> JoinSubQuery<T2, TKey>(Action<SqlExp<T2>> joinQuery,
@@ -399,10 +461,12 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
 
             joinQuery?.Invoke(query);
 
+
             _resolver.JoinSubQuery<T, T2, TKey>(query, primaryKeySelector, foreignKeySelector, joinType);
 
-           // query.Select(selections);
+            // query.Select(selections);
 
+            this._childSqlExps.Add(query);
             this.SelectSubQuery(query, selections);
 
 
@@ -410,7 +474,39 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
             return query;
         }
 
+        public SqlExp<T2> SubQuery<T2>(SqlExp<T2> subQuery)
+        {
+            
+           
+            this._childSqlExps.Add(subQuery);
 
+            _resolver.SubQuery<T2>(subQuery);
+
+            // query.Select(selections);
+
+            return subQuery;
+        }
+
+
+        //public SqlExp<T2> JoinSubQuery<T2, TKey>(Action<SqlExp<T2>> joinQuery,
+        //    Expression<Func<T, TKey>> primaryKeySelector,
+        //    string frognKey, JoinType joinType = JoinType.Join
+        //    )
+        //{
+        //    var query = new SqlExp<T2>(_adapter);
+
+        //    joinQuery?.Invoke(query);
+
+        //    _resolver.JoinSubQuery<T, T2, TKey>(query, primaryKeySelector, foreignKeySelector, joinType);
+
+        //    // query.Select(selections);
+
+        //   // this.SelectSubQuery(query, selections);
+
+
+
+        //    return query;
+        //}
 
 
         public SqlExp<T2> LeftJoin<T2, TKey>(Action<SqlExp<T2>> joinQuery,

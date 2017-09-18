@@ -9,6 +9,8 @@ namespace Dapper.LambdaExtension
         LeftJoin,
         RightJoin,
         InnerJoin,
-        Join
+        Join,
+        LeftOuterJoin,
+        RightOuterJoin
     }
 }

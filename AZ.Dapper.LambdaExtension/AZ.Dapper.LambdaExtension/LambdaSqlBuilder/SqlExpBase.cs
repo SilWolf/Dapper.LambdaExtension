@@ -1,18 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Dapper.LambdaExtension.LambdaSqlBuilder.Adapter;
 using Dapper.LambdaExtension.LambdaSqlBuilder.Entity;
 using Dapper.LambdaExtension.LambdaSqlBuilder.Resolver;
 
 namespace Dapper.LambdaExtension.LambdaSqlBuilder
 {
-    
+
     public abstract class SqlExpBase
     {
         internal Builder.Builder _builder;
         internal LambdaResolver _resolver;
         internal SqlType _type;
         internal SqlAdapterType _adapter;
+
+        internal List<SqlExpBase> _childSqlExps = new List<SqlExpBase>();
+
+     
 
         public string JoinSubAliasTableName { get; internal set; }
 
@@ -27,7 +32,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
 
         }
 
-        public SqlExpBase(SqlAdapterType adater,Type entityType)
+        public SqlExpBase(SqlAdapterType adater, Type entityType)
         {
             _type = SqlType.Query;
             _adapter = adater;
@@ -36,12 +41,12 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
             _resolver = new LambdaResolver(_builder);
         }
 
-        public SqlExpBase(SqlAdapterType adater, SqlTableDefine tableDefine,List<SqlColumnDefine> columnDefines)
+        public SqlExpBase(SqlAdapterType adater, SqlTableDefine tableDefine, List<SqlColumnDefine> columnDefines)
         {
             _type = SqlType.Query;
             _adapter = adater;
-             
-            _builder = new Builder.Builder(_type, tableDefine,columnDefines, AdapterFactory.GetAdapterInstance(_adapter));
+
+            _builder = new Builder.Builder(_type, tableDefine, columnDefines, AdapterFactory.GetAdapterInstance(_adapter));
             _resolver = new LambdaResolver(_builder);
         }
 
@@ -62,8 +67,30 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
         {
             get
             {
-                return _builder.Parameters; 
-                
+                if (_childSqlExps.Any())
+                {
+                    var parameterList = new Dictionary<string, object>();
+
+                    foreach (var child in _childSqlExps)
+                    {
+                        var parameters = child.Parameters;
+
+                        foreach (var pp in parameters)
+                        {
+                            parameterList.Add(pp.Key, pp.Value);
+                        }
+                    }
+
+                    foreach (var pm in _builder.Parameters)
+                    {
+                        parameterList.Add(pm.Key,pm.Value);
+                    }
+                    return parameterList;
+                }
+                else
+                {
+                    return _builder.Parameters;
+                }
             }
         }
 
@@ -86,10 +113,10 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
 
         public void SetAdapter(SqlAdapterType adapter)
         {
-            _builder.Adapter =AdapterFactory.GetAdapterInstance(adapter);
+            _builder.Adapter = AdapterFactory.GetAdapterInstance(adapter);
         }
 
-      
+
 
         //public static SqlAdapter GetAdapterByDb(IDbConnection dbconnection)
         //{
@@ -98,6 +125,6 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
 
         //}
 
-       
+
     }
 }

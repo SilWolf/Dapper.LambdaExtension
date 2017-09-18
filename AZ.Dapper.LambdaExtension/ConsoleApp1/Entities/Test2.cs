@@ -11,11 +11,11 @@ namespace testdemo.Entities
      
     public class Test2
     {
-        [DBKey(true)]
+        [ZPKey(true)]
         
         public int Id { get; set; }
 
-        [DBColumn("c_name")]
+        [ZPColumn("c_name")]
         public string Name { get; set; }
     }
 }

@@ -63,6 +63,8 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
         private bool _useField;
         private bool _userKey;
 
+        internal bool _isSubQuery;
+
         private Type _entityType;
 
         private SqlTableDefine _tableDefine;
@@ -193,6 +195,10 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
 
         private string GetTableName()
         {
+            if (_isSubQuery)
+            {
+                return _tableNames.First();
+            }
             var joinExpression = string.Join(" ", _joinExpressions);
             return string.Format("{0} {1}", _adapter.Table(_tableNames.First(),_schema), joinExpression);
         }
@@ -283,7 +289,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
         {
             string paramId = this.GetParamId(fieldName);
             string key = _adapter.Field(tableName, fieldName);
-            
+ 
             string value = _adapter.Parameter(paramId);
 
             if (_parameterDic.ContainsKey(value))
@@ -291,6 +297,12 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
                 value = value + Guid.NewGuid().ToString("n");
             }
             this.AddParameter(value, fieldValue);
+
+            if (_isSubQuery)
+            {
+                key = _adapter.Field(JoinSubAliasTableName, fieldName);
+            }
+
             return string.Format("{0} {1} {2}", key, op, value);
         }
 

@@ -6,6 +6,8 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
 {
     partial class Builder
     {
+        internal string JoinSubAliasTableName;
+
         public void Join(string originalTableName, string joinTableName, string leftField, string rightField,JoinType joinType)
         {
             var joinTypeStr = "JOIN";
@@ -48,6 +50,12 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
                 case JoinType.RightJoin:
                     joinTypeStr = "RIGHT JOIN";
                     break;
+                case JoinType.LeftOuterJoin:
+                    joinTypeStr = "LEFT OUTER JOIN";
+                    break;
+                case JoinType.RightOuterJoin:
+                    joinTypeStr = "RIGHT OUTER JOIN";
+                    break;
                 default:
                     joinTypeStr = "JOIN";
                     break;
@@ -56,7 +64,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
             var aliasTname = $"join_" + DateTime.Now.Ticks;
 
             sqlExp.JoinSubAliasTableName = aliasTname;
-
+            JoinSubAliasTableName = aliasTname;
             var subQueryStr = sqlExp.SqlString;
 
             var joinString = string.Format("{3} ({0}) {4} ON {1} = {4}.{2}",
@@ -67,6 +75,24 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
             _joinExpressions.Add(joinString);
             _splitColumns.Add(rightField);
         }
+
+        public void QuerySub(SqlExpBase sqlExp)
+        {
+             
+            var aliasTname = $"query_" + DateTime.Now.Ticks;
+            JoinSubAliasTableName = aliasTname;
+            sqlExp.JoinSubAliasTableName = aliasTname;
+
+            var subQueryStr = sqlExp.SqlString;
+
+            var subTableString = string.Format("({0}) AS {1}", subQueryStr,aliasTname);
+           
+            _tableNames.Clear();
+            _tableNames.Add(subTableString);
+       
+        }
+
+
 
         public void OrderBy(string tableName, string fieldName, bool desc = false)
         {
