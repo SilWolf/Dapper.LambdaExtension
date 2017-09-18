@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dapper.LambdaExtension.Extentions
+namespace Dapper
 {
     public class DapperLamException:Exception
     {
@@ -14,6 +14,8 @@ namespace Dapper.LambdaExtension.Extentions
        
         }
         public string SqlString { get; set; }
+
+        public IDictionary<string,object> Parameters { get; set; }
 
         public override string StackTrace {
             get { return InnerException?.StackTrace; }

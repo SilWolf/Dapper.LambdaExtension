@@ -56,7 +56,7 @@ namespace Dapper.LambdaExtension.Extentions
 
                 Console.WriteLine(ex.Message + ex.StackTrace);
                 Console.WriteLine(sqllam.SqlString);
-                throw new DapperLamException(ex.Message, ex, sqllam.SqlString);
+                throw new DapperLamException(ex.Message, ex, sqllam.SqlString) { Parameters = sqllam.Parameters };
             }
         }
 
@@ -84,7 +84,7 @@ namespace Dapper.LambdaExtension.Extentions
 
                 Console.WriteLine(ex.Message + ex.StackTrace);
                 Console.WriteLine(sqllam.SqlString);
-                throw new DapperLamException(ex.Message, ex, sqllam.SqlString);
+                throw new DapperLamException(ex.Message, ex, sqllam.SqlString) { Parameters = sqllam.Parameters };
             }
         }
 
@@ -110,7 +110,7 @@ namespace Dapper.LambdaExtension.Extentions
 
                 Console.WriteLine(ex.Message + ex.StackTrace);
                 Console.WriteLine(sqllam.SqlString);
-                throw new DapperLamException(ex.Message, ex, sqllam.SqlString);
+                throw new DapperLamException(ex.Message, ex, sqllam.SqlString) { Parameters = sqllam.Parameters };
             }
         }
 
@@ -134,7 +134,7 @@ namespace Dapper.LambdaExtension.Extentions
 
                 Console.WriteLine(ex.Message + ex.StackTrace);
                 Console.WriteLine(sqllam.SqlString);
-                throw new DapperLamException(ex.Message, ex, sqllam.SqlString);
+                throw new DapperLamException(ex.Message, ex, sqllam.SqlString) { Parameters = sqllam.Parameters };
             }
         }
 
@@ -163,7 +163,7 @@ namespace Dapper.LambdaExtension.Extentions
 
                 Console.WriteLine(ex.Message + ex.StackTrace);
                 Console.WriteLine(sqllam.SqlString);
-                throw new DapperLamException(ex.Message, ex, sqllam.SqlString);
+                throw new DapperLamException(ex.Message, ex, sqllam.SqlString) { Parameters = sqllam.Parameters };
             }
         }
         public static int Update<T>(this IDbConnection db, T entity, IDbTransaction trans = null, int? commandTimeout = null)
@@ -188,7 +188,7 @@ namespace Dapper.LambdaExtension.Extentions
 
                 Console.WriteLine(ex.Message + ex.StackTrace);
                 Console.WriteLine(sqllam.SqlString);
-                throw new DapperLamException(ex.Message, ex, sqllam.SqlString);
+                throw new DapperLamException(ex.Message, ex, sqllam.SqlString) { Parameters = sqllam.Parameters };
             }
         }
 
@@ -221,7 +221,7 @@ namespace Dapper.LambdaExtension.Extentions
 
                 Console.WriteLine(ex.Message + ex.StackTrace);
                 Console.WriteLine(sqllam.SqlString);
-                throw new DapperLamException(ex.Message, ex, sqllam.SqlString);
+                throw new DapperLamException(ex.Message, ex, sqllam.SqlString) { Parameters = sqllam.Parameters };
             }
         }
 
@@ -253,7 +253,7 @@ namespace Dapper.LambdaExtension.Extentions
 
                 Console.WriteLine(ex.Message + ex.StackTrace);
                 Console.WriteLine(sqllam.SqlString);
-                throw new DapperLamException(ex.Message, ex, sqllam.SqlString);
+                throw new DapperLamException(ex.Message, ex, sqllam.SqlString) { Parameters = sqllam.Parameters };
             }
         }
 
@@ -280,7 +280,7 @@ namespace Dapper.LambdaExtension.Extentions
 
                 Console.WriteLine(ex.Message + ex.StackTrace);
                 Console.WriteLine(sqllam.SqlString);
-                throw new DapperLamException(ex.Message, ex, sqllam.SqlString);
+                throw new DapperLamException(ex.Message, ex, sqllam.SqlString) { Parameters = sqllam.Parameters };
             }
         }
 
@@ -310,7 +310,7 @@ namespace Dapper.LambdaExtension.Extentions
 
                 Console.WriteLine(ex.Message + ex.StackTrace);
                 Console.WriteLine(sqllam.SqlString);
-                throw new DapperLamException(ex.Message, ex, sqllam.SqlString);
+                throw new DapperLamException(ex.Message, ex, sqllam.SqlString) { Parameters = sqllam.Parameters };
             }
         }
 
@@ -337,7 +337,7 @@ namespace Dapper.LambdaExtension.Extentions
 
                 Console.WriteLine(ex.Message + ex.StackTrace);
                 Console.WriteLine(sqllam.SqlString);
-                throw new DapperLamException(ex.Message, ex, sqllam.SqlString);
+                throw new DapperLamException(ex.Message, ex, sqllam.SqlString) { Parameters = sqllam.Parameters };
             }
         }
 
@@ -369,8 +369,23 @@ namespace Dapper.LambdaExtension.Extentions
 
             countSqlam = countSqlam.Count();
 
-            var countRet = db.Query<int>(countSqlam.SqlString, countSqlam.Parameters).FirstOrDefault();
+            int countRet;
 
+            try { 
+              countRet = db.Query<int>(countSqlam.SqlString, countSqlam.Parameters).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                if (Debugger.IsAttached)
+                {
+                    Debug.WriteLine(ex.Message + ex.StackTrace);
+                    Debug.WriteLine(countSqlam.SqlString);
+                }
+
+                Console.WriteLine(ex.Message + ex.StackTrace);
+                Console.WriteLine(countSqlam.SqlString);
+                throw new DapperLamException(ex.Message, ex, countSqlam.SqlString) { Parameters = countSqlam.Parameters };
+            }
             var sqlstring = sqllam.QueryPage(pageSize, pageNumber);
 
             try
@@ -390,7 +405,7 @@ namespace Dapper.LambdaExtension.Extentions
 
                 Console.WriteLine(ex.Message + ex.StackTrace);
                 Console.WriteLine(sqlstring);
-                throw new DapperLamException(ex.Message, ex, sqlstring);
+                throw new DapperLamException(ex.Message, ex, sqlstring) { Parameters = sqllam.Parameters };
             }
 
         }
@@ -415,7 +430,7 @@ namespace Dapper.LambdaExtension.Extentions
 
                 Console.WriteLine(ex.Message + ex.StackTrace);
                 Console.WriteLine(sqllam.SqlString);
-                throw new DapperLamException(ex.Message, ex, sqllam.SqlString);
+                throw new DapperLamException(ex.Message, ex, sqllam.SqlString) { Parameters = sqllam.Parameters };
             }
 
         }
@@ -434,10 +449,24 @@ namespace Dapper.LambdaExtension.Extentions
 
             countSqlam = countSqlam.Count();
 
+            int countRet;
+            try
+            {
+                countRet = db.Query<int>(countSqlam.SqlString, countSqlam.Parameters, trans, commandTimeout: commandTimeout).FirstOrDefault();
 
-            var countRet = db.Query<int>(countSqlam.SqlString, countSqlam.Parameters, trans, commandTimeout: commandTimeout).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                if (Debugger.IsAttached)
+                {
+                    Debug.WriteLine(ex.Message + ex.StackTrace);
+                    Debug.WriteLine(countSqlam.SqlString);
+                }
 
-
+                Console.WriteLine(ex.Message + ex.StackTrace);
+                Console.WriteLine(countSqlam.SqlString);
+                throw new DapperLamException(ex.Message, ex, countSqlam.SqlString){Parameters = countSqlam.Parameters};
+            }
             var sqlstring = sqllam.QueryPage(pageSize, pageNumber);
 
             try
@@ -455,7 +484,7 @@ namespace Dapper.LambdaExtension.Extentions
 
                 Console.WriteLine(ex.Message + ex.StackTrace);
                 Console.WriteLine(sqlstring);
-                throw new DapperLamException(ex.Message, ex, sqlstring);
+                throw new DapperLamException(ex.Message, ex, sqlstring) { Parameters = sqllam.Parameters };
             }
         }
 
@@ -472,9 +501,23 @@ namespace Dapper.LambdaExtension.Extentions
 
             countSqlam = countSqlam.Count();
 
+            int countRet;
+            try
+            {
+                countRet = db.Query<int>(countSqlam.SqlString, countSqlam.Parameters, trans, commandTimeout: commandTimeout).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                if (Debugger.IsAttached)
+                {
+                    Debug.WriteLine(ex.Message + ex.StackTrace);
+                    Debug.WriteLine(countSqlam.SqlString);
+                }
 
-            var countRet = db.Query<int>(countSqlam.SqlString, countSqlam.Parameters, trans, commandTimeout: commandTimeout).FirstOrDefault();
-
+                Console.WriteLine(ex.Message + ex.StackTrace);
+                Console.WriteLine(countSqlam.SqlString);
+                throw new DapperLamException(ex.Message, ex, countSqlam.SqlString) { Parameters = countSqlam.Parameters };
+            }
 
             var sqlstring = sqllam.QueryPage(pageSize, pageNumber);
 
@@ -493,7 +536,7 @@ namespace Dapper.LambdaExtension.Extentions
 
                 Console.WriteLine(ex.Message + ex.StackTrace);
                 Console.WriteLine(sqlstring);
-                throw new DapperLamException(ex.Message, ex,sqlstring);
+                throw new DapperLamException(ex.Message, ex,sqlstring) { Parameters = sqllam.Parameters };
             }
         }
 
@@ -510,14 +553,9 @@ namespace Dapper.LambdaExtension.Extentions
 
             subAction?.Invoke(sqllam);
 
-            subAction?.Invoke(countSqlam);
+            //subAction?.Invoke(countSqlam);
 
-            countSqlam = countSqlam.Count();
-
-
-            var countRet = db.Query<int>(countSqlam.SqlString, countSqlam.Parameters, trans, commandTimeout: commandTimeout).FirstOrDefault();
-
-
+   
             //action?.Invoke(sqllam);
 
             //subAction?.Invoke(sqllamSub);
@@ -529,6 +567,28 @@ namespace Dapper.LambdaExtension.Extentions
             sqlLamMain.SubQuery(sqllam);
 
             action.Invoke(sqlLamMain);
+
+
+            countSqlam = countSqlam.Count();
+            int countRet;
+            try
+            {
+
+                  countRet = db.Query<int>(countSqlam.SqlString, countSqlam.Parameters, trans, commandTimeout: commandTimeout).FirstOrDefault();
+
+            }
+            catch (Exception ex)
+            {
+                if (Debugger.IsAttached)
+                {
+                    Debug.WriteLine(ex.Message + ex.StackTrace);
+                    Debug.WriteLine(countSqlam.SqlString);
+                }
+
+                Console.WriteLine(ex.Message + ex.StackTrace);
+                Console.WriteLine(countSqlam.SqlString);
+                throw new DapperLamException(ex.Message, ex, countSqlam.SqlString){Parameters = countSqlam.Parameters};
+            }
 
             var sqlstring = sqlLamMain.QueryPage(pageSize, pageNumber);
             try
@@ -546,7 +606,7 @@ namespace Dapper.LambdaExtension.Extentions
 
                 Console.WriteLine(ex.Message + ex.StackTrace);
                 Console.WriteLine(sqlLamMain.SqlString);
-                throw new DapperLamException(ex.Message, ex, sqlLamMain.SqlString);
+                throw new DapperLamException(ex.Message, ex, sqlLamMain.SqlString) { Parameters = sqlLamMain.Parameters };
             }
         }
 
@@ -572,7 +632,7 @@ namespace Dapper.LambdaExtension.Extentions
 
                 Console.WriteLine(ex.Message + ex.StackTrace);
                 Console.WriteLine(sqllam.SqlString);
-                throw new DapperLamException(ex.Message, ex, sqllam.SqlString);
+                throw new DapperLamException(ex.Message, ex, sqllam.SqlString) { Parameters = sqllam.Parameters };
             }
         }
 
@@ -611,7 +671,7 @@ namespace Dapper.LambdaExtension.Extentions
 
                 Console.WriteLine(ex.Message + ex.StackTrace);
                 Console.WriteLine(sqlLamMain.SqlString);
-                throw new DapperLamException(ex.Message,ex,sqlLamMain.SqlString);
+                throw new DapperLamException(ex.Message,ex,sqlLamMain.SqlString) { Parameters = sqlLamMain.Parameters };
             }
         }
 
@@ -637,7 +697,7 @@ namespace Dapper.LambdaExtension.Extentions
 
                 Console.WriteLine(ex.Message + ex.StackTrace);
                 Console.WriteLine(sqllam.SqlString);
-                throw new DapperLamException(ex.Message, ex, sqllam.SqlString);
+                throw new DapperLamException(ex.Message, ex, sqllam.SqlString) { Parameters = sqllam.Parameters };
             }
         }
 
