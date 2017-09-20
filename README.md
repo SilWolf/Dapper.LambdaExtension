@@ -8,11 +8,15 @@
 * SqlAnywhere
 * Sqlite3
 * SqlServerCE
+* Oracle (暂时没环境测试,有需要的请自行测试)
 
 > PS: 内置支持以上数据库的适配器,暂时不开放适配器扩展功能和自定义适配器接口
 
 ## 从NUGET 获取
 > Install-Package AZ.Dapper.LambdaExtension 
+
+### Nuget Gallery
+> https://www.nuget.org/packages/AZ.Dapper.LambdaExtension/
 
 # 用法
 
@@ -45,6 +49,10 @@
         [DBColumn("is_deleted")]
         public bool Deleted { get; set; }
     }
+
+### 注意
+> 如果使用使用了DBColumn属性去映射实体属性与字段名,则需要在你的应用程序启动的时候,手动调用一下:
+> PreApplicationStart.RegisterTypeMaps();
 
 ## 创建表
 
