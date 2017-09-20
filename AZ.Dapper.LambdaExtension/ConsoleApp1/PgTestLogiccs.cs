@@ -1,7 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
+using AIRBox.Data.Entity;
+using AIRBox.Data.VirtualEntity;
+using ConsoleApp1;
+using Dapper.LambdaExtension;
 using Dapper.LambdaExtension.Extentions;
 using Dapper.LambdaExtension.Helpers;
 using Dapper.LambdaExtension.LambdaSqlBuilder;
@@ -19,7 +24,7 @@ namespace testdemo.TestLogic
             {
                 return db.Query<Test2>(sql =>
                 {
-                    sql.WhereIsIn(p => p.Id, new List<object>() { 1, 4 });
+                    sql.WhereIsIn(p => p.Id, new List<object>() {1,4});
                 }).ToList();
             }
         }
@@ -108,6 +113,74 @@ namespace testdemo.TestLogic
             }
         }
 
+        public void InsertMulitFor(List<Test2> itemList)
+        {
+            using (var db = GetConnection())
+            {
+                ////var ecount = db.Query<Test2>().ToList().Count;
+
+
+
+                for (var i = 0; i < itemList.Count; i++)
+                {
+                    var item = new Test2()
+                    {
+                        Name = itemList[i] + i.ToString()
+                    };
+
+                    db.Insert(item);
+                }
+
+
+            }
+        }
+        public void InsertMulti(List<Test2> itemList)
+        {
+
+
+            using (var db = GetConnection())
+            {
+                db.InsertList(itemList);
+            }
+        }
+
+        public    List<Test2> GetMultiList(int count, string prefix)
+        {
+            var multiList = new List<Test2>();
+
+            for (var i = 1; i <= count; i++)
+            {
+                multiList.Add(new Test2()
+                {
+                    Name = prefix + i.ToString()
+                });
+            }
+            return multiList;
+        }
+        //public dynamic TestJoinCount(Action<SqlExp<Test2>> sql)
+        //{
+        //    using (var db = GetConnection())
+        //    {
+        //        return db.Query<Test2,dynamic>(sql);
+        //    }
+        //}
+
+        public dynamic TestJoinCount<TResult>(Action<SqlExp<Test2>> sql)
+        {
+            using (var db = GetConnection())
+            {
+                return db.Query<Test2, TResult>(sql);
+            }
+        }
+
+
+        public dynamic TestV<TResult>(Action<SqlExp<Test2>> sql)
+        {
+            using (var db = GetConnection())
+            {
+                return db.Query<Test2, TResult>(sql);
+            }
+        }
 
         public List<t2> TestSuperClass()
         {
@@ -157,6 +230,103 @@ namespace testdemo.TestLogic
 
             var entityDef = type.GetEntityDefines();
 
+        }
+
+        public void TestSubSubQuery()
+        {
+
+            using (var db = GetConnection())
+            {
+                var list = db.PagedQuery<Matrix, VMatrix>(10, 3, sql =>
+                    {
+                        sql.Where(p => p.ParameterCount > 1);
+                    }, exp => GetVMatrix(exp)
+                );
+
+
+
+
+            }
+        }
+        private void GetVMatrix(SqlExp<Matrix> sqlMain)
+        {
+
+
+            //sqlMain =>
+            //{
+            //main select
+            sqlMain.Select(p => p.Id);
+            sqlMain.Select(p => p.Name);
+            sqlMain.Select(p => p.Code);
+            sqlMain.Select(p => p.WordLength);
+            sqlMain.Select(p => p.SyncWord1);
+            sqlMain.Select(p => p.SyncWord2);
+            sqlMain.Select(p => p.SyncWord3);
+            sqlMain.Select(p => p.SyncWord4);
+            sqlMain.Select(p => p.FrameCounterStartWith);
+            sqlMain.Select(p => p.Activated);
+            sqlMain.Select(p => p.IsDeleted);
+            sqlMain.Select(p => p.OriginalData);
+            sqlMain.Select(p => p.Description);
+            sqlMain.Select(p => p.CreatedTime);
+            sqlMain.Select(p => p.LastUpdatedTime);
+
+
+            //sub query parameter indo
+            var sqlInfo =
+                sqlMain.JoinSubQuery<VEParametersInfo, string>(sql =>
+                {
+
+                        //sub query parameter child
+                        var sqlchild = sql.JoinSubQuery<VEParameterChild, string>(sql2 =>
+                    {
+                        sql2.Select(p => p.ParameterId);
+                        sql2.Count<VEParameterChild>(p => p.Id, v => v.Frequency);
+                        sql2.Where(v => v.PartIndex == 1);
+                        sql2.GroupBy(p => p.ParameterId);
+
+                    }, p => p.ParameterId,
+                        v => v.ParameterId, JoinType.InnerJoin);
+                        //selection and other
+
+                        sql.Select(p => p.MatrixId);
+                    sql.Count<VEParametersInfo>(p => p.Id, v => v.ParameterCount);
+                    sql.MaxSubQuery<VEParameterChild>(sqlchild, p => p.Frequency, v => v.MaxFrequency);
+
+                    sql.GroupBy(p => p.MatrixId);
+
+                }, p => p.Id, v => v.MatrixId, JoinType.LeftOuterJoin);
+
+            sqlMain.SelectSubQuery<VMatrix>(sqlInfo, p => p.ParameterCount, p => p.MaxFrequency);
+
+            //sub query  r aircraft _matrix
+
+            var sqlAir = sqlMain.JoinSubQuery<RelationAircraftMatrix, string>(sql =>
+            {
+                sql.Select(p => p.MatrixCode);
+                sql.Count<VMatrix>(v => v.Id, p => p.RelationAircraftCount);
+                sql.Where(p => p.IsDeleted == false);
+                sql.GroupBy(p => p.MatrixCode);
+
+            }, p => p.Code, v => v.MatrixCode, JoinType.LeftOuterJoin);
+
+            sqlMain.SelectSubQuery<VMatrix>(sqlAir, v => v.RelationAircraftCount);
+
+            //subquery decode process
+
+            var sqlDecode = sqlMain.JoinSubQuery<DecodeProcess, string>(sql =>
+            {
+                sql.Select(p => p.MatrixCode);
+                sql.Count<VMatrix>(p => p.Id, v => v.DecodeTimes);
+                sql.Max<VMatrix>(p => p.CreatedTime, v => v.LastUsageDate);
+                sql.GroupBy(p => p.MatrixCode);
+
+            }, p => p.Code,
+                v => v.MatrixCode, JoinType.LeftOuterJoin);
+
+            sqlMain.SelectSubQuery<VMatrix>(sqlDecode, v => v.DecodeTimes, v => v.LastUsageDate);
+
+            //};
         }
     }
 }

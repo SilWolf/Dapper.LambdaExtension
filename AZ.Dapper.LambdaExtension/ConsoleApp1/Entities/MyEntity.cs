@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Text;
 using Dapper;
-using Dapper.Contrib.Extensions;
+ 
 using Dapper.LambdaExtension.Extentions;
 using Npgsql;
 
@@ -35,6 +35,7 @@ namespace ConsoleApp1.Entities
         {
             using (var connection = new NpgsqlConnection())
             {
+                
                 connection.CreateTable<MyEntity>();
 
 

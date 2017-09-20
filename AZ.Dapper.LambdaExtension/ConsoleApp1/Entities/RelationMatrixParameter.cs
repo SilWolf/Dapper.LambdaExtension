@@ -18,24 +18,24 @@ namespace AIRBox.Data.Entity
 	///	);
     /// </code>
     [Serializable]
-    [ZPTable("r_matrix_parameter")]
+    [DBTable("r_matrix_parameter")]
     public class RelationMatrixParameter:EntityBase
     {
-        [ZPColumn("matrix_id", dbType: DbType.AnsiStringFixedLength, fieldLength: "51")]
+        [DBColumn("matrix_id", dbType: DbType.AnsiStringFixedLength, fieldLength: "51")]
         public string MatrixId { get; set; }
-        [ZPColumn("parameter_id", dbType: DbType.AnsiStringFixedLength, fieldLength: "51")]
+        [DBColumn("parameter_id", dbType: DbType.AnsiStringFixedLength, fieldLength: "51")]
         public string ParameterId { get; set; }
-        [ZPColumn("r_name")]
+        [DBColumn("r_name")]
         public string Name { get; set; }
 
   
 
-        [ZPColumn("r_index")]
+        [DBColumn("r_index")]
         public int Index { get; set; }
         /// <summary>
         /// 该参数存储的Engine Table名称
         /// </summary>
-        [ZPColumn("engine_table_name")]
+        [DBColumn("engine_table_name")]
         public string EngineTableName { get; set; }
 
         public RelationMatrixParameter()

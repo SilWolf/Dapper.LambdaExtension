@@ -211,17 +211,17 @@ namespace testdemo.TestLogic
         }
 
 
-        [ZPTable("tt1",Schema = "test")]
+        [DBTable("tt1",Schema = "test")]
         public class t1
         {
-            [ZPColumn("name1")]
+            [DBColumn("name1")]
             public string Name { get; set; }
         }
 
-        [ZPTable("v_tt2",Schema = "test")]
+        [DBTable("v_tt2",Schema = "test")]
         public class t2:t1
         {
-            [ZPColumn("name2")]
+            [DBColumn("name2")]
             public string TestName2 { get; set; }
         }
 

@@ -6,13 +6,13 @@ using Dapper.LambdaExtension.LambdaSqlBuilder.Attributes;
 
 namespace AIRBox.Data.VirtualEntity
 {
-    [ZPTable("o_parameter_child")]
+    [DBTable("o_parameter_child")]
     public class VEParameterChild:ParameterChild
     {
-        [ZPColumn("parameter_id")]
+        [DBColumn("parameter_id")]
         public string ParameterId { get; set; }
 
-        [ZPColumn("f_frequency")]
+        [DBColumn("f_frequency")]
         public int Frequency { get; set; }
     }
 }

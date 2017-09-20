@@ -1,13 +1,13 @@
-﻿using Dapper.Contrib.Extensions;
+﻿ 
 using System;
 using Dapper.LambdaExtension.LambdaSqlBuilder.Attributes;
 
 namespace testdemo.Entities
 {
-    [ZPTable("tbn1")]
+    [DBTable("tbn1")]
     public class Tbn
     {
-        [ZPKey]
+        [DBKey]
         public int id { get; set; }
 
         public string name { get; set; }

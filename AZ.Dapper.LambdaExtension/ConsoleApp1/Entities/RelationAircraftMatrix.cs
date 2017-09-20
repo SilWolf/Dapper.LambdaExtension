@@ -15,14 +15,14 @@ namespace AIRBox.Data.Entity
 	///		created_time TIMESTAMP NOT NULL
 	///	);
     /// </code>
-    [ZPTable("r_aircraft_matrix")]
+    [DBTable("r_aircraft_matrix")]
     public class RelationAircraftMatrix:EntityBase
     {
-        [ZPColumn("aircraft_id", dbType: DbType.AnsiStringFixedLength, fieldLength: "51")]
+        [DBColumn("aircraft_id", dbType: DbType.AnsiStringFixedLength, fieldLength: "51")]
         public string AircraftId { get; set; }
 
 
-        [ZPColumn("matrix_code", dbType: DbType.AnsiStringFixedLength, fieldLength: "51")]
+        [DBColumn("matrix_code", dbType: DbType.AnsiStringFixedLength, fieldLength: "51")]
         public string MatrixCode { get; set; }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using Dapper.LambdaExtension.LambdaSqlBuilder.Attributes;
-using OfficeOpenXml.Announce;
+ 
 using System.Data;
 
 namespace AIRBox.Data.Entity
@@ -11,24 +11,23 @@ namespace AIRBox.Data.Entity
     [Serializable]
     public class EntityBase
     {
-        [EPColumnName("Id" , 0)]
-        [ZPColumn("id", dbType:DbType.AnsiStringFixedLength,fieldLength:"51")]
-        [ZPKey]
+ 
+        [DBColumn("id", dbType:DbType.AnsiStringFixedLength,fieldLength:"51")]
+        [DBKey]
         public string Id { get; set; }
         
-        [EPColumnName("Deleted", 997)]
-        [ZPColumn("is_deleted")]
+ 
+        [DBColumn("is_deleted")]
         public bool IsDeleted { get; set; }
-
-        [EPColumnName("Created", 998)]
-        [ZPColumn("created_time")]
+ 
+        [DBColumn("created_time")]
         public DateTime CreatedTime { get; set; }
 
-        [EPColumnName("Last Updated Time",999)]
-        [ZPColumn("last_updated_time")]
+ 
+        [DBColumn("last_updated_time")]
         public DateTime LastUpdatedTime { get; set; }
 
-        [ZPIgnore]
+        [DBIgnore]
         public CustomProperties CustomProperties { get; set; } = new CustomProperties();
 
         public EntityBase()

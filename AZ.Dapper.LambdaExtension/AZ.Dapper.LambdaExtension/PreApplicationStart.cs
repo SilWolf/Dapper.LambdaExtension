@@ -135,13 +135,13 @@ namespace Dapper.LambdaExtension
 
                 var attrib = member.GetCustomAttribute<DBColumnAttribute>(false);
                 //var attrib = (DBColumnAttribute)Attribute.GetCustomAttribute(member, typeof(DBColumnAttribute), false);
-                return attrib == null ? member.Name : attrib.Name;//if not define zpcolumn attribute on an propertity/field then use it's own name.
+                return attrib == null ? member.Name : attrib.Name;//if not define DBColumn attribute on an propertity/field then use it's own name.
 
             }
             else
             {
                 var attrib = member.GetCustomAttribute<DBColumnAttribute>(false);// (DBColumnAttribute)Attribute.GetCustomAttribute(member, typeof(DBColumnAttribute), false);
-                return attrib == null ? member.Name : attrib.Name;//if not define zpcolumn attribute on an propertity/field then use it's own name.
+                return attrib == null ? member.Name : attrib.Name;//if not define DBColumn attribute on an propertity/field then use it's own name.
 
             }
         }
