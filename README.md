@@ -11,6 +11,8 @@
 
 > PS: 内置支持以上数据库的适配器,暂时不开放适配器扩展功能和自定义适配器接口
 
+## 从NUGET 获取
+> Install-Package AZ.Dapper.LambdaExtension 
 
 # 用法
 
@@ -73,8 +75,16 @@
 `生成的T-Sql 语句: select id,myname,created_date,is_delete from o_myentity where myname like '%name%' `
 
 ### 复杂查询 
+扩展提供一个Action<SqlExp<T>> 代理,来提供复杂的查询功能:
 
+    var resultlist = connection.Query<MyEntity>(sql =>
+    {
+        sql.Where(p => p.Name.Contains("aa"));
+        sql.Or(p => p.Deleted == true);
 
+    });
+
+`生成的T-Sql语句:select id,myname,created_date,is_delete from o_myentity where myname like '%aa%' or is_delete =1`
 
 
 

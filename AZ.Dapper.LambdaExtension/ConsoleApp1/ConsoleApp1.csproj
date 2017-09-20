@@ -7,13 +7,13 @@
 
   <ItemGroup>
     <PackageReference Include="Dapper" Version="1.50.2" />
-    <PackageReference Include="Dapper.Contrib" Version="1.50.0" />
     <PackageReference Include="EPPlus.OrmExtension.Standard" Version="1.0.3" />
     <PackageReference Include="Npgsql" Version="3.2.5" />
     <PackageReference Include="System.Runtime" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AZ.Dapper.LambdaExtension.Standard\AZ.Dapper.LambdaExtension.Standard.csproj" />
     <ProjectReference Include="..\Dapper.LambdaExtension.Standard2\Dapper.LambdaExtension.Standard.csproj" />
     <ProjectReference Include="..\testentitycore\testentitycore.csproj" />
   </ItemGroup>
