@@ -8,6 +8,7 @@
 * SqlAnywhere
 * Sqlite3
 * SqlServerCE
+* Oracle (暂时没环境测试,有需要的请自行测试)
 
 > PS: 内置支持以上数据库的适配器,暂时不开放适配器扩展功能和自定义适配器接口
 
