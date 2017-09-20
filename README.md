@@ -14,6 +14,9 @@
 ## 从NUGET 获取
 > Install-Package AZ.Dapper.LambdaExtension 
 
+### Nuget Gallery
+> https://www.nuget.org/packages/AZ.Dapper.LambdaExtension/
+
 # 用法
 
 ## Attributes 使用
