@@ -8,20 +8,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
     class MySqlAdapter : AdapterBase
     {
         public override string AutoIncrementDefinition { get; } = "AUTO_INCREMENT";
-        //public override string StringColumnDefinition { get; } = "VARCHAR(255)";
-
-        //public override string IntColumnDefinition { get; } = "int(11)";
-        //public override string LongColumnDefinition { get; } = "BIGINT";
-        //public override string GuidColumnDefinition { get; } = "char(32)";
-        //public override string BoolColumnDefinition { get; } = "tinyint(1)";
-        //public override string RealColumnDefinition { get; } = "DOUBLE";
-        //public override string DecimalColumnDefinition { get; } = "decimal(38,6)";
-        //public override string BlobColumnDefinition { get; } = "VARBINARY(MAX)";
-        //public override string DateTimeColumnDefinition { get; } = "DATETIME";
-        //public override string TimeColumnDefinition { get; } = "time";
-
-        //public override string StringLengthNonUnicodeColumnDefinitionFormat { get; } = "VARCHAR({0})";
-        //public override string StringLengthUnicodeColumnDefinitionFormat { get; } = "NVARCHAR({0})";
+ 
 
         public override string ParamStringPrefix { get; } = "@";
 

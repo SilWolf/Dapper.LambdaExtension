@@ -39,16 +39,16 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
         {
             var member = GetMemberExpression(expression);
 
-            ZPColumnAttribute column;
+            DBColumnAttribute column;
 
             if (!EnvHelper.IsNetFX)
             {
-                column = member.Member.GetCustomAttributes(false).OfType<ZPColumnAttribute>()
-                    .FirstOrDefault(); //.GetCustomAttributes(false).OfType<ZPColumnAttribute>().FirstOrDefault();
+                column = member.Member.GetCustomAttributes(false).OfType<DBColumnAttribute>()
+                    .FirstOrDefault(); //.GetCustomAttributes(false).OfType<DBColumnAttribute>().FirstOrDefault();
             }
             else
             {
-                column = member.Member.GetCustomAttributes(false).OfType<ZPColumnAttribute>().FirstOrDefault();
+                column = member.Member.GetCustomAttributes(false).OfType<DBColumnAttribute>().FirstOrDefault();
             }
 
             if (column != null)
@@ -64,15 +64,15 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
 
         public string GetTableName(Type type)
         {
-            ZPTableAttribute table;
+            DBTableAttribute table;
             if (!EnvHelper.IsNetFX)
             {
-                table = type.GetTypeInfo().GetCustomAttributes(false).OfType<ZPTableAttribute>()
-                    .FirstOrDefault(); //.GetCustomAttributes(false).OfType<ZPColumnAttribute>().FirstOrDefault();
+                table = type.GetTypeInfo().GetCustomAttributes(false).OfType<DBTableAttribute>()
+                    .FirstOrDefault(); //.GetCustomAttributes(false).OfType<DBColumnAttribute>().FirstOrDefault();
             }
             else
             {
-                table = type.GetTypeInfo().GetCustomAttributes(false).OfType<ZPTableAttribute>().FirstOrDefault(); ;
+                table = type.GetTypeInfo().GetCustomAttributes(false).OfType<DBTableAttribute>().FirstOrDefault(); ;
                 
             }
 

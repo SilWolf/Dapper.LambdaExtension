@@ -7,21 +7,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
     class Sqlite3Adapter : AdapterBase
     {
         public override string AutoIncrementDefinition { get; } = "AUTOINCREMENT";
-        //public override string StringColumnDefinition { get; } = "VARCHAR(255)";
-
-        //public override string IntColumnDefinition { get; } = "INTEGER";
-        //public override string LongColumnDefinition { get; } = "INTEGER";
-        //public override string GuidColumnDefinition { get; } = "VARCHAR(48)";
-        //public override string BoolColumnDefinition { get; } = "INTEGER";
-        //public override string RealColumnDefinition { get; } = "REAL";
-        //public override string DecimalColumnDefinition { get; } = "NUMERIC";
-        //public override string BlobColumnDefinition { get; } = "BLOB";
-        //public override string DateTimeColumnDefinition { get; } = "DATETIME";
-        //public override string TimeColumnDefinition { get; } = "DATETIME";
-
-        //public override string StringLengthNonUnicodeColumnDefinitionFormat { get; } = "VARCHAR({0})";
-        //public override string StringLengthUnicodeColumnDefinitionFormat { get; } = "NVARCHAR({0})";
-
+ 
         public override string ParamStringPrefix { get; } = "@";
 
         public override string PrimaryKeyDefinition { get; } = " Primary Key";

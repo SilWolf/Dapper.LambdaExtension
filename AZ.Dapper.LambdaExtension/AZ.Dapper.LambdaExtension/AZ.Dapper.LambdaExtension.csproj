@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extentions\DapperLamException.cs" />
     <Compile Include="Helpers\EntityHelper.cs" />
     <Compile Include="Helpers\EnvHelper.cs" />
     <Compile Include="LambdaSqlBuilder\Adapter\AdapterBase.cs" />

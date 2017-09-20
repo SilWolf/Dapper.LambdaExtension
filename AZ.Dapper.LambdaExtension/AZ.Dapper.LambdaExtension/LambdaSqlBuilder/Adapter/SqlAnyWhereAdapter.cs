@@ -7,20 +7,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
     class SqlAnyWhereAdapter : AdapterBase
     {
         public override string AutoIncrementDefinition { get; } = "AUTOINCREMENT";
-        //public override string StringColumnDefinition { get; } = "VARCHAR(255)";
-
-        //public override string IntColumnDefinition { get; } = "integer";
-        //public override string LongColumnDefinition { get; } = "BIGINT";
-        //public override string GuidColumnDefinition { get; } = "varchar(32)";
-        //public override string BoolColumnDefinition { get; } = "bit";
-        //public override string RealColumnDefinition { get; } = "real";
-        //public override string DecimalColumnDefinition { get; } = "decimal(38,6)";
-        //public override string BlobColumnDefinition { get; } = "long binary";
-        //public override string DateTimeColumnDefinition { get; } = "DATETIME";
-        //public override string TimeColumnDefinition { get; } = "time";
-
-        //public override string StringLengthNonUnicodeColumnDefinitionFormat { get; } = "VARCHAR({0})";
-        //public override string StringLengthUnicodeColumnDefinitionFormat { get; } = "NVARCHAR({0})";
+ 
 
         public override string ParamStringPrefix { get; } = "@";
 
