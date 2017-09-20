@@ -49,6 +49,10 @@
         public bool Deleted { get; set; }
     }
 
+### 注意
+> 如果使用使用了DBColumn属性去映射实体属性与字段名,则需要在你的应用程序启动的时候,手动调用一下:
+> PreApplicationStart.RegisterTypeMaps();
+
 ## 创建表
 
     connection.CreateTable<MyEntity>();
