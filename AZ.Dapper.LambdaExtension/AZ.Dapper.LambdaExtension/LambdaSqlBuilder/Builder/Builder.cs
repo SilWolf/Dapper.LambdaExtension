@@ -333,12 +333,14 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
             {
                 value = value + Guid.NewGuid().ToString("n");
             }
-            this.AddParameter(value, fieldValue);
 
             if (_isSubQuery)
             {
                 key = _adapter.Field(JoinSubAliasTableName, fieldName);
+                value = JoinSubAliasTableName + value;
             }
+
+            this.AddParameter(value, fieldValue);
 
             return string.Format("{0} {1} {2}", key, op, value);
         }
@@ -353,6 +355,13 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
             {
                 value = value + Guid.NewGuid().ToString("n");
             }
+
+            if (_isSubQuery)
+            {
+                key = _adapter.Field(JoinSubAliasTableName, fieldName);
+                value = JoinSubAliasTableName + value;
+            }
+
             this.AddParameter(value, fieldValue);
             return string.Format("{0} {1} {2}", key, op, value);
         }
