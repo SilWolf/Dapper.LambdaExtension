@@ -16,17 +16,17 @@
 
 ## 从NUGET 获取
 
-> Install-Package AZ.Dapper.LambdaExtension 
+> Install-Package AZ.Dapper.LambdaExtension
 
 ### Nuget Gallery
 
-> https://www.nuget.org/packages/AZ.Dapper.LambdaExtension/
+> <https://www.nuget.org/packages/AZ.Dapper.LambdaExtension/>
 
-# 用法
+## 用法
 
 ## Attributes 使用
 
-* DBTableAttribute  `定义表的数据库映射别名,和Schema名称,若无schema 指定为null,或不设置即可`  
+* DBTableAttribute  `定义表的数据库映射别名,和Schema名称,若无schema 指定为null,或不设置即可`
 * DBKeyAttribute `定义字段为主键,并可设定是否为自增字段`
 * DBIgnoreAttribute `定义属性是否忽略,即在数据库中不存在此属性对应字段时使用`
 * DBColumnAttribute `定义字段的数据库属性,name-数据库字段映射名称,nullable-是否为空,dbType-数据类型,fieldlength-若设定数据类型为可指定数据长度的可使用此参数设定,具体参见用法实例`
@@ -35,8 +35,8 @@
 
 ## 异常捕获
 
- DapperLamException 类提供T-Sql异常信息捕获. 
- 
+DapperLamException 类提供T-Sql异常信息捕获.
+
  * SqlString 属性提供异常的 T-SQL语句.
  * Parameters 属性提供查询所依赖的参数化信息
 
@@ -97,11 +97,11 @@
 
     var results=connection.Query<MyEntity>(p => p.Name.Contains("name"));
 
-`生成的T-Sql 语句: select id,myname,created_date,is_delete from o_myentity where myname like '%name%' `
+`生成的T-Sql 语句: select id,myname,created_date,is_delete from o_myentity where myname like '%name%'`
 
-### 复杂查询 
+### 复杂查询
 
-扩展提供一个Action<SqlExp<T>> 代理,来提供复杂的查询功能:
+扩展提供一个Action&lt;SqlExp&lt;T&gt;&gt; 代理,来提供复杂的查询功能:
 
 栗子:
 
@@ -116,11 +116,11 @@
 
 ### 分页查询
 
-扩展提供通用的数据库分页功能.封装的 PagedQuery<T>()扩展方法
+扩展提供通用的数据库分页功能.封装的 PagedQuery&lt;T&gt; ()扩展方法
 
-返回类型为 PagedResult<T>,其属性包括:
+返回类型为 PagedResult&lt;T&gt; ,其属性包括:
 
- * IEnumerable<T> Results 查询结果集
+ * IEnumerable&lt;T&gt; Results 查询结果集
  * int Count 查询的总结果数.
  * int PageSize 分页大小
  * int PageNumber 当前页码(从1开始)
@@ -153,7 +153,8 @@
 
 
 
-# License info note:
+## License info note
+
 this project used lambda expression explain code from:
-https://github.com/DomanyDusan/lambda-sql-builder
+<https://github.com/DomanyDusan/lambda-sql-builder>
 
