@@ -317,11 +317,13 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
         {
             if (_useField)
             {
-                //++_paramIndex;
+                if (_type == SqlType.Query)
+                {
+                    _paramIndex++;
+                    return PARAMETER_PREFIX + "_" + _paramIndex.ToString(CultureInfo.InvariantCulture) + "_" + fieldName;
+                }
 
-                _paramIndex++;
-                return PARAMETER_PREFIX +"_"+ _paramIndex.ToString(CultureInfo.InvariantCulture)+"_"+fieldName;
-                //return fieldName;
+                return fieldName;
             }
             return this.GetParamId();
         }
