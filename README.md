@@ -70,9 +70,6 @@
 
     connection.CreateTable<MyEntity>();
 
-
-
-
 ## 增删改
 
     var entity=new MyEntity()
@@ -117,7 +114,6 @@
  * int Count 查询的总结果数.
  * int PageSize 分页大小
  * int PageNumber 当前页码(从1开始)
-
 
     var pageSize = 10;
     var pageNumber = 1;
