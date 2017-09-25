@@ -52,6 +52,8 @@ namespace Dapper.LambdaExtension.Helpers
                     var columnAttr = cp.GetCustomAttribute<DBColumnAttribute>();
                     var dataTypeAttr = cp.GetCustomAttribute<DBCustomeDataTypeAttribute>();
 
+                    var indexAttr = cp.GetCustomAttribute<DBIndexAttribute>();
+
                     var cname = cp.Name;
 
                     var alias = cname;
@@ -80,7 +82,7 @@ namespace Dapper.LambdaExtension.Helpers
 
                     //var nullable = keyAttr == null && (columnAttr?.Nullable ?? cp.PropertyType.IsNullableType());
 
-                    var cd = new SqlColumnDefine(cname, alias, null, cp.PropertyType, nullable, columnAttr, keyAttr, dataTypeAttr);
+                    var cd = new SqlColumnDefine(cname, alias, null, cp.PropertyType, nullable, columnAttr, keyAttr, dataTypeAttr,null, indexAttr);
 
                     colDeflist.Add(cd);
                 }

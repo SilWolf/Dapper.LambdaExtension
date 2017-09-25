@@ -23,10 +23,11 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Entity
         [Obsolete]
         public DBCustomeDataTypeAttribute DataTypeAttribute { get; set; }
 
+        public DBIndexAttribute IndexAttribute { get; set; }
 
         public DBIgnoreAttribute IgnoreAttribute { get; set; }
 
-        public SqlColumnDefine(string name, string aliasName, object value,Type valueType, bool nullAble, DBColumnAttribute columnAttr, DBKeyAttribute keyAttr, DBCustomeDataTypeAttribute customeDataTypeAttr, DBIgnoreAttribute ignoreAttr=null)
+        public SqlColumnDefine(string name, string aliasName, object value,Type valueType, bool nullAble, DBColumnAttribute columnAttr, DBKeyAttribute keyAttr, DBCustomeDataTypeAttribute customeDataTypeAttr, DBIgnoreAttribute ignoreAttr=null, DBIndexAttribute indexAttr = null)
         {
             Name = name;
             AliasName = aliasName;
@@ -37,14 +38,16 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Entity
             IgnoreAttribute = ignoreAttr;
             ValueType = valueType;
             NullAble = nullAble;
+            IndexAttribute = indexAttr;
         }
 
-        public SqlColumnDefine( DBColumnAttribute columnAttribute, DBKeyAttribute keyAttribute = null )
+        public SqlColumnDefine( DBColumnAttribute columnAttribute, DBKeyAttribute keyAttribute = null, DBIndexAttribute indexAttr = null)
         {
             Name = columnAttribute.Name;
             AliasName = columnAttribute.Name;
             ColumnAttribute = columnAttribute;
             KeyAttribute = keyAttribute;
+            IndexAttribute = indexAttr;
         }
     }
 }

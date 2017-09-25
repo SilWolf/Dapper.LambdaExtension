@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Dynamic;
 using System.Linq;
 using System.Reflection;
@@ -69,31 +70,119 @@ namespace Dapper.LambdaExtension.Extentions
         }
 
 
+
         /// <summary>
         /// 根据实体类创建数据库表
         /// </summary>
         /// <typeparam name="T">实体类类型</typeparam>
         /// <param name="db"></param>
         /// <param name="transaction"></param>
-        public static void CreateTable<T>(this IDbConnection db,IDbTransaction transaction=null)
+        public static void CreateTable<T>(this IDbConnection db, IDbTransaction transaction = null)
         {
-           var dbAdapter= AdapterFactory.GetAdapterInstance(db.GetAdapter());
- 
+            var dbAdapter = AdapterFactory.GetAdapterInstance(db.GetAdapter());
+
             var entityDef = EntityHelper.GetEntityDefine<T>();
 
             var createTableSql = dbAdapter.CreateTableSql(entityDef.Item1, entityDef.Item2);
 
-            db.Execute(createTableSql,transaction:transaction);
+            if (transaction == null)
+            {
+                var trans = db.BeginTransaction();
+                try
+                {
+                    db.Execute(createTableSql, transaction: trans);
 
+                    trans.Commit();
+                }
+                catch (Exception ex)
+                {
+                    trans.Rollback();
+
+                    if (Debugger.IsAttached)
+                    {
+                        Debug.WriteLine(ex.Message + ex.StackTrace);
+                        Debug.WriteLine(createTableSql);
+                    }
+
+                    Console.WriteLine(ex.Message + ex.StackTrace);
+                    Console.WriteLine(createTableSql);
+                    throw new DapperLamException(ex.Message, ex, createTableSql);
+                }
+            }
+            else
+            {
+                try
+                {
+
+                    db.Execute(createTableSql, transaction: transaction);
+                }
+                catch (Exception ex)
+                {
+                    if (Debugger.IsAttached)
+                    {
+                        Debug.WriteLine(ex.Message + ex.StackTrace);
+                        Debug.WriteLine(createTableSql);
+                    }
+
+                    Console.WriteLine(ex.Message + ex.StackTrace);
+                    Console.WriteLine(createTableSql);
+                    throw new DapperLamException(ex.Message, ex, createTableSql);
+                }
+            }
         }
 
-        public static void CreateTable(this IDbConnection db,SqlTableDefine tableDefine, List<SqlColumnDefine> columnList, IDbTransaction transaction = null)
+        public static void CreateTable(this IDbConnection db, SqlTableDefine tableDefine, List<SqlColumnDefine> columnList, IDbTransaction transaction = null)
         {
             var dbAdapter = AdapterFactory.GetAdapterInstance(db.GetAdapter());
 
             var createTableSql = dbAdapter.CreateTableSql(tableDefine, columnList);
 
-            db.Execute(createTableSql,transaction:transaction);
+            //db.Execute(createTableSql,transaction:transaction);
+
+            if (transaction == null)
+            {
+                var trans = db.BeginTransaction();
+                try
+                {
+                    db.Execute(createTableSql, transaction: trans);
+
+                    trans.Commit();
+                }
+                catch (Exception ex)
+                {
+                    trans.Rollback();
+
+                    if (Debugger.IsAttached)
+                    {
+                        Debug.WriteLine(ex.Message + ex.StackTrace);
+                        Debug.WriteLine(createTableSql);
+                    }
+
+                    Console.WriteLine(ex.Message + ex.StackTrace);
+                    Console.WriteLine(createTableSql);
+                    throw new DapperLamException(ex.Message, ex, createTableSql);
+                }
+            }
+            else
+            {
+                try
+                {
+
+                    db.Execute(createTableSql, transaction: transaction);
+                }
+                catch (Exception ex)
+                {
+                    if (Debugger.IsAttached)
+                    {
+                        Debug.WriteLine(ex.Message + ex.StackTrace);
+                        Debug.WriteLine(createTableSql);
+                    }
+
+                    Console.WriteLine(ex.Message + ex.StackTrace);
+                    Console.WriteLine(createTableSql);
+                    throw new DapperLamException(ex.Message, ex, createTableSql);
+                }
+            }
         }
         public static bool TableExist<T>(this IDbConnection db, IDbTransaction transaction = null)
         {

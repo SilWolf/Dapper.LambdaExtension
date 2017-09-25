@@ -62,6 +62,7 @@
     <Compile Include="LambdaSqlBuilder\Attributes\DBIgnoreAttribute.cs" />
     <Compile Include="LambdaSqlBuilder\Attributes\DBKeyAttribute.cs" />
     <Compile Include="LambdaSqlBuilder\Attributes\DBTableAttribute.cs" />
+    <Compile Include="LambdaSqlBuilder\Attributes\DBIndexAttribute.cs" />
     <Compile Include="LambdaSqlBuilder\Builder\Builder.cs" />
     <Compile Include="LambdaSqlBuilder\Builder\BuilderCommon.cs" />
     <Compile Include="LambdaSqlBuilder\Builder\BuilderField.cs" />

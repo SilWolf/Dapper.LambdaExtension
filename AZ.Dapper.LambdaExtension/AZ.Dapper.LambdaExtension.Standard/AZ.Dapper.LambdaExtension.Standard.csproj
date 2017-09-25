@@ -45,6 +45,7 @@
     <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Attributes\DBColumnAttribute.cs" Link="LambdaSqlBuilder\Attributes\DBColumnAttribute.cs" />
     <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Attributes\DBCustomeDataTypeAttribute.cs" Link="LambdaSqlBuilder\Attributes\DBCustomeDataTypeAttribute.cs" />
     <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Attributes\DBIgnoreAttribute.cs" Link="LambdaSqlBuilder\Attributes\DBIgnoreAttribute.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Attributes\DBIndexAttribute.cs" Link="LambdaSqlBuilder\Attributes\DBIndexAttribute.cs" />
     <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Attributes\DBKeyAttribute.cs" Link="LambdaSqlBuilder\Attributes\DBKeyAttribute.cs" />
     <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Attributes\DBTableAttribute.cs" Link="LambdaSqlBuilder\Attributes\DBTableAttribute.cs" />
     <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Builder\Builder.cs" Link="LambdaSqlBuilder\Builder\Builder.cs" />
@@ -80,7 +81,6 @@
     <Folder Include="Extensions\" />
     <Folder Include="Helpers\" />
     <Folder Include="LambdaSqlBuilder\Adapter\" />
-    <Folder Include="LambdaSqlBuilder\Attributes\" />
     <Folder Include="LambdaSqlBuilder\Builder\" />
     <Folder Include="LambdaSqlBuilder\Resolver\ExpressionTree\" />
   </ItemGroup>
