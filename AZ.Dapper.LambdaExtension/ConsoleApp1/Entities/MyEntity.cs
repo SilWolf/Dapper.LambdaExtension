@@ -58,6 +58,15 @@ namespace ConsoleApp1.Entities
                     sql.Or(p => p.Deleted == true);
 
                 });
+
+
+                var pageSize = 10;
+                var pageNumber = 1;
+                var pagedResult = connection.PagedQuery<MyEntity>(pageSize, pageNumber, sql =>
+                {
+                    sql.Where(p => p.Name.Contains("aa"));
+                    sql.Or(p => p.Deleted == true);
+                });
             }
         }
     }
