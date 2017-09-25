@@ -44,6 +44,8 @@
 
 ## 定义POCO类
 
+栗子:
+
     [DBTable("o_myentity")]
     public class MyEntity
     {
@@ -68,9 +70,13 @@
 
 ## 创建表
 
+栗子:
+
     connection.CreateTable<MyEntity>();
 
 ## 增删改
+
+栗子:
 
     var entity=new MyEntity()
     {
@@ -87,6 +93,8 @@
 
 ### 简单表达式查询
 
+栗子:
+
     var results=connection.Query<MyEntity>(p => p.Name.Contains("name"));
 
 `生成的T-Sql 语句: select id,myname,created_date,is_delete from o_myentity where myname like '%name%' `
@@ -94,6 +102,8 @@
 ### 复杂查询 
 
 扩展提供一个Action<SqlExp<T>> 代理,来提供复杂的查询功能:
+
+栗子:
 
     var resultlist = connection.Query<MyEntity>(sql =>
     {
@@ -114,6 +124,8 @@
  * int Count 查询的总结果数.
  * int PageSize 分页大小
  * int PageNumber 当前页码(从1开始)
+
+栗子:
 
     var pageSize = 10;
     var pageNumber = 1;
