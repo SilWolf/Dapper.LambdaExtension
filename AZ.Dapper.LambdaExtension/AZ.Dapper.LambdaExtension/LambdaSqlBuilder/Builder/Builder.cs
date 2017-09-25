@@ -308,7 +308,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
 
         private string GetParamId()
         {
-            ++_paramIndex;
+            _paramIndex++;
             return PARAMETER_PREFIX + _paramIndex.ToString(CultureInfo.InvariantCulture);
         }
 
@@ -316,8 +316,11 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
         {
             if (_useField)
             {
-                ++_paramIndex;
-                return fieldName;
+                //++_paramIndex;
+
+                _paramIndex++;
+                return PARAMETER_PREFIX +"_"+ _paramIndex.ToString(CultureInfo.InvariantCulture)+"_"+fieldName;
+                //return fieldName;
             }
             return this.GetParamId();
         }
@@ -337,7 +340,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
             if (_isSubQuery)
             {
                 key = _adapter.Field(JoinSubAliasTableName, fieldName);
-                value = JoinSubAliasTableName + value;
+                //value = JoinSubAliasTableName + value;
             }
 
             this.AddParameter(value, fieldValue);
