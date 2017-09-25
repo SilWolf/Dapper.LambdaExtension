@@ -72,7 +72,8 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
 
         internal ISqlAdapter Adapter { get { return _adapter; } set { _adapter = value; } }
 
-        private const string PARAMETER_PREFIX = "Param";
+        //private const string PARAMETER_PREFIX = "Param";
+        private readonly string PARAMETER_PREFIX = "P_" + DateTime.Now.Ticks.ToString();
 
         private readonly List<string> _tableNames = new List<string>();
         private readonly string _schema = string.Empty;
