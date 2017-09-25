@@ -19,6 +19,11 @@ namespace Dapper.LambdaExtension.Extentions
 {
     public static class DapperLambdaExt
     {
+
+        //private static string LastSql { get; set; }
+
+        public static bool PrintSql { get; set; }
+
         static DapperLambdaExt()
         {
             //PreApplicationStart.RegisterTypeMaps();    
@@ -44,7 +49,17 @@ namespace Dapper.LambdaExtension.Extentions
             }
             try
             {
-                return db.Query<T>(sqllam.SqlString, sqllam.Parameters, trans, commandTimeout: commandTimeout);
+                var sqlString = sqllam.SqlString;
+
+                if (PrintSql)
+                {
+                    if (Debugger.IsAttached)
+                    {
+                        Debug.WriteLine(sqlString);
+                    }
+                }
+
+                return db.Query<T>(sqlString, sqllam.Parameters, trans, commandTimeout: commandTimeout);
             }
             catch (Exception ex)
             {
@@ -72,7 +87,16 @@ namespace Dapper.LambdaExtension.Extentions
             }
             try
             {
-                return db.QueryFirstOrDefault<T>(sqllam.SqlString, sqllam.Parameters, trans, commandTimeout: commandTimeout);
+                var sqlString = sqllam.SqlString;
+
+                if (PrintSql)
+                {
+                    if (Debugger.IsAttached)
+                    {
+                        Debug.WriteLine(sqlString);
+                    }
+                }
+                return db.QueryFirstOrDefault<T>(sqlString, sqllam.Parameters, trans, commandTimeout: commandTimeout);
             }
             catch (Exception ex)
             {
@@ -98,7 +122,17 @@ namespace Dapper.LambdaExtension.Extentions
 
             try
             {
-                return db.Execute(sqllam.SqlString, entity, trans, commandTimeout, CommandType.Text);
+                var sqlString = sqllam.SqlString;
+
+                if (PrintSql)
+                {
+                    if (Debugger.IsAttached)
+                    {
+                        Debug.WriteLine(sqlString);
+                    }
+                    
+                }
+                return db.Execute(sqlString, entity, trans, commandTimeout, CommandType.Text);
             }
             catch (Exception ex)
             {
@@ -122,7 +156,17 @@ namespace Dapper.LambdaExtension.Extentions
             sqllam = sqllam.Insert(tableDefine, columnDefines);
             try
             {
-                return db.Execute(sqllam.SqlString, entity, trans, commandTimeout, CommandType.Text);
+                var sqlString = sqllam.SqlString;
+
+                if (PrintSql)
+                {
+                    if (Debugger.IsAttached)
+                    {
+                        Debug.WriteLine(sqlString);
+                    }
+
+                }
+                return db.Execute(sqlString, entity, trans, commandTimeout, CommandType.Text);
             }
             catch (Exception ex)
             {
@@ -151,7 +195,18 @@ namespace Dapper.LambdaExtension.Extentions
             sqllam = sqllam.Insert();
             try
             {
-                return db.Execute(sqllam.SqlString, entitys, trans, commandTimeout, CommandType.Text);
+                var sqlString = sqllam.SqlString;
+
+                if (PrintSql)
+                {
+                    if (Debugger.IsAttached)
+                    {
+                        Debug.WriteLine(sqlString);
+                    }
+
+                }
+
+                return db.Execute(sqlString, entitys, trans, commandTimeout, CommandType.Text);
             }
             catch (Exception ex)
             {
@@ -176,7 +231,17 @@ namespace Dapper.LambdaExtension.Extentions
 
             try
             {
-                return db.Execute(sqllam.SqlString, entity, trans, commandTimeout, CommandType.Text);
+                var sqlString = sqllam.SqlString;
+
+                if (PrintSql)
+                {
+                    if (Debugger.IsAttached)
+                    {
+                        Debug.WriteLine(sqlString);
+                    }
+
+                }
+                return db.Execute(sqlString, entity, trans, commandTimeout, CommandType.Text);
             }
             catch (Exception ex)
             {
@@ -209,7 +274,16 @@ namespace Dapper.LambdaExtension.Extentions
 
             try
             {
-                return db.Execute(sqllam.SqlString, entitys, trans, commandTimeout, CommandType.Text);
+                var sqlString = sqllam.SqlString;
+
+                if (PrintSql)
+                {
+                    if (Debugger.IsAttached)
+                    {
+                        Debug.WriteLine(sqlString);
+                    }
+                }
+                return db.Execute(sqlString, entitys, trans, commandTimeout, CommandType.Text);
             }
             catch (Exception ex)
             {
@@ -241,7 +315,16 @@ namespace Dapper.LambdaExtension.Extentions
 
             try
             {
-                return db.Execute(sqllam.SqlString, engityList, trans, commandTimeout, CommandType.Text);
+                var sqlString = sqllam.SqlString;
+
+                if (PrintSql)
+                {
+                    if (Debugger.IsAttached)
+                    {
+                        Debug.WriteLine(sqlString);
+                    }
+                }
+                return db.Execute(sqlString, engityList, trans, commandTimeout, CommandType.Text);
             }
             catch (Exception ex)
             {
@@ -268,7 +351,16 @@ namespace Dapper.LambdaExtension.Extentions
             sqllam = sqllam.Delete();
             try
             {
-                return db.Execute(sqllam.SqlString, engity, trans, commandTimeout, CommandType.Text);
+                var sqlString = sqllam.SqlString;
+
+                if (PrintSql)
+                {
+                    if (Debugger.IsAttached)
+                    {
+                        Debug.WriteLine(sqlString);
+                    }
+                }
+                return db.Execute(sqlString, engity, trans, commandTimeout, CommandType.Text);
             }
             catch (Exception ex)
             {
@@ -298,7 +390,16 @@ namespace Dapper.LambdaExtension.Extentions
 
             try
             {
-                return db.Execute(sqllam.SqlString, sqllam.Parameters, trans, commandTimeout, CommandType.Text);
+                var sqlString = sqllam.SqlString;
+
+                if (PrintSql)
+                {
+                    if (Debugger.IsAttached)
+                    {
+                        Debug.WriteLine(sqlString);
+                    }
+                }
+                return db.Execute(sqlString, sqllam.Parameters, trans, commandTimeout, CommandType.Text);
             }
             catch (Exception ex)
             {
@@ -325,7 +426,16 @@ namespace Dapper.LambdaExtension.Extentions
 
             try
             {
-                return db.Execute(sqllam.SqlString, sqllam.Parameters, trans, commandTimeout, CommandType.Text);
+                var sqlString = sqllam.SqlString;
+
+                if (PrintSql)
+                {
+                    if (Debugger.IsAttached)
+                    {
+                        Debug.WriteLine(sqlString);
+                    }
+                }
+                return db.Execute(sqlString, sqllam.Parameters, trans, commandTimeout, CommandType.Text);
             }
             catch (Exception ex)
             {
@@ -371,8 +481,17 @@ namespace Dapper.LambdaExtension.Extentions
 
             int countRet;
 
-            try { 
-              countRet = db.Query<int>(countSqlam.SqlString, countSqlam.Parameters).FirstOrDefault();
+            try {
+                var sqlString = countSqlam.SqlString;
+
+                if (PrintSql)
+                {
+                    if (Debugger.IsAttached)
+                    {
+                        Debug.WriteLine(sqlString);
+                    }
+                }
+                countRet = db.Query<int>(sqlString, countSqlam.Parameters).FirstOrDefault();
             }
             catch (Exception ex)
             {
@@ -390,7 +509,14 @@ namespace Dapper.LambdaExtension.Extentions
 
             try
             {
-
+               
+                if (PrintSql)
+                {
+                    if (Debugger.IsAttached)
+                    {
+                        Debug.WriteLine(sqlstring);
+                    }
+                }
                 var retlist = db.Query<T>(sqlstring, sqllam.Parameters, trans, commandTimeout: commandTimeout);
 
                 return new PagedResult<T>(retlist, countRet, pageSize, pageNumber);
@@ -418,7 +544,16 @@ namespace Dapper.LambdaExtension.Extentions
 
             try
             {
-                return db.Query<T>(sqllam.SqlString, sqllam.Parameters, trans, commandTimeout: commandTimeout);
+                var sqlString = sqllam.SqlString;
+
+                if (PrintSql)
+                {
+                    if (Debugger.IsAttached)
+                    {
+                        Debug.WriteLine(sqlString);
+                    }
+                }
+                return db.Query<T>(sqlString, sqllam.Parameters, trans, commandTimeout: commandTimeout);
             }
             catch (Exception ex)
             {
@@ -452,7 +587,16 @@ namespace Dapper.LambdaExtension.Extentions
             int countRet;
             try
             {
-                countRet = db.Query<int>(countSqlam.SqlString, countSqlam.Parameters, trans, commandTimeout: commandTimeout).FirstOrDefault();
+                var sqlString = countSqlam.SqlString;
+
+                if (PrintSql)
+                {
+                    if (Debugger.IsAttached)
+                    {
+                        Debug.WriteLine(sqlString);
+                    }
+                }
+                countRet = db.Query<int>(sqlString, countSqlam.Parameters, trans, commandTimeout: commandTimeout).FirstOrDefault();
 
             }
             catch (Exception ex)
@@ -471,6 +615,15 @@ namespace Dapper.LambdaExtension.Extentions
 
             try
             {
+                //var sqlString = countSqlam.SqlString;
+
+                if (PrintSql)
+                {
+                    if (Debugger.IsAttached)
+                    {
+                        Debug.WriteLine(sqlstring);
+                    }
+                }
                 var retlist = db.Query<T>(sqlstring, sqllam.Parameters, trans, commandTimeout: commandTimeout);
                 return new PagedResult<T>(retlist, countRet, pageSize, pageNumber);
             }
@@ -504,6 +657,15 @@ namespace Dapper.LambdaExtension.Extentions
             int countRet;
             try
             {
+                var sqlString = countSqlam.SqlString;
+
+                if (PrintSql)
+                {
+                    if (Debugger.IsAttached)
+                    {
+                        Debug.WriteLine(sqlString);
+                    }
+                }
                 countRet = db.Query<int>(countSqlam.SqlString, countSqlam.Parameters, trans, commandTimeout: commandTimeout).FirstOrDefault();
             }
             catch (Exception ex)
@@ -523,6 +685,14 @@ namespace Dapper.LambdaExtension.Extentions
 
             try
             {
+                
+                if (PrintSql)
+                {
+                    if (Debugger.IsAttached)
+                    {
+                        Debug.WriteLine(sqlstring);
+                    }
+                }
                 var retlist = db.Query<TResult>(sqlstring, sqllam.Parameters, trans, commandTimeout: commandTimeout);
                 return new PagedResult<TResult>(retlist, countRet, pageSize, pageNumber);
             }
@@ -566,8 +736,16 @@ namespace Dapper.LambdaExtension.Extentions
             int countRet=0;
             try
             {
+                var sqlString = countSqlam.SqlString;
 
-                  countRet = db.Query<int>(countSqlam.SqlString, countSqlam.Parameters, trans, commandTimeout: commandTimeout).FirstOrDefault();
+                if (PrintSql)
+                {
+                    if (Debugger.IsAttached)
+                    {
+                        Debug.WriteLine(sqlString);
+                    }
+                }
+                countRet = db.Query<int>(sqlString, countSqlam.Parameters, trans, commandTimeout: commandTimeout).FirstOrDefault();
 
             }
             catch (Exception ex)
@@ -586,6 +764,13 @@ namespace Dapper.LambdaExtension.Extentions
             var sqlstring = sqlLamMain.QuerySubPage(pageSize, pageNumber);
             try
             {
+                if (PrintSql)
+                {
+                    if (Debugger.IsAttached)
+                    {
+                        Debug.WriteLine(sqlstring);
+                    }
+                }
                 var retlist = db.Query<TResult>(sqlstring, sqlLamMain.Parameters, trans, commandTimeout: commandTimeout);
                 return new PagedResult<TResult>(retlist, countRet, pageSize, pageNumber);
             }
@@ -613,7 +798,16 @@ namespace Dapper.LambdaExtension.Extentions
 
             try
             {
-                return db.Query<TResult>(sqllam.SqlString, sqllam.Parameters, trans, commandTimeout: commandTimeout);
+                var sqlString = sqllam.SqlString;
+
+                if (PrintSql)
+                {
+                    if (Debugger.IsAttached)
+                    {
+                        Debug.WriteLine(sqlString);
+                    }
+                }
+                return db.Query<TResult>(sqlString, sqllam.Parameters, trans, commandTimeout: commandTimeout);
             }
             catch (Exception ex)
             {
@@ -647,12 +841,19 @@ namespace Dapper.LambdaExtension.Extentions
             sqlLamMain.SubQuery(sqllamSub);
 
             action?.Invoke(sqlLamMain);
-
-             
-
+ 
             try
             {
-                return db.Query<TResult>(sqlLamMain.SqlString, sqlLamMain.Parameters, trans, commandTimeout: commandTimeout);
+                var sqlString = sqlLamMain.SqlString;
+
+                if (PrintSql)
+                {
+                    if (Debugger.IsAttached)
+                    {
+                        Debug.WriteLine(sqlString);
+                    }
+                }
+                return db.Query<TResult>(sqlString, sqlLamMain.Parameters, trans, commandTimeout: commandTimeout);
             }
             catch (Exception ex)
             {
@@ -678,7 +879,16 @@ namespace Dapper.LambdaExtension.Extentions
 
             try
             {
-                return db.ExecuteScalar<TResult>(sqllam.SqlString, sqllam.Parameters, trans, commandTimeout);
+                var sqlString = sqllam.SqlString;
+
+                if (PrintSql)
+                {
+                    if (Debugger.IsAttached)
+                    {
+                        Debug.WriteLine(sqlString);
+                    }
+                }
+                return db.ExecuteScalar<TResult>(sqlString, sqllam.Parameters, trans, commandTimeout);
             }
             catch (Exception ex)
             {

@@ -70,26 +70,33 @@ namespace Dapper.LambdaExtension.Extentions
         }
 
 
-
         /// <summary>
         /// 根据实体类创建数据库表
         /// </summary>
         /// <typeparam name="T">实体类类型</typeparam>
         /// <param name="db"></param>
         /// <param name="transaction"></param>
-        public static void CreateTable<T>(this IDbConnection db, IDbTransaction transaction = null)
+        public static void CreateTable<T>(this IDbConnection db,IDbTransaction transaction=null)
         {
-            var dbAdapter = AdapterFactory.GetAdapterInstance(db.GetAdapter());
-
+           var dbAdapter= AdapterFactory.GetAdapterInstance(db.GetAdapter());
+ 
             var entityDef = EntityHelper.GetEntityDefine<T>();
 
             var createTableSql = dbAdapter.CreateTableSql(entityDef.Item1, entityDef.Item2);
+
+            if (DapperLambdaExt.PrintSql)
+            {
+                if (Debugger.IsAttached)
+                {
+                    Debug.WriteLine(createTableSql);
+                }
+            }
 
             if (transaction == null)
             {
                 var trans = db.BeginTransaction();
                 try
-                {
+                { 
                     db.Execute(createTableSql, transaction: trans);
 
                     trans.Commit();
@@ -113,7 +120,6 @@ namespace Dapper.LambdaExtension.Extentions
             {
                 try
                 {
-
                     db.Execute(createTableSql, transaction: transaction);
                 }
                 catch (Exception ex)
@@ -131,14 +137,19 @@ namespace Dapper.LambdaExtension.Extentions
             }
         }
 
-        public static void CreateTable(this IDbConnection db, SqlTableDefine tableDefine, List<SqlColumnDefine> columnList, IDbTransaction transaction = null)
+        public static void CreateTable(this IDbConnection db,SqlTableDefine tableDefine, List<SqlColumnDefine> columnList, IDbTransaction transaction = null)
         {
             var dbAdapter = AdapterFactory.GetAdapterInstance(db.GetAdapter());
 
             var createTableSql = dbAdapter.CreateTableSql(tableDefine, columnList);
-
-            //db.Execute(createTableSql,transaction:transaction);
-
+ 
+            if (DapperLambdaExt.PrintSql)
+            {
+                if (Debugger.IsAttached)
+                {
+                    Debug.WriteLine(createTableSql);
+                }
+            }
             if (transaction == null)
             {
                 var trans = db.BeginTransaction();
