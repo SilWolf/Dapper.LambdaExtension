@@ -23,6 +23,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
 
         public void JoinSub(SqlExpBase sqlExp,string originalTableName, string joinTableName, string leftField, string rightField, JoinType joinType)
         {
+           
             var joinTypeStr = GetJoinType(joinType);
 
             var aliasTname = $"join_" + DateTime.Now.Ticks;
@@ -40,6 +41,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
             _joinExpressions.Add(joinString);
             _splitColumns.Add(rightField);
         }
+
         private static string GetJoinType(JoinType joinType)
         {
             string joinTypeStr;
@@ -66,6 +68,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
             }
             return joinTypeStr;
         }
+
         public void QuerySub(SqlExpBase sqlExp)
         {
              
@@ -86,7 +89,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
 
         public void OrderBy(string tableName, string fieldName, bool desc = false)
         {
-            var order = $"{tableName}.{_adapter.Field(fieldName)}";
+            var order = $"{Adapter.Table(tableName,string.Empty)}.{_adapter.Field(fieldName)}";
             if (desc) order += " DESC";
 
             _sortList.Add(order);

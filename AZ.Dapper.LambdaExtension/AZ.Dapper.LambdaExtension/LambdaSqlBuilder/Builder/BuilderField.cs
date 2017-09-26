@@ -25,7 +25,18 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
         public void AddCondition(bool isnull, string tableName, string fieldName)
         {
             string s = isnull ? "IS NULL" : "IS NOT NULL";
-            _conditions.Add(string.Format("{0} {1}", _adapter.Field(tableName, fieldName), s));
+
+             
+            string key = _adapter.Field(tableName, fieldName);
+
+         
+            if (_isSubQuery)
+            {
+                key = _adapter.Field(JoinSubAliasTableName, fieldName);
+ 
+            }
+ 
+            _conditions.Add(string.Format("{0} {1}", key, s));
         }
 
         public void AddCondition(string leftTableName, string leftFieldName, string op,
@@ -45,7 +56,17 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
                 return paramId;
             });
             string op = notIn ? "NOT IN" : "IN";
-            var newCondition = string.Format("{0} {2} ({1})", _adapter.Field(tableName, fieldName), string.Join(",", paramIds), op);
+
+            string key = _adapter.Field(tableName, fieldName);
+
+
+            if (_isSubQuery)
+            {
+                key = _adapter.Field(JoinSubAliasTableName, fieldName);
+
+            }
+
+            var newCondition = string.Format("{0} {2} ({1})", key, string.Join(",", paramIds), op);
             _conditions.Add(newCondition);
         }
 
@@ -61,7 +82,16 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
                 this.AddParameter(name.Key, name.Value);
             }
             string op = notIn ? "NOT IN" : "IN";
-            var newCondition = string.Format("{0} {2} ({1})", _adapter.Field(tableName, fieldName), innerQuery, op);
+
+            string key = _adapter.Field(tableName, fieldName);
+
+
+            //if (_isSubQuery)
+            //{
+            //    key = _adapter.Field(JoinSubAliasTableName, fieldName);
+
+            //}
+            var newCondition = string.Format("{0} {2} ({1})", key, innerQuery, op);
             _conditions.Add(newCondition);
         }
 
