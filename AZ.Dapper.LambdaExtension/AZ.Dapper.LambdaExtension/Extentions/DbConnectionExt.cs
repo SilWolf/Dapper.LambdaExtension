@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Dynamic;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using Dapper.LambdaExtension.Helpers;
 using Dapper.LambdaExtension.LambdaSqlBuilder.Adapter;
 using Dapper.LambdaExtension.LambdaSqlBuilder.Attributes;
@@ -117,6 +118,14 @@ namespace Dapper.LambdaExtension.Extentions
             }
         }
 
+        public static Task CreateTableAsync<T>(this IDbConnection db, IDbTransaction transaction = null)
+        {
+           return  Task.Run(() =>
+            {
+                db.CreateTable<T>(transaction);
+            });
+        }
+
         public static void CreateTable(this IDbConnection db, SqlTableDefine tableDefine, List<SqlColumnDefine> columnList, IDbTransaction transaction = null)
         {
             var dbAdapter = AdapterFactory.GetAdapterInstance(db.GetAdapter());
@@ -156,12 +165,30 @@ namespace Dapper.LambdaExtension.Extentions
                 }
             }
         }
+
+        public static Task CreateTableAsync(this IDbConnection db, SqlTableDefine tableDefine, List<SqlColumnDefine> columnList, IDbTransaction transaction = null)
+        {
+            return Task.Run(() =>
+            {
+                db.CreateTable(tableDefine,columnList,transaction);
+            });
+        }
         public static bool TableExist<T>(this IDbConnection db, IDbTransaction transaction = null)
         {
             var entityDef = EntityHelper.GetEntityDefine<T>();
 
             return db.TableExist(entityDef.Item1, transaction);
         }
+
+        public static Task<bool> TableExistAsync<T>(this IDbConnection db, IDbTransaction transaction = null)
+        {
+            return Task.Run(() =>
+            {
+                return db.TableExist<T>(transaction);
+            });
+            
+        }
+
         public static bool TableExist(this IDbConnection db, SqlTableDefine tableDefine, IDbTransaction transaction = null)
         {
             var tableName = tableDefine.Name;
@@ -175,6 +202,15 @@ namespace Dapper.LambdaExtension.Extentions
             return db.TableExist(tableName, tableSchema, transaction);
         }
 
+        public static Task<bool> TableExistAsync(this IDbConnection db, SqlTableDefine tableDefine, IDbTransaction transaction = null)
+        {
+            return Task.Run(() =>
+            {
+                return db.TableExist(tableDefine,transaction);
+            });
+
+        }
+
         public static bool TableExist(this IDbConnection db, string tableName, string tableSchema = null, IDbTransaction transaction = null)
         {
             var dbAdapter = AdapterFactory.GetAdapterInstance(db.GetAdapter());
@@ -182,6 +218,15 @@ namespace Dapper.LambdaExtension.Extentions
             var tableExistSql = dbAdapter.TableExistSql(tableName, tableSchema);
 
             return db.ExecuteScalar<int>(tableExistSql, transaction: transaction) > 0;
+        }
+
+        public static Task<bool> TableExistAsync(this IDbConnection db, string tableName, string tableSchema = null, IDbTransaction transaction = null)
+        {
+            return Task.Run(() =>
+            {
+                return db.TableExist(tableName, tableSchema, transaction);
+            });
+
         }
 
         /// <summary>
@@ -198,6 +243,14 @@ namespace Dapper.LambdaExtension.Extentions
 
         }
 
+        public static Task DropTableAsync<T>(this IDbConnection db, IDbTransaction transaction = null)
+        {
+            return Task.Run(() =>
+            {
+                  db.DropTable<T>(transaction);
+            });
+        }
+
         public static void DropTable(this IDbConnection db, SqlTableDefine tableDefine, IDbTransaction transaction = null)
         {
             var tableSchema = string.Empty;
@@ -211,6 +264,14 @@ namespace Dapper.LambdaExtension.Extentions
             db.DropTable(tableName, tableSchema, transaction);
         }
 
+        public static Task DropTableAsync(this IDbConnection db, SqlTableDefine tableDefine,IDbTransaction transaction = null)
+        {
+            return Task.Run(() =>
+            {
+                db.DropTable(tableDefine,transaction);
+            });
+        }
+
         public static void DropTable(this IDbConnection db, string tableName, string tableSchema, IDbTransaction transaction = null)
         {
             var dbAdapter = AdapterFactory.GetAdapterInstance(db.GetAdapter());
@@ -218,6 +279,14 @@ namespace Dapper.LambdaExtension.Extentions
             var sql = dbAdapter.DropTableSql(tableName, tableSchema);
 
             db.Execute(sql, transaction: transaction);
+        }
+
+        public static Task DropTableAsync(this IDbConnection db, string tableName, string tableSchema, IDbTransaction transaction = null)
+        {
+            return Task.Run(() =>
+            {
+                db.DropTable(tableName,tableSchema, transaction);
+            });
         }
 
         /// <summary>
@@ -235,6 +304,14 @@ namespace Dapper.LambdaExtension.Extentions
 
         }
 
+        public static Task TruncateTableAsync<T>(this IDbConnection db, IDbTransaction transaction = null)
+        {
+            return Task.Run(() =>
+            {
+                db.TruncateTable<T>( transaction);
+            });
+        }
+
         public static void TruncateTable(this IDbConnection db, SqlTableDefine tableDefine, IDbTransaction transaction = null)
         {
             var tableSchema = string.Empty;
@@ -246,6 +323,22 @@ namespace Dapper.LambdaExtension.Extentions
                 tableSchema = tableDefine.TableAttribute.Schema;
             }
             db.TruncateTable(tableName, tableSchema, transaction);
+        }
+
+        public static Task TruncateTableAsync(this IDbConnection db, SqlTableDefine tableDefine, IDbTransaction transaction = null)
+        {
+            return Task.Run(() =>
+            {
+                db.TruncateTable(tableDefine, transaction);
+            });
+        }
+
+        public static Task TruncateTableAsync(this IDbConnection db, string tableName, string tableSchema, IDbTransaction transaction = null)
+        {
+            return Task.Run(() =>
+            {
+                db.TruncateTable(tableName, tableSchema, transaction);
+            });
         }
 
         public static void TruncateTable(this IDbConnection db, string tableName, string tableSchema, IDbTransaction transaction = null)
