@@ -30,6 +30,7 @@
 * DBKeyAttribute `定义字段为主键,并可设定是否为自增字段`
 * DBIgnoreAttribute `定义属性是否忽略,即在数据库中不存在此属性对应字段时使用`
 * DBColumnAttribute `定义字段的数据库属性,name-数据库字段映射名称,nullable-是否为空,dbType-数据类型,fieldlength-若设定数据类型为可指定数据长度的可使用此参数设定,具体参见用法实例`
+* DBIndexAttribute `为指定字段创建索引,暂不支持联合索引`
 
 扩展的所有方法都是作为 IDbconnection 对象的扩展方法出现.
 
@@ -68,11 +69,15 @@ DapperLamException 类提供T-Sql异常信息捕获.
 > 如果使用使用了DBColumn属性去映射实体属性与字段名,则需要在你的应用程序启动的时候,手动调用一下:
 > PreApplicationStart.RegisterTypeMaps();
 
-## 创建表
+## 库表操作
 
 栗子:
 
+    //创建表
     connection.CreateTable<MyEntity>();
+
+    //删除表
+    connection.DropTable<MyEntity>();
 
 ## 增删改
 

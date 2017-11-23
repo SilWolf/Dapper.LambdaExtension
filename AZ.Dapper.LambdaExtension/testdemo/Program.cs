@@ -30,6 +30,8 @@ namespace testdemo
 
            // npglogic.DeleteTest3(test3);
 
+            //string str = string.Empty;
+
             Console.ReadLine();
         }
 

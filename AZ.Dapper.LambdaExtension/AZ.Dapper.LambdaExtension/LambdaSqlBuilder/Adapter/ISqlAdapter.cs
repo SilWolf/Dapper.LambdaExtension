@@ -25,6 +25,9 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
         string LikeStagement();
 
         string LikeChars();
+
+        string EqualChars();
+
         string CreateTableSql(SqlTableDefine tableDefine, List<SqlColumnDefine> columnDefines);
 
         /// <summary>

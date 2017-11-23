@@ -131,6 +131,11 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
             return "%";
         }
 
+        public virtual string EqualChars()
+        {
+            return "=";
+        }
+
         public virtual string GetIdentitySql(string incrementColumnName)
         {
             return SelectIdentitySql;
