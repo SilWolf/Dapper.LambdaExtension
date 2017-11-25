@@ -25,8 +25,10 @@
 
   <ItemGroup>
     <Compile Include="..\AZ.Dapper.LambdaExtension\Extentions\DapperLambdaExt.cs" Link="Extensions\DapperLambdaExt.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\Extentions\DapperLambdaExtAsync.cs" Link="Extensions\DapperLambdaExtAsync.cs" />
     <Compile Include="..\AZ.Dapper.LambdaExtension\Extentions\DapperLamException.cs" Link="Extensions\DapperLamException.cs" />
     <Compile Include="..\AZ.Dapper.LambdaExtension\Extentions\DbConnectionExt.cs" Link="Extensions\DbConnectionExt.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\Extentions\DbConnectionExtAsync.cs" Link="Extensions\DbConnectionExtAsync.cs" />
     <Compile Include="..\AZ.Dapper.LambdaExtension\Extentions\Extension.cs" Link="Extensions\Extension.cs" />
     <Compile Include="..\AZ.Dapper.LambdaExtension\Extentions\PagedResult.cs" Link="Extensions\PagedResult.cs" />
     <Compile Include="..\AZ.Dapper.LambdaExtension\Helpers\EntityHelper.cs" Link="Helpers\EntityHelper.cs" />

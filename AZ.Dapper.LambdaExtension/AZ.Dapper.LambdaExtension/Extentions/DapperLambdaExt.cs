@@ -359,6 +359,28 @@ namespace Dapper.LambdaExtension.Extentions
             }
         }
 
+        public static TResult QueryFirstOrDefault<TEntity, TResult>(this IDbConnection db, Action<SqlExp<TEntity>> action = null,
+            IDbTransaction trans = null, int? commandTimeout = null) where TEntity : class
+        {
+
+            var sqllam = new SqlExp<TEntity>(db.GetAdapter());
+
+            action?.Invoke(sqllam);
+            var sqlString = sqllam.SqlString;
+            try
+            {
+
+                DebuggingSqlString(sqlString);
+                return db.QueryFirstOrDefault<TResult>(sqlString, sqllam.Parameters, trans, commandTimeout: commandTimeout);
+            }
+            catch (Exception ex)
+            {
+                DebuggingException(ex, sqlString);
+                throw new DapperLamException(ex.Message, ex, sqlString) { Parameters = sqllam.Parameters };
+            }
+        }
+
+
         public static IEnumerable<T> Query<T>(this IDbConnection db, Action<SqlExp<T>> action, IDbTransaction trans = null, int? commandTimeout = null)
         {
 
