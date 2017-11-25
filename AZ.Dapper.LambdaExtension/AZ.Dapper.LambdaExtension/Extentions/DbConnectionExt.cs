@@ -16,7 +16,7 @@ using Dapper;
 
 namespace Dapper.LambdaExtension.Extentions
 {
-    public static class DbConnectionExt
+    public static partial class DbConnectionExt
     {
         private static bool _typeRegistered = false;
         static DbConnectionExt()
@@ -85,46 +85,30 @@ namespace Dapper.LambdaExtension.Extentions
 
             var createTableSql = dbAdapter.CreateTableSql(entityDef.Item1, entityDef.Item2);
 
-            DapperLambdaExt.DebuggingSqlString(createTableSql);
-
-            if (transaction == null)
-            {
-                var trans = db.BeginTransaction();
-                try
-                {
-                    db.Execute(createTableSql, transaction: trans);
-
-                    trans.Commit();
-                }
-                catch (Exception ex)
-                {
-                    trans.Rollback();
-
-                    DapperLambdaExt.DebuggingException(ex, createTableSql);
-                    throw new DapperLamException(ex.Message, ex, createTableSql);
-                }
-            }
-            else
-            {
-                try
-                {
-                    db.Execute(createTableSql, transaction: transaction);
-                }
-                catch (Exception ex)
-                {
-                    DapperLambdaExt.DebuggingException(ex, createTableSql);
-                    throw new DapperLamException(ex.Message, ex, createTableSql);
-                }
-            }
+            ExecuteSql(db, transaction, createTableSql);
         }
 
-        public static Task CreateTableAsync<T>(this IDbConnection db, IDbTransaction transaction = null)
+
+        /// <summary>
+        /// 根据实体类创建数据库表
+        /// </summary>
+        /// <typeparam name="T">实体类类型</typeparam>
+        /// <param name="db"></param>
+        /// <param name="transaction"></param>
+        public static void CreateTableIfNotExist<T>(this IDbConnection db, IDbTransaction transaction = null)
         {
-           return  Task.Run(() =>
+            if (!db.TableExist<T>(transaction))
             {
-                db.CreateTable<T>(transaction);
-            });
+                var dbAdapter = AdapterFactory.GetAdapterInstance(db.GetAdapter());
+
+                var entityDef = EntityHelper.GetEntityDefine<T>();
+
+                var createTableSql = dbAdapter.CreateTableSql(entityDef.Item1, entityDef.Item2);
+
+                ExecuteSql(db, transaction, createTableSql);
+            }
         }
+
 
         public static void CreateTable(this IDbConnection db, SqlTableDefine tableDefine, List<SqlColumnDefine> columnList, IDbTransaction transaction = null)
         {
@@ -132,61 +116,33 @@ namespace Dapper.LambdaExtension.Extentions
 
             var createTableSql = dbAdapter.CreateTableSql(tableDefine, columnList);
 
-            DapperLambdaExt.DebuggingSqlString(createTableSql);
+             
 
-            if (transaction == null)
-            {
-                var trans = db.BeginTransaction();
-                try
-                {
-                    db.Execute(createTableSql, transaction: trans);
-
-                    trans.Commit();
-                }
-                catch (Exception ex)
-                {
-                    trans.Rollback();
-
-                    DapperLambdaExt.DebuggingException(ex, createTableSql);
-                    throw new DapperLamException(ex.Message, ex, createTableSql);
-                }
-            }
-            else
-            {
-                try
-                {
-
-                    db.Execute(createTableSql, transaction: transaction);
-                }
-                catch (Exception ex)
-                {
-                    DapperLambdaExt.DebuggingException(ex, createTableSql);
-                    throw new DapperLamException(ex.Message, ex, createTableSql);
-                }
-            }
+            ExecuteSql(db, transaction, createTableSql);
         }
 
-        public static Task CreateTableAsync(this IDbConnection db, SqlTableDefine tableDefine, List<SqlColumnDefine> columnList, IDbTransaction transaction = null)
+        public static void CreateTableIfNotExist(this IDbConnection db, SqlTableDefine tableDefine, List<SqlColumnDefine> columnList, IDbTransaction transaction = null)
         {
-            return Task.Run(() =>
+            if (!db.TableExist(tableDefine, transaction))
             {
-                db.CreateTable(tableDefine,columnList,transaction);
-            });
+                var dbAdapter = AdapterFactory.GetAdapterInstance(db.GetAdapter());
+
+                var createTableSql = dbAdapter.CreateTableSql(tableDefine, columnList);
+
+
+
+                db.ExecuteSql(transaction, createTableSql);
+            }
         }
+
+
+      
+
         public static bool TableExist<T>(this IDbConnection db, IDbTransaction transaction = null)
         {
             var entityDef = EntityHelper.GetEntityDefine<T>();
 
             return db.TableExist(entityDef.Item1, transaction);
-        }
-
-        public static Task<bool> TableExistAsync<T>(this IDbConnection db, IDbTransaction transaction = null)
-        {
-            return Task.Run(() =>
-            {
-                return db.TableExist<T>(transaction);
-            });
-            
         }
 
         public static bool TableExist(this IDbConnection db, SqlTableDefine tableDefine, IDbTransaction transaction = null)
@@ -202,15 +158,6 @@ namespace Dapper.LambdaExtension.Extentions
             return db.TableExist(tableName, tableSchema, transaction);
         }
 
-        public static Task<bool> TableExistAsync(this IDbConnection db, SqlTableDefine tableDefine, IDbTransaction transaction = null)
-        {
-            return Task.Run(() =>
-            {
-                return db.TableExist(tableDefine,transaction);
-            });
-
-        }
-
         public static bool TableExist(this IDbConnection db, string tableName, string tableSchema = null, IDbTransaction transaction = null)
         {
             var dbAdapter = AdapterFactory.GetAdapterInstance(db.GetAdapter());
@@ -218,15 +165,6 @@ namespace Dapper.LambdaExtension.Extentions
             var tableExistSql = dbAdapter.TableExistSql(tableName, tableSchema);
 
             return db.ExecuteScalar<int>(tableExistSql, transaction: transaction) > 0;
-        }
-
-        public static Task<bool> TableExistAsync(this IDbConnection db, string tableName, string tableSchema = null, IDbTransaction transaction = null)
-        {
-            return Task.Run(() =>
-            {
-                return db.TableExist(tableName, tableSchema, transaction);
-            });
-
         }
 
         /// <summary>
@@ -243,14 +181,6 @@ namespace Dapper.LambdaExtension.Extentions
 
         }
 
-        public static Task DropTableAsync<T>(this IDbConnection db, IDbTransaction transaction = null)
-        {
-            return Task.Run(() =>
-            {
-                  db.DropTable<T>(transaction);
-            });
-        }
-
         public static void DropTable(this IDbConnection db, SqlTableDefine tableDefine, IDbTransaction transaction = null)
         {
             var tableSchema = string.Empty;
@@ -264,14 +194,6 @@ namespace Dapper.LambdaExtension.Extentions
             db.DropTable(tableName, tableSchema, transaction);
         }
 
-        public static Task DropTableAsync(this IDbConnection db, SqlTableDefine tableDefine,IDbTransaction transaction = null)
-        {
-            return Task.Run(() =>
-            {
-                db.DropTable(tableDefine,transaction);
-            });
-        }
-
         public static void DropTable(this IDbConnection db, string tableName, string tableSchema, IDbTransaction transaction = null)
         {
             var dbAdapter = AdapterFactory.GetAdapterInstance(db.GetAdapter());
@@ -279,14 +201,6 @@ namespace Dapper.LambdaExtension.Extentions
             var sql = dbAdapter.DropTableSql(tableName, tableSchema);
 
             db.Execute(sql, transaction: transaction);
-        }
-
-        public static Task DropTableAsync(this IDbConnection db, string tableName, string tableSchema, IDbTransaction transaction = null)
-        {
-            return Task.Run(() =>
-            {
-                db.DropTable(tableName,tableSchema, transaction);
-            });
         }
 
         /// <summary>
@@ -304,14 +218,6 @@ namespace Dapper.LambdaExtension.Extentions
 
         }
 
-        public static Task TruncateTableAsync<T>(this IDbConnection db, IDbTransaction transaction = null)
-        {
-            return Task.Run(() =>
-            {
-                db.TruncateTable<T>( transaction);
-            });
-        }
-
         public static void TruncateTable(this IDbConnection db, SqlTableDefine tableDefine, IDbTransaction transaction = null)
         {
             var tableSchema = string.Empty;
@@ -325,22 +231,6 @@ namespace Dapper.LambdaExtension.Extentions
             db.TruncateTable(tableName, tableSchema, transaction);
         }
 
-        public static Task TruncateTableAsync(this IDbConnection db, SqlTableDefine tableDefine, IDbTransaction transaction = null)
-        {
-            return Task.Run(() =>
-            {
-                db.TruncateTable(tableDefine, transaction);
-            });
-        }
-
-        public static Task TruncateTableAsync(this IDbConnection db, string tableName, string tableSchema, IDbTransaction transaction = null)
-        {
-            return Task.Run(() =>
-            {
-                db.TruncateTable(tableName, tableSchema, transaction);
-            });
-        }
-
         public static void TruncateTable(this IDbConnection db, string tableName, string tableSchema, IDbTransaction transaction = null)
         {
             var dbAdapter = AdapterFactory.GetAdapterInstance(db.GetAdapter());
@@ -349,6 +239,77 @@ namespace Dapper.LambdaExtension.Extentions
 
             db.Execute(sql, transaction: transaction);
         }
-    }
 
+        private static void ExecuteSql(this IDbConnection db, IDbTransaction transaction, string createTableSql)
+        {
+            DapperLambdaExt.DebuggingSqlString(createTableSql);
+
+            if (transaction == null)
+            {
+                var trans = db.BeginTransaction();
+                try
+                {
+                    db.Execute(createTableSql, transaction: trans);
+
+                    trans.Commit();
+                }
+                catch (Exception ex)
+                {
+                    trans.Rollback();
+
+                    DapperLambdaExt.DebuggingException(ex, createTableSql);
+                    throw new DapperLamException(ex.Message, ex, createTableSql);
+                }
+            }
+            else
+            {
+                try
+                {
+                    db.Execute(createTableSql, transaction: transaction);
+                }
+                catch (Exception ex)
+                {
+                    DapperLambdaExt.DebuggingException(ex, createTableSql);
+                    throw new DapperLamException(ex.Message, ex, createTableSql);
+                }
+            }
+        }
+
+        private static async Task<int> ExecuteSqlAsync(this IDbConnection db, IDbTransaction transaction, string createTableSql)
+        {
+            DapperLambdaExt.DebuggingSqlString(createTableSql);
+
+            if (transaction == null)
+            {
+                var trans = db.BeginTransaction();
+                try
+                {
+                  var ret=  await db.ExecuteAsync(createTableSql, transaction: trans);
+
+                    trans.Commit();
+
+                    return ret;
+                }
+                catch (Exception ex)
+                {
+                    trans.Rollback();
+
+                    DapperLambdaExt.DebuggingException(ex, createTableSql);
+                    throw new DapperLamException(ex.Message, ex, createTableSql);
+                }
+            }
+            else
+            {
+                try
+                {
+                    return  await db.ExecuteAsync(createTableSql, transaction: transaction);
+                }
+                catch (Exception ex)
+                {
+                    DapperLambdaExt.DebuggingException(ex, createTableSql);
+                    throw new DapperLamException(ex.Message, ex, createTableSql);
+                }
+            }
+        }
+    }
 }

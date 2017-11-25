@@ -1,105 +1,22 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Runtime.Serialization;
-
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Dapper.LambdaExtension.LambdaSqlBuilder;
-using Dapper.LambdaExtension.LambdaSqlBuilder.Adapter;
 using Dapper.LambdaExtension.LambdaSqlBuilder.Entity;
-
-using Dapper;
 
 namespace Dapper.LambdaExtension.Extentions
 {
     public static partial class DapperLambdaExt
     {
 
-        //private static string LastSql { get; set; }
+        #region Insert Async
 
-        public static bool PrintSql { get; set; }
-
-        internal static ConcurrentBag<string> LastSqlStack { get; set; }
-
-        static DapperLambdaExt()
-        {
-            //PreApplicationStart.RegisterTypeMaps();    
-        }
-
-#region  base methods
-        private static void AddSql(string sql)
-        {
-            Task.Run(() =>
-            {
-                if (LastSqlStack == null)
-                {
-                    LastSqlStack = new ConcurrentBag<string>();
-                }
-
-                if (LastSqlStack.Count >= 5)
-                {
-                    LastSqlStack = new ConcurrentBag<string>();
-                }
-
-                LastSqlStack.Add(sql);
-            });
-        }
-
-        public static string GetLastSql()
-        {
-            var sql = LastSqlStack.LastOrDefault();
-            return sql;
-        }
-        internal static void DebuggingSqlString(string sqlString)
-        {
-            AddSql(sqlString);
-            if (PrintSql)
-            {
-                if (Debugger.IsAttached)
-                {
-                    Debug.WriteLine(sqlString);
-                }
-            }
-        }
-        internal static void DebuggingException(Exception ex, string sqlString)
-        {
-
-            if (Debugger.IsAttached)
-            {
-                Debug.WriteLine(ex.Message + ex.StackTrace);
-                Debug.WriteLine(sqlString);
-            }
-
-            Console.WriteLine(ex.Message + ex.StackTrace);
-            Console.WriteLine(sqlString);
-        }
-
-
-        public static string GetParameterString(IDictionary<string, object> dic)
-        {
-            StringBuilder sb = new StringBuilder();
-            foreach (var item in dic)
-            {
-                sb.AppendFormat("Key: {0}, Value: {1}", item.Key, item.Value);
-                sb.AppendLine();
-            }
-            return sb.ToString();
-        }
-
-        #endregion
-
-
-        #region Insert
-
-
-        public static int Insert<T>(this IDbConnection db, T entity, IDbTransaction trans = null, int? commandTimeout = null)
+        public static Task<int> InsertAsync<T>(this IDbConnection db, T entity, IDbTransaction trans = null,
+            int? commandTimeout = null)
         {
             var sqllam = new SqlExp<T>(db.GetAdapter());
 
@@ -108,7 +25,7 @@ namespace Dapper.LambdaExtension.Extentions
             try
             {
                 DebuggingSqlString(sqlString);
-                return db.Execute(sqlString, entity, trans, commandTimeout, CommandType.Text);
+                return db.ExecuteAsync(sqlString, entity, trans, commandTimeout, CommandType.Text);
             }
             catch (Exception ex)
             {
@@ -117,9 +34,10 @@ namespace Dapper.LambdaExtension.Extentions
             }
         }
 
-        public static int Insert(this IDbConnection db, SqlTableDefine tableDefine, List<SqlColumnDefine> columnDefines, IEnumerable<object> entity, IDbTransaction trans = null, int? commandTimeout = null)
+        public static Task<int> InsertAsync(this IDbConnection db, SqlTableDefine tableDefine,
+            List<SqlColumnDefine> columnDefines,
+            IEnumerable<object> entity, IDbTransaction trans = null, int? commandTimeout = null)
         {
-
             var sqllam = new SqlExp<object>(tableDefine, columnDefines, db.GetAdapter());
 
             sqllam = sqllam.Insert(tableDefine, columnDefines);
@@ -128,7 +46,7 @@ namespace Dapper.LambdaExtension.Extentions
             {
 
                 DebuggingSqlString(sqlString);
-                return db.Execute(sqlString, entity, trans, commandTimeout, CommandType.Text);
+                return db.ExecuteAsync(sqlString, entity, trans, commandTimeout, CommandType.Text);
             }
             catch (Exception ex)
             {
@@ -137,11 +55,12 @@ namespace Dapper.LambdaExtension.Extentions
             }
         }
 
-        public static int InsertList<T>(this IDbConnection db, IEnumerable<T> entitys, IDbTransaction trans = null, int? commandTimeout = null)
+        public static Task<int> InsertListAsync<T>(this IDbConnection db, IEnumerable<T> entitys,
+            IDbTransaction trans = null, int? commandTimeout = null)
         {
             if (!entitys.Any())
             {
-                return 0;
+                return Task.FromResult(0);
             }
 
             var sqllam = new SqlExp<T>(db.GetAdapter());
@@ -152,7 +71,7 @@ namespace Dapper.LambdaExtension.Extentions
             {
                 DebuggingSqlString(sqlString);
 
-                return db.Execute(sqlString, entitys, trans, commandTimeout, CommandType.Text);
+                return db.ExecuteAsync(sqlString, entitys, trans, commandTimeout, CommandType.Text);
             }
             catch (Exception ex)
             {
@@ -163,12 +82,13 @@ namespace Dapper.LambdaExtension.Extentions
 
         #endregion
 
-        #region Update
+
+        #region Update Async
 
 
-        public static int Update<T>(this IDbConnection db, T entity, IDbTransaction trans = null, int? commandTimeout = null)
+        public static Task<int> UpdateAsync<T>(this IDbConnection db, T entity, IDbTransaction trans = null,
+            int? commandTimeout = null)
         {
-
             var sqllam = new SqlExp<T>(db.GetAdapter());
 
 
@@ -177,7 +97,7 @@ namespace Dapper.LambdaExtension.Extentions
             try
             {
                 DebuggingSqlString(sqlString);
-                return db.Execute(sqlString, entity, trans, commandTimeout, CommandType.Text);
+                return db.ExecuteAsync(sqlString, entity, trans, commandTimeout, CommandType.Text);
             }
             catch (Exception ex)
             {
@@ -186,12 +106,13 @@ namespace Dapper.LambdaExtension.Extentions
             }
         }
 
-
-        public static int UpdateList<T>(this IDbConnection db, IEnumerable<T> entitys, IDbTransaction trans = null, int? commandTimeout = null)
+        public static Task<int> UpdateListAsync<T>(this IDbConnection db, IEnumerable<T> entitys,
+            IDbTransaction trans = null,
+            int? commandTimeout = null)
         {
             if (!entitys.Any())
             {
-                return 0;
+                return Task.FromResult(0);
             }
 
             var sqllam = new SqlExp<T>(db.GetAdapter());
@@ -203,7 +124,7 @@ namespace Dapper.LambdaExtension.Extentions
             {
 
                 DebuggingSqlString(sqlString);
-                return db.Execute(sqlString, entitys, trans, commandTimeout, CommandType.Text);
+                return db.ExecuteAsync(sqlString, entitys, trans, commandTimeout, CommandType.Text);
             }
             catch (Exception ex)
             {
@@ -215,11 +136,13 @@ namespace Dapper.LambdaExtension.Extentions
         #endregion
 
 
-        #region Delete
+        #region Delete Async
 
-        public static int Delete<T>(this IDbConnection db, T engity, IDbTransaction trans = null, int? commandTimeout = null)
+
+
+        public static Task<int> DeleteAsync<T>(this IDbConnection db, T engity, IDbTransaction trans = null,
+            int? commandTimeout = null)
         {
-
             var sqllam = new SqlExp<T>(db.GetAdapter());
 
 
@@ -229,7 +152,7 @@ namespace Dapper.LambdaExtension.Extentions
             {
 
                 DebuggingSqlString(sqlString);
-                return db.Execute(sqlString, engity, trans, commandTimeout, CommandType.Text);
+                return db.ExecuteAsync(sqlString, engity, trans, commandTimeout, CommandType.Text);
             }
             catch (Exception ex)
             {
@@ -238,7 +161,8 @@ namespace Dapper.LambdaExtension.Extentions
             }
         }
 
-        public static int Delete<T>(this IDbConnection db, Expression<Func<T, bool>> deleteExpression, IDbTransaction trans = null, int? commandTimeout = null)
+        public static Task<int> DeleteAsync<T>(this IDbConnection db, Expression<Func<T, bool>> deleteExpression,
+            IDbTransaction trans = null, int? commandTimeout = null)
         {
             if (deleteExpression == null)
             {
@@ -254,7 +178,7 @@ namespace Dapper.LambdaExtension.Extentions
             {
 
                 DebuggingSqlString(sqlString);
-                return db.Execute(sqlString, sqllam.Parameters, trans, commandTimeout, CommandType.Text);
+                return db.ExecuteAsync(sqlString, sqllam.Parameters, trans, commandTimeout, CommandType.Text);
             }
             catch (Exception ex)
             {
@@ -263,9 +187,10 @@ namespace Dapper.LambdaExtension.Extentions
             }
         }
 
-        public static int Delete<T>(this IDbConnection db, Action<SqlExp<T>> action, IDbTransaction trans = null, int? commandTimeout = null)
+        public static Task<int> DeleteAsync<T>(this IDbConnection db, Action<SqlExp<T>> action,
+            IDbTransaction trans = null,
+            int? commandTimeout = null)
         {
-
             var sqllam = new SqlExp<T>(db.GetAdapter());
 
             sqllam = sqllam.Delete();
@@ -276,7 +201,7 @@ namespace Dapper.LambdaExtension.Extentions
             {
 
                 DebuggingSqlString(sqlString);
-                return db.Execute(sqlString, sqllam.Parameters, trans, commandTimeout, CommandType.Text);
+                return db.ExecuteAsync(sqlString, sqllam.Parameters, trans, commandTimeout, CommandType.Text);
             }
             catch (Exception ex)
             {
@@ -284,12 +209,13 @@ namespace Dapper.LambdaExtension.Extentions
                 throw new DapperLamException(ex.Message, ex, sqllam.SqlString) { Parameters = sqllam.Parameters };
             }
         }
-
-        public static int DeleteList<T>(this IDbConnection db, IEnumerable<T> engityList, IDbTransaction trans = null, int? commandTimeout = null)
+        public static Task<int> DeleteListAsync<T>(this IDbConnection db, IEnumerable<T> engityList,
+            IDbTransaction trans = null,
+            int? commandTimeout = null)
         {
             if (!engityList.Any())
             {
-                return 0;
+                return Task.FromResult(0);
             }
 
             var sqllam = new SqlExp<T>(db.GetAdapter());
@@ -301,7 +227,7 @@ namespace Dapper.LambdaExtension.Extentions
             {
 
                 DebuggingSqlString(sqlString);
-                return db.Execute(sqlString, engityList, trans, commandTimeout, CommandType.Text);
+                return db.ExecuteAsync(sqlString, engityList, trans, commandTimeout, CommandType.Text);
             }
             catch (Exception ex)
             {
@@ -310,13 +236,16 @@ namespace Dapper.LambdaExtension.Extentions
             }
         }
 
-        #endregion
+#endregion
 
 
-        #region Query
+        #region Query Async
 
-        public static T QueryFirstOrDefault<T>(this IDbConnection db, Expression<Func<T, bool>> wherExpression = null, IDbTransaction trans = null, int? commandTimeout = null)
+        public static Task<T> QueryFirstOrDefaultAsync<T>(this IDbConnection db,
+            Expression<Func<T, bool>> wherExpression = null,
+            IDbTransaction trans = null, int? commandTimeout = null)
         {
+            //return Task.Run(() => { return db.QueryFirstOrDefault<T>(wherExpression, trans, commandTimeout); });
 
             var sqllam = new SqlExp<T>(db.GetAdapter());
 
@@ -329,7 +258,7 @@ namespace Dapper.LambdaExtension.Extentions
             try
             {
                 DebuggingSqlString(sqlString);
-                return db.QueryFirstOrDefault<T>(sqlString, sqllam.Parameters, trans, commandTimeout: commandTimeout);
+                return db.QueryFirstOrDefaultAsync<T>(sqlString, sqllam.Parameters, trans, commandTimeout: commandTimeout);
             }
             catch (Exception ex)
             {
@@ -338,7 +267,7 @@ namespace Dapper.LambdaExtension.Extentions
             }
         }
 
-        public static T QueryFirstOrDefault<T>(this IDbConnection db, Action<SqlExp<T>> action, IDbTransaction trans = null, int? commandTimeout = null)
+        public static Task<T> QueryFirstOrDefaultAsync<T>(this IDbConnection db, Action<SqlExp<T>> action, IDbTransaction trans = null, int? commandTimeout = null)
         {
 
             var sqllam = new SqlExp<T>(db.GetAdapter());
@@ -350,7 +279,7 @@ namespace Dapper.LambdaExtension.Extentions
             try
             {
                 DebuggingSqlString(sqlString);
-                return db.QueryFirstOrDefault<T>(sqlString, sqllam.Parameters, trans, commandTimeout: commandTimeout);
+                return db.QueryFirstOrDefaultAsync<T>(sqlString, sqllam.Parameters, trans, commandTimeout: commandTimeout);
             }
             catch (Exception ex)
             {
@@ -359,29 +288,12 @@ namespace Dapper.LambdaExtension.Extentions
             }
         }
 
-        public static IEnumerable<T> Query<T>(this IDbConnection db, Action<SqlExp<T>> action, IDbTransaction trans = null, int? commandTimeout = null)
+
+        public static Task<IEnumerable<T>> QueryAsync<T>(this IDbConnection db,
+          Expression<Func<T, bool>> wherExpression = null, IDbTransaction trans = null, int? commandTimeout = null)
         {
+            // return Task.Run(() => { return db.Query<T>(wherExpression, trans, commandTimeout); });
 
-            var sqllam = new SqlExp<T>(db.GetAdapter());
-
-            action?.Invoke(sqllam);
-
-            var sqlString = sqllam.SqlString;
-            try
-            {
-
-                DebuggingSqlString(sqlString);
-                return db.Query<T>(sqlString, sqllam.Parameters, trans, commandTimeout: commandTimeout);
-            }
-            catch (Exception ex)
-            {
-                DebuggingException(ex, sqlString);
-                throw new DapperLamException(ex.Message, ex, sqlString) { Parameters = sqllam.Parameters };
-            }
-
-        }
-        public static IEnumerable<T> Query<T>(this IDbConnection db, Expression<Func<T, bool>> wherExpression = null, IDbTransaction trans = null, int? commandTimeout = null)
-        {
             var sqllam = new SqlExp<T>(db.GetAdapter());
 
             if (wherExpression != null)
@@ -394,7 +306,7 @@ namespace Dapper.LambdaExtension.Extentions
             {
                 DebuggingSqlString(sqlString);
 
-                return db.Query<T>(sqlString, sqllam.Parameters, trans, commandTimeout: commandTimeout);
+                return db.QueryAsync<T>(sqlString, sqllam.Parameters, trans, commandTimeout: commandTimeout);
             }
             catch (Exception ex)
             {
@@ -402,10 +314,32 @@ namespace Dapper.LambdaExtension.Extentions
                 throw new DapperLamException(ex.Message, ex, sqlString) { Parameters = sqllam.Parameters };
             }
         }
-        public static IEnumerable<TResult> Query<TEntity, TResult>(this IDbConnection db, Action<SqlExp<TEntity>> action = null,
+
+        public static Task<IEnumerable<T>> QueryAsync<T>(this IDbConnection db, Action<SqlExp<T>> action,
+            IDbTransaction trans = null, int? commandTimeout = null)
+        {
+            var sqllam = new SqlExp<T>(db.GetAdapter());
+
+            action?.Invoke(sqllam);
+
+            var sqlString = sqllam.SqlString;
+            try
+            {
+
+                DebuggingSqlString(sqlString);
+                return db.QueryAsync<T>(sqlString, sqllam.Parameters, trans, commandTimeout: commandTimeout);
+            }
+            catch (Exception ex)
+            {
+                DebuggingException(ex, sqlString);
+                throw new DapperLamException(ex.Message, ex, sqlString) { Parameters = sqllam.Parameters };
+            }
+        }
+
+        public static Task<IEnumerable<TResult>> QueryAsync<TEntity, TResult>(this IDbConnection db,
+            Action<SqlExp<TEntity>> action = null,
             IDbTransaction trans = null, int? commandTimeout = null) where TEntity : class
         {
-
             var sqllam = new SqlExp<TEntity>(db.GetAdapter());
 
             action?.Invoke(sqllam);
@@ -414,7 +348,7 @@ namespace Dapper.LambdaExtension.Extentions
             {
 
                 DebuggingSqlString(sqlString);
-                return db.Query<TResult>(sqlString, sqllam.Parameters, trans, commandTimeout: commandTimeout);
+                return db.QueryAsync<TResult>(sqlString, sqllam.Parameters, trans, commandTimeout: commandTimeout);
             }
             catch (Exception ex)
             {
@@ -423,9 +357,12 @@ namespace Dapper.LambdaExtension.Extentions
             }
         }
 
-        public static IEnumerable<TResult> Query<TEntity, TResult>(this IDbConnection db, Action<SqlExp<TResult>> action, Action<SqlExp<TEntity>> subAction, IDbTransaction trans = null, int? commandTimeout = null) where TEntity : class
+        public static Task<IEnumerable<TResult>> QueryAsync<TEntity, TResult>(this IDbConnection db,
+            Action<SqlExp<TResult>> action, Action<SqlExp<TEntity>> subAction,
+            IDbTransaction trans = null, int? commandTimeout = null
+        )
+            where TEntity : class where TResult : class
         {
-
             var sqllamSub = new SqlExp<TEntity>(db.GetAdapter());
 
             //action?.Invoke(sqllam);
@@ -444,7 +381,7 @@ namespace Dapper.LambdaExtension.Extentions
             {
 
                 DebuggingSqlString(sqlString);
-                return db.Query<TResult>(sqlString, sqlLamMain.Parameters, trans, commandTimeout: commandTimeout);
+                return db.QueryAsync<TResult>(sqlString, sqlLamMain.Parameters, trans, commandTimeout: commandTimeout);
             }
             catch (Exception ex)
             {
@@ -453,20 +390,20 @@ namespace Dapper.LambdaExtension.Extentions
             }
         }
 
+
+
         #endregion
 
 
-        #region  Paged Query
+        #region Paged Query Async
 
-        
 
-        public static PagedResult<T> PagedQuery<T>(this IDbConnection db, int pageSize, int pageNumber,
+        public static async Task<PagedResult<T>> PagedQueryAsync<T>(this IDbConnection db, int pageSize, int pageNumber,
             Expression<Func<T, bool>> whereExpression = null, Expression<Func<T, object>> groupByexpression = null,
             IDbTransaction trans = null, int? commandTimeout = null,
             Expression<Func<T, object>> orderbyExpression = null)
             where T : class
         {
-
             var sqllam = new SqlExp<T>(db.GetAdapter());
             var countSqlam = new SqlExp<T>(db.GetAdapter());
             if (whereExpression != null)
@@ -493,7 +430,9 @@ namespace Dapper.LambdaExtension.Extentions
             {
 
                 DebuggingSqlString(sqlString);
-                countRet = db.Query<int>(sqlString, countSqlam.Parameters).FirstOrDefault();
+                var tret = await db.QueryAsync<int>(sqlString, countSqlam.Parameters);
+
+                countRet = tret.FirstOrDefault();
             }
             catch (Exception ex)
             {
@@ -505,23 +444,23 @@ namespace Dapper.LambdaExtension.Extentions
             try
             {
                 DebuggingSqlString(sqlstring);
-                var retlist = db.Query<T>(sqlstring, sqllam.Parameters, trans, commandTimeout: commandTimeout);
-
-                return new PagedResult<T>(retlist, countRet, pageSize, pageNumber);
+                var retlist = await db.QueryAsync<T>(sqlstring, sqllam.Parameters, trans, commandTimeout: commandTimeout);
+ 
+                return new   PagedResult<T>(retlist, countRet, pageSize, pageNumber);
             }
             catch (Exception ex)
             {
                 DebuggingException(ex, sqlstring);
                 throw new DapperLamException(ex.Message, ex, sqlstring) { Parameters = sqllam.Parameters };
             }
-
         }
 
-       
-
-        public static PagedResult<T> PagedQuery<T>(this IDbConnection db, int pageSize, int pageNumber, Action<SqlExp<T>> action, IDbTransaction trans = null, int? commandTimeout = null) where T : class
+        public static async Task<PagedResult<T>> PagedQueryAsync<T>(this IDbConnection db, int pageSize, int pageNumber,
+            Action<SqlExp<T>> action,
+            IDbTransaction trans = null, int? commandTimeout = null
+        )
+            where T : class
         {
-
             var sqllam = new SqlExp<T>(db.GetAdapter());
 
             var countSqlam = new SqlExp<T>(db.GetAdapter(), true);
@@ -538,7 +477,10 @@ namespace Dapper.LambdaExtension.Extentions
             try
             {
                 DebuggingSqlString(sqlString);
-                countRet = db.Query<int>(sqlString, countSqlam.Parameters, trans, commandTimeout: commandTimeout).FirstOrDefault();
+                //countRet = db.Query<int>(sqlString, countSqlam.Parameters, trans, commandTimeout: commandTimeout).FirstOrDefault();
+                var tret = await db.QueryAsync<int>(sqlString, countSqlam.Parameters, trans, commandTimeout: commandTimeout);
+
+                countRet = tret.FirstOrDefault();
             }
             catch (Exception ex)
             {
@@ -550,7 +492,7 @@ namespace Dapper.LambdaExtension.Extentions
             try
             {
                 DebuggingSqlString(sqlstring);
-                var retlist = db.Query<T>(sqlstring, sqllam.Parameters, trans, commandTimeout: commandTimeout);
+                var retlist = await db.QueryAsync<T>(sqlstring, sqllam.Parameters, trans, commandTimeout: commandTimeout);
                 return new PagedResult<T>(retlist, countRet, pageSize, pageNumber);
             }
             catch (Exception ex)
@@ -560,10 +502,13 @@ namespace Dapper.LambdaExtension.Extentions
             }
         }
 
-
-        public static PagedResult<TResult> PagedQuery<T, TResult>(this IDbConnection db, int pageSize, int pageNumber, Action<SqlExp<T>> action, IDbTransaction trans = null, int? commandTimeout = null) where T : class where TResult : class
+        public static async Task<PagedResult<TResult>> PagedQueryAsync<T, TResult>(this IDbConnection db, int pageSize,
+            int pageNumber,
+            Action<SqlExp<T>> action,
+            IDbTransaction trans = null, int? commandTimeout = null
+        )
+            where T : class where TResult : class
         {
-
             var sqllam = new SqlExp<T>(db.GetAdapter());
 
             var countSqlam = new SqlExp<T>(db.GetAdapter(), true);
@@ -581,7 +526,8 @@ namespace Dapper.LambdaExtension.Extentions
             {
 
                 DebuggingSqlString(sqlString);
-                countRet = db.Query<int>(countSqlam.SqlString, countSqlam.Parameters, trans, commandTimeout: commandTimeout).FirstOrDefault();
+                var tret =await db.QueryAsync<int>(countSqlam.SqlString, countSqlam.Parameters, trans, commandTimeout: commandTimeout);
+                countRet = tret.FirstOrDefault();
             }
             catch (Exception ex)
             {
@@ -594,7 +540,7 @@ namespace Dapper.LambdaExtension.Extentions
             try
             {
                 DebuggingSqlString(sqlstring);
-                var retlist = db.Query<TResult>(sqlstring, sqllam.Parameters, trans, commandTimeout: commandTimeout);
+                var retlist =  await db.QueryAsync<TResult>(sqlstring, sqllam.Parameters, trans, commandTimeout: commandTimeout);
                 return new PagedResult<TResult>(retlist, countRet, pageSize, pageNumber);
             }
             catch (Exception ex)
@@ -604,11 +550,13 @@ namespace Dapper.LambdaExtension.Extentions
             }
         }
 
-
-        public static PagedResult<TResult> PagedQuery<TEntity, TResult>(this IDbConnection db, int pageSize, int pageNumber, Action<SqlExp<TResult>> action, Action<SqlExp<TEntity>> subAction,
-            IDbTransaction trans = null, int? commandTimeout = null) where TEntity : class where TResult : class
+        public static async Task<PagedResult<TResult>> PagedQueryAsync<TEntity, TResult>(this IDbConnection db, int pageSize,
+            int pageNumber,
+            Action<SqlExp<TResult>> action, Action<SqlExp<TEntity>> subAction,
+            IDbTransaction trans = null, int? commandTimeout = null
+        )
+            where TEntity : class where TResult : class
         {
-
             var sqllam = new SqlExp<TEntity>(db.GetAdapter());
 
             subAction?.Invoke(sqllam);
@@ -632,7 +580,8 @@ namespace Dapper.LambdaExtension.Extentions
             try
             {
                 DebuggingSqlString(sqlString);
-                countRet = db.Query<int>(sqlString, countSqlam.Parameters, trans, commandTimeout: commandTimeout).FirstOrDefault();
+                var tret = await db.QueryAsync<int>(sqlString, countSqlam.Parameters, trans, commandTimeout: commandTimeout);
+                countRet = tret.FirstOrDefault();
 
             }
             catch (Exception ex)
@@ -645,7 +594,7 @@ namespace Dapper.LambdaExtension.Extentions
             try
             {
                 DebuggingSqlString(sqlstring);
-                var retlist = db.Query<TResult>(sqlstring, sqlLamMain.Parameters, trans, commandTimeout: commandTimeout);
+                var retlist = await db.QueryAsync<TResult>(sqlstring, sqlLamMain.Parameters, trans, commandTimeout: commandTimeout);
                 return new PagedResult<TResult>(retlist, countRet, pageSize, pageNumber);
             }
             catch (Exception ex)
@@ -655,17 +604,12 @@ namespace Dapper.LambdaExtension.Extentions
             }
         }
 
-
         #endregion
 
 
-        #region  Execution Sql
-
-        
-
-
-        public static TResult ExecuteScalar<TEntity, TResult>(this IDbConnection db, Action<SqlExp<TEntity>> action = null,
-          IDbTransaction trans = null, int? commandTimeout = null) where TEntity : class
+        #region Execution Sql Async
+        public static Task<TResult> ExecuteScalarAsync<TEntity, TResult>(this IDbConnection db, Action<SqlExp<TEntity>> action = null,
+            IDbTransaction trans = null, int? commandTimeout = null) where TEntity : class
         {
             var sqllam = new SqlExp<TEntity>(db.GetAdapter());
 
@@ -675,7 +619,7 @@ namespace Dapper.LambdaExtension.Extentions
             {
 
                 DebuggingSqlString(sqlString);
-                return db.ExecuteScalar<TResult>(sqlString, sqllam.Parameters, trans, commandTimeout);
+                return db.ExecuteScalarAsync<TResult>(sqlString, sqllam.Parameters, trans, commandTimeout);
             }
             catch (Exception ex)
             {
@@ -696,14 +640,13 @@ namespace Dapper.LambdaExtension.Extentions
         /// <param name="commandType"></param>
         /// <param name="flag"></param>
         /// <returns></returns>
-        public static int ExecuteNoCache(this IDbConnection cnn, string sql, object param = null, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = null, CommandFlags flag = CommandFlags.Buffered)
+        public static Task<int> ExecuteNoCacheAsync(this IDbConnection cnn, string sql ,object param = null, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = null, CommandFlags flag = CommandFlags.Buffered, CancellationToken cancellationToken=default(CancellationToken))
         {
-            CommandDefinition command = new CommandDefinition(sql, param, transaction, commandTimeout, commandType, flag, new CancellationToken());
+            CommandDefinition command = new CommandDefinition(sql, param, transaction, commandTimeout, commandType, flag, cancellationToken);
 
-            return cnn.Execute(command);
+            return cnn.ExecuteAsync(command);
         }
 
-
-        #endregion
+#endregion
     }
 }
