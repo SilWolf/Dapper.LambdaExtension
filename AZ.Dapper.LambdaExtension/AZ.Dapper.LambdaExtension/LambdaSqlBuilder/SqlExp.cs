@@ -107,6 +107,14 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
             return this;
         }
 
+        public SqlExp<T> Update(Expression<Func<T, object>> expression,object value)
+        {
+            _builder.UpdateSqlType(SqlType.Update);
+
+          _resolver.ResolveUpdate<T>(expression,value);
+            return this;
+        }
+         
  
         public SqlExp<T> Update(object obj)
         {

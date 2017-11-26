@@ -239,11 +239,15 @@ namespace testdemo.TestLogic
             {
                 var list = db.PagedQuery<Matrix, VMatrix>(10, 3, sql =>
                     {
+                        sql.Select(v => v.DecodeTimes);
                         sql.Where(p => p.ParameterCount > 1);
                     }, exp => GetVMatrix(exp)
                 );
 
-
+                //db.Update<Matrix>(sql =>
+                //{
+                //    sql.Update(v => v.Code, "a").Update(p=>p.SyncWord1,"aa"); 
+                //});
 
 
             }

@@ -171,13 +171,58 @@ namespace Dapper.LambdaExtension.Extentions
 
             var sqllam = new SqlExp<T>(db.GetAdapter());
 
-
+ 
             sqllam = sqllam.Update();
             var sqlString = sqllam.SqlString;
             try
             {
                 DebuggingSqlString(sqlString);
                 return db.Execute(sqlString, entity, trans, commandTimeout, CommandType.Text);
+            }
+            catch (Exception ex)
+            {
+                DebuggingException(ex, sqlString);
+                throw new DapperLamException(ex.Message, ex, sqlString) { Parameters = sqllam.Parameters };
+            }
+        }
+        public static int Update<T>(this IDbConnection db, T entity, Expression<Func<T,bool>> whereExpression, IDbTransaction trans = null, int? commandTimeout = null)
+        {
+
+            var sqllam = new SqlExp<T>(db.GetAdapter());
+            
+            sqllam = sqllam.Update();
+
+            if (whereExpression != null)
+            {
+                sqllam.Where(whereExpression);
+            }
+
+            var sqlString = sqllam.SqlString;
+            try
+            {
+                DebuggingSqlString(sqlString);
+                return db.Execute(sqlString, entity, trans, commandTimeout, CommandType.Text);
+            }
+            catch (Exception ex)
+            {
+                DebuggingException(ex, sqlString);
+                throw new DapperLamException(ex.Message, ex, sqlString) { Parameters = sqllam.Parameters };
+            }
+        }
+
+        public static int Update<T>(this IDbConnection db,Action<SqlExp<T>> action, IDbTransaction trans = null, int? commandTimeout = null )
+        {
+             
+            var sqllam = new SqlExp<T>(db.GetAdapter());
+
+           action?.Invoke(sqllam);
+
+            
+            var sqlString = sqllam.SqlString;
+            try
+            {
+                DebuggingSqlString(sqlString);
+                return db.Execute(sqlString, sqllam.Parameters, trans, commandTimeout, CommandType.Text);
             }
             catch (Exception ex)
             {

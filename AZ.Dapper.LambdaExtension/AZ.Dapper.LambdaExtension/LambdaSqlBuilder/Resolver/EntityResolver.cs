@@ -1,8 +1,10 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using Dapper.LambdaExtension.Helpers;
 using Dapper.LambdaExtension.LambdaSqlBuilder.Attributes;
 using Dapper.LambdaExtension.LambdaSqlBuilder.Entity;
 
@@ -14,6 +16,12 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
         {
             string tableName = GetTableName<T>();
             ResolveParameter<T>(tableName);
+        }
+
+        public void ResolveUpdate<T>(Expression<Func<T, object>> expression, object value)
+        {
+
+            ResolveParameter<T>(expression, value);
         }
 
         public void ResolveUpdate(Type type, object obj)
@@ -37,7 +45,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
         public void ResolveInsert(bool key, SqlTableDefine tableDefine, List<SqlColumnDefine> columnDefines)
         {
             string tableName = GetTableName(tableDefine);
-            ResolveParameter(key,tableName, columnDefines);
+            ResolveParameter(key, tableName, columnDefines);
         }
 
         private void ResolveParameter<T>(string tableName)
@@ -66,11 +74,34 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
                     }
                 }
 
-                _builder.AddSection(tableName, item.Name,fieldAlias, _operationDictionary[ExpressionType.Equal],null);
+                _builder.AddSection(tableName, item.Name, fieldAlias, _operationDictionary[ExpressionType.Equal], null);
             }
         }
 
-        private void ResolveParameter<T>(string tableName,object objs)
+
+        private void ResolveParameter<T>(Expression<Func<T, object>> expression, object value)
+        {
+ 
+            string tableName = GetTableName<T>();
+
+            var columnName = GetColumnName(expression);
+
+            //var memberExpression = GetMemberExpression(expression.Body);
+
+            if (!EnvHelper.IsNetFX)
+            {
+ 
+                _builder.AddSection(tableName, columnName, columnName, _operationDictionary[ExpressionType.Equal], value);
+
+            }
+            else
+            {
+                _builder.AddSection(tableName, columnName, columnName, _operationDictionary[ExpressionType.Equal], value);
+            }
+
+        }
+
+        private void ResolveParameter<T>(string tableName, object objs)
         {
             var ps = GetPropertyInfos<T>();
             foreach (PropertyInfo item in ps)
@@ -107,7 +138,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
             var ps = GetPropertyInfos<T>();
             foreach (PropertyInfo item in ps)
             {
-               //z object obj = item.GetValue(entity, null);
+                //z object obj = item.GetValue(entity, null);
 
                 var propname = item.Name;
 
@@ -128,7 +159,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
                     }
                 }
 
-                _builder.AddSection(tableName, propname,fieldAlias, null);
+                _builder.AddSection(tableName, propname, fieldAlias, null);
             }
         }
 
@@ -136,10 +167,10 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
         {
             _builder.UpdateInsertKey(key);
 
-           
+
             foreach (var item in columnsDefines)
             {
-               
+
 
                 var propname = item.Name;
 
@@ -153,14 +184,14 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
                     continue;
                 }
 
-                 
-                    if (!string.IsNullOrEmpty(item.AliasName))
-                    {
-                        fieldAlias = item.AliasName;
-                    }
-                
 
-                _builder.AddSection(tableName, propname, fieldAlias,null);
+                if (!string.IsNullOrEmpty(item.AliasName))
+                {
+                    fieldAlias = item.AliasName;
+                }
+
+
+                _builder.AddSection(tableName, propname, fieldAlias, null);
             }
         }
 

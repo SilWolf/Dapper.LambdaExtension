@@ -105,6 +105,51 @@ namespace Dapper.LambdaExtension.Extentions
                 throw new DapperLamException(ex.Message, ex, sqlString) { Parameters = sqllam.Parameters };
             }
         }
+        public static Task<int> UpdateAsync<T>(this IDbConnection db, T entity, Expression<Func<T, bool>> whereExpression, IDbTransaction trans = null, int? commandTimeout = null)
+        {
+
+            var sqllam = new SqlExp<T>(db.GetAdapter());
+
+            sqllam = sqllam.Update();
+
+            if (whereExpression != null)
+            {
+                sqllam.Where(whereExpression);
+            }
+
+            var sqlString = sqllam.SqlString;
+            try
+            {
+                DebuggingSqlString(sqlString);
+                return db.ExecuteAsync(sqlString, entity, trans, commandTimeout, CommandType.Text);
+            }
+            catch (Exception ex)
+            {
+                DebuggingException(ex, sqlString);
+                throw new DapperLamException(ex.Message, ex, sqlString) { Parameters = sqllam.Parameters };
+            }
+        }
+
+        public static Task<int> UpdateAsync<T>(this IDbConnection db, Action<SqlExp<T>> action, IDbTransaction trans = null, int? commandTimeout = null)
+        {
+
+            var sqllam = new SqlExp<T>(db.GetAdapter());
+
+            action?.Invoke(sqllam);
+
+
+            var sqlString = sqllam.SqlString;
+            try
+            {
+                DebuggingSqlString(sqlString);
+                return db.ExecuteAsync(sqlString, sqllam.Parameters, trans, commandTimeout, CommandType.Text);
+            }
+            catch (Exception ex)
+            {
+                DebuggingException(ex, sqlString);
+                throw new DapperLamException(ex.Message, ex, sqlString) { Parameters = sqllam.Parameters };
+            }
+        }
 
         public static Task<int> UpdateListAsync<T>(this IDbConnection db, IEnumerable<T> entitys,
             IDbTransaction trans = null,

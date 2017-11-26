@@ -255,6 +255,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
 
 
         }
+ 
 
         private void SelectSubQuery<T2>(MemberExpression expression,string subAlias)
         {
