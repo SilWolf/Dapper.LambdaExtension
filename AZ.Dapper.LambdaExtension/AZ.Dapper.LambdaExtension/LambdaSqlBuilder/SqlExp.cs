@@ -297,7 +297,19 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
 
             return this;
         }
- 
+        public SqlExp<T> SelectSubQuerySingle<T2>(SqlExpBase sqlExp, Expression<Func<T2, object>> subProp, Expression<Func<T, object>> mainProp)
+        {
+            if (_type != SqlType.Query)
+            {
+                _type = SqlType.Query;
+            }
+
+            var fieldAlias = _resolver.GetColumnName(mainProp);
+
+            _resolver.SelectSubQuery<T2>(subProp, sqlExp.JoinSubAliasTableName, fieldAlias);
+
+            return this;
+        }
 
         public SqlExp<T> SelectEntity(params Expression<Func<T, SqlColumnEntity>>[] expressions)
         {

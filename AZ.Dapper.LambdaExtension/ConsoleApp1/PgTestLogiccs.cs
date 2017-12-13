@@ -302,6 +302,7 @@ namespace testdemo.TestLogic
                 }, p => p.Id, v => v.MatrixId, JoinType.LeftOuterJoin);
 
             sqlMain.SelectSubQuery<VMatrix>(sqlInfo, p => p.ParameterCount, p => p.MaxFrequency);
+        
 
             //sub query  r aircraft _matrix
 

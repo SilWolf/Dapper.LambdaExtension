@@ -139,7 +139,10 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
         {
             SelectSubQuery<T2>(expression.Body,subAlias);
         }
-
+        public void SelectSubQuery<T2>(Expression<Func<T2, object>> expression, string subAlias, string fieldAlias)
+        {
+            SelectSubQuery<T2>(expression.Body, subAlias, fieldAlias);
+        }
         public void Select<T>(Expression<Func<T, SqlColumnEntity>> expression)
         {
             Select<T>(expression.Body);
@@ -205,7 +208,25 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
                     throw new ArgumentException("Invalid expression");
             }
         }
-
+        private void SelectSubQuery<T2>(Expression expression, string subTableAlias, string fieldAlias)
+        {
+            switch (expression.NodeType)
+            {
+                case ExpressionType.Parameter:
+                    _builder.Select(subTableAlias);
+                    break;
+                case ExpressionType.Convert:
+                case ExpressionType.MemberAccess:
+                    SelectSubQuery<T2>(GetMemberExpression(expression), subTableAlias, fieldAlias);
+                    break;
+                case ExpressionType.New:
+                    foreach (MemberExpression memberExp in (expression as NewExpression).Arguments)
+                        SelectSubQuery<T2>(memberExp, subTableAlias, fieldAlias);
+                    break;
+                default:
+                    throw new ArgumentException("Invalid expression");
+            }
+        }
         private void Select<T>(MemberExpression expression)
         {
 
@@ -277,6 +298,31 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
                 }
                 else
                     _builder.Select(subAlias, GetColumnName(expression));
+            }
+
+
+        }
+
+        private void SelectSubQuery<T2>(MemberExpression expression, string subTableAlias, string propAlias)
+        {
+
+            if (!EnvHelper.IsNetFX)
+            {
+                if (expression.Type.GetTypeInfo().IsClass && expression.Type != typeof(String))
+                {
+                    _builder.Select(subTableAlias);
+                }
+                else
+                    _builder.Select(subTableAlias, GetColumnName(expression), propAlias);
+            }
+            else
+            {
+                if (expression.Type.GetTypeInfo().IsClass && expression.Type != typeof(String))
+                {
+                    _builder.Select(subTableAlias);
+                }
+                else
+                    _builder.Select(subTableAlias, GetColumnName(expression), propAlias);
             }
 
 
