@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+    <metadata>
+        <id>AZ.Dapper.LambdaExtension</id>
+        <version>1.2.4</version>
+        <authors>azraelrabbit</authors>
+        <owners>azraelrabbit@gmail.com</owners>
+        <licenseUrl>https://github.com/azraelrabbit/Dapper.LambdaExtension/blob/master/LICENSE</licenseUrl>
+        <projectUrl>https://github.com/azraelrabbit/Dapper.LambdaExtension</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Dapper dot net lambda extension for CRUD</description>
+        <releaseNotes>add alternative usage.</releaseNotes>
+        <copyright>azraelrabbit</copyright>
+        <language>zh-CN</language>
+        <tags>dapper,lambda</tags>
+        <dependencies>
+            <group targetFramework=".NETFramework4.5">
+                <dependency id="Dapper" version="1.50.2" />
+            </group>
+            <group targetFramework=".NETCoreApp1.0">
+                <dependency id="Microsoft.Extensions.DependencyModel" version="1.1.1" />
+                <dependency id="Dapper" version="1.50.2" />
+                <dependency id="System.Reflection" version="4.3.0" />
+                <dependency id="System.Reflection.Extensions" version="4.3.0" />
+            </group>
+            <group targetFramework=".NETStandard1.1">
+                <dependency id="Microsoft.Extensions.DependencyModel" version="1.1.1" />
+                <dependency id="Dapper" version="1.50.2" />
+                <dependency id="System.Reflection" version="4.3.0" />
+                <dependency id="System.Reflection.Extensions" version="4.3.0" />
+                <dependency id="System.Reflection.Metadata" version="1.4.2" />
+            </group>
+            <group targetFramework=".NETStandard1.6">
+                <dependency id="Dapper" version="1.50.2" />
+                <dependency id="Microsoft.Extensions.DependencyModel" version="1.1.1" />
+                <dependency id="System.Reflection" version="4.3.0" />
+                <dependency id="System.Reflection.Extensions" version="4.3.0" />
+                <dependency id="System.Reflection.Metadata" version="1.4.2" />
+            </group>
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="..\..\Publish\Release\NetFX\AZ.Dapper.LambdaExtension.dll" target="lib\net45\AZ.Dapper.LambdaExtension.dll" />
+        <file src="..\..\Publish\Release\NetFX\AZ.Dapper.LambdaExtension.pdb" target="lib\net45\AZ.Dapper.LambdaExtension.pdb" />
+        <file src="..\..\Publish\Release\NetStandard\netstandard1.6\AZ.Dapper.LambdaExtension.Standard.deps.json" target="lib\netstandard1.1\AZ.Dapper.LambdaExtension.Standard.deps.json" />
+        <file src="..\..\Publish\Release\NetStandard\netstandard1.6\AZ.Dapper.LambdaExtension.Standard.dll" target="lib\netstandard1.1\AZ.Dapper.LambdaExtension.Standard.dll" />
+        <file src="..\..\Publish\Release\NetStandard\netstandard1.6\AZ.Dapper.LambdaExtension.Standard.pdb" target="lib\netstandard1.1\AZ.Dapper.LambdaExtension.Standard.pdb" />
+        <file src="..\..\Publish\Release\NetStandard\netstandard1.6\AZ.Dapper.LambdaExtension.Standard.deps.json" target="lib\netstandard1.6\AZ.Dapper.LambdaExtension.Standard.deps.json" />
+        <file src="..\..\Publish\Release\NetStandard\netstandard1.6\AZ.Dapper.LambdaExtension.Standard.dll" target="lib\netstandard1.6\AZ.Dapper.LambdaExtension.Standard.dll" />
+        <file src="..\..\Publish\Release\NetStandard\netstandard1.6\AZ.Dapper.LambdaExtension.Standard.pdb" target="lib\netstandard1.6\AZ.Dapper.LambdaExtension.Standard.pdb" />
+    </files>
+</package>

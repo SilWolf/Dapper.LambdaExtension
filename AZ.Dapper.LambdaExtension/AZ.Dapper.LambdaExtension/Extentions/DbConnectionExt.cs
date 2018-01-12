@@ -25,6 +25,18 @@ namespace Dapper.LambdaExtension.Extentions
 
         }
 
+        public static IDbTransaction BeginTransaction(this IDbConnection db, IDbTransaction trans)
+        {
+            if (trans == null)
+            {
+                return db.BeginTransaction();
+            }
+            else
+            {
+                return trans;
+            }
+        }
+
         public static SqlAdapterType GetAdapter(this IDbConnection dbconn)
         {
             if (!_typeRegistered)

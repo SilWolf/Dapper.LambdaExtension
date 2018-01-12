@@ -141,7 +141,12 @@ DapperLamException 类提供T-Sql异常信息捕获.
     });
 
 
+### 子查询
+在通过Action&lt;SqlExp&lt;T&gt;&gt; 代理,使用复杂查询功能时,
+可为当前查询创建子查询,并支持Join.
 
+栗子: 
+    
 
 
 
