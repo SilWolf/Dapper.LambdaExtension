@@ -3,8 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Dynamic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
+using ConsoleApp1.Entities;
 using Dapper.LambdaExtension;
 using Dapper.LambdaExtension.LambdaSqlBuilder.Entity;
 using testdemo.Entities;
@@ -127,14 +129,38 @@ namespace ConsoleApp1
             //    Console.WriteLine($"{item.Id}_{item.c_name}_{item.Count}");
             //}
 
-            var msLogic = new MssqlTestLogic();
+            //var msLogic = new MssqlTestLogic();
 
-            msLogic.TestSubSubQuery();
+            //msLogic.TestSubSubQuery();
 
 
+            //test trans
+            //var plogic=new PgTestLogic();
+
+            //var l1 = plogic.FindAction();
+
+            //var l2 = plogic.FindActionByTrans();
+
+            //plogic.TestTransInsert();
+
+
+            //Console.WriteLine(l1.FirstOrDefault().GetType().Name+"____count: "+l1.Count);
+            //Console.WriteLine(l2.FirstOrDefault().GetType().Name + "____count: " + l2.Count);
             //var msLogic = new PgTestLogic();
 
             //msLogic.TestSubSubQuery();
+
+
+            //test table
+
+            Test3.CreateTableIfNotExists();
+
+          Test3.Insert(new Test3(){MyName = "test1",CreateDate = DateTime.Now});
+
+
+            var first = Test3.QueryFirstOrDefault(null);
+
+            Console.WriteLine(first.MyName+"========="+first.CreateDate.ToString());
 
             Console.ReadLine();
         }

@@ -12,6 +12,7 @@ using Dapper.LambdaExtension.LambdaSqlBuilder.Attributes;
 using Dapper.LambdaExtension.LambdaSqlBuilder.Entity;
 
 using Dapper;
+using Dapper.LambdaExtension.LambdaSqlBuilder;
 
 
 namespace Dapper.LambdaExtension.Extentions
@@ -70,6 +71,11 @@ namespace Dapper.LambdaExtension.Extentions
             return SqlAdapterType.SqlServer;
         }
 
+
+        public static SqlExp<T> GetSqlExp<T>(this IDbConnection db ,bool forCount=false)
+        {
+            return new SqlExp<T>(db.GetAdapter(),forCount);
+        }
 
         /// <summary>
         /// 根据实体类创建数据库表

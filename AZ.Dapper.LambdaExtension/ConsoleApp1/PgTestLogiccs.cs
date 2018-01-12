@@ -29,6 +29,38 @@ namespace testdemo.TestLogic
             }
         }
 
+        public List<Test2> FindActionByTrans()
+        {
+            using (var db = GetConnection())
+            {
+                var trans = db.BeginTransaction();
+                return db.Query<Test2>(sql =>
+                {
+                    sql.WhereIsIn(p => p.Id, new List<object>() { 1, 4 });
+                },trans).ToList();
+            }
+        }
+
+
+        public void TestTransInsert()
+        {
+            using (var db = GetConnection())
+            {
+                var trans = db.BeginTransaction();
+
+                try
+                {
+                    db.Insert(new Test2() {Name = "TransTEst"},trans);
+                    trans.Commit();
+                }
+                catch (Exception ex)
+                {
+                    trans.Rollback();
+                    throw ex;
+                }
+            }
+        }
+
 
         public List<Test2> FindAction2()
         {

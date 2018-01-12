@@ -30,7 +30,11 @@
     <Compile Include="..\AZ.Dapper.LambdaExtension\Extentions\DbConnectionExt.cs" Link="Extensions\DbConnectionExt.cs" />
     <Compile Include="..\AZ.Dapper.LambdaExtension\Extentions\DbConnectionExtAsync.cs" Link="Extensions\DbConnectionExtAsync.cs" />
     <Compile Include="..\AZ.Dapper.LambdaExtension\Extentions\Extension.cs" Link="Extensions\Extension.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\Extentions\IDbFactory.cs" Link="Extensions\IDbFactory.cs" />
     <Compile Include="..\AZ.Dapper.LambdaExtension\Extentions\PagedResult.cs" Link="Extensions\PagedResult.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\Extentions\TableBase.cs" Link="Extensions\TableBase.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\Extentions\TableBaseAsync.cs" Link="Extensions\TableBaseAsync.cs" />
+    <Compile Include="..\AZ.Dapper.LambdaExtension\Extentions\TableBaseById.cs" Link="Extensions\TableBaseById.cs" />
     <Compile Include="..\AZ.Dapper.LambdaExtension\Helpers\EntityHelper.cs" Link="Helpers\EntityHelper.cs" />
     <Compile Include="..\AZ.Dapper.LambdaExtension\Helpers\EnvHelper.cs" Link="Helpers\EnvHelper.cs" />
     <Compile Include="..\AZ.Dapper.LambdaExtension\LambdaSqlBuilder\Adapter\AdapterBase.cs" Link="LambdaSqlBuilder\Adapter\AdapterBase.cs" />

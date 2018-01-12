@@ -8,7 +8,7 @@ using Dapper.LambdaExtension.LambdaSqlBuilder.Attributes;
 
 namespace testdemo.Entities
 {
-     
+     //[DBTable("test2")]
     public class Test2
     {
         [DBKey(true)]

@@ -43,9 +43,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DbFactoryBase.cs" />
     <Compile Include="Extentions\DapperLambdaExtAsync.cs" />
     <Compile Include="Extentions\DapperLamException.cs" />
     <Compile Include="Extentions\DbConnectionExtAsync.cs" />
+    <Compile Include="Extentions\IDbFactory.cs" />
+    <Compile Include="Extentions\TableBaseAsync.cs" />
+    <Compile Include="Extentions\TableBaseById.cs" />
+    <Compile Include="Extentions\TableBase.cs" />
     <Compile Include="Helpers\EntityHelper.cs" />
     <Compile Include="Helpers\EnvHelper.cs" />
     <Compile Include="LambdaSqlBuilder\Adapter\AdapterBase.cs" />
