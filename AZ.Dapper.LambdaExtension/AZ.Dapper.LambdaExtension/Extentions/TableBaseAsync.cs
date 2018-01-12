@@ -116,7 +116,7 @@ namespace Dapper.LambdaExtension.Extentions
             }
         }
 
-        public static Task<PagedResult<T>> PagedQueryAsync(int pageSize, int pageNumber, Action<SqlExp<T>> action, IDbTransaction trans)
+        public static Task<PagedResult<T>> PagedQueryAsync(int pageSize, int pageNumber, Action<SqlExp<T>> action, IDbTransaction trans=null)
         {
             using (var db = DbFactory.OpenDbConnection())
             {
