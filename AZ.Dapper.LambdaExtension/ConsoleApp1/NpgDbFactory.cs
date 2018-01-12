@@ -15,7 +15,7 @@ namespace ConsoleApp1
         public NpgDbFactory()
         {
             
-            ConnectionString = "server=192.168.10.25;User Id=postgres;password=ZeroPlus2013;database=testdb;Encoding=UTF-8;";
+            ConnectionString = "server=192.168.10.25;User Id=postgres;password= ;database=testdb;Encoding=UTF-8;";
         }
 
         
