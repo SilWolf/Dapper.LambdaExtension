@@ -10,7 +10,7 @@ using Dapper.LambdaExtension.LambdaSqlBuilder.Adapter;
 
 namespace Dapper.LambdaExtension.Extentions
 {
-    public abstract partial  class TableBase<T,TDbFactory> where T:class where TDbFactory : IDbFactory,new ()
+    public abstract partial class TableBase<T, TDbFactory> where T : class where TDbFactory : IDbFactory, new()
     {
 
 
@@ -24,43 +24,80 @@ namespace Dapper.LambdaExtension.Extentions
             {
                 if (_dbfactory == null)
                 {
-                    _dbfactory=new TDbFactory();
+                    _dbfactory = new TDbFactory();
                 }
                 return _dbfactory;
             }
         }
 
-        public static int Insert(T entity,IDbTransaction trans = null)
+        public static int Insert(T entity, IDbTransaction trans = null)
         {
 
             using (var db = DbFactory.OpenDbConnection())
             {
-                return db.Insert<T>(entity,trans);
+                return db.Insert<T>(entity, trans);
             }
         }
 
         public static int Insert(List<T> entities, IDbTransaction trans = null)
         {
-
-            using (var db = DbFactory.OpenDbConnection())
+            if (trans != null)
             {
-                return db.InsertList<T>(entities, trans);
+                return trans.Connection.InsertList<T>(entities, trans);
+            }
+            else
+            {
+
+                using (var db = DbFactory.OpenDbConnection())
+                {
+                    var tr = db.BeginTransaction();
+                    try
+                    {
+                        var ret = db.InsertList<T>(entities, tr);
+                        tr.Commit();
+                        return ret;
+                    }
+                    catch (Exception ex)
+                    {
+                        tr.Rollback();
+                        throw ex;
+                    }
+                }
+
             }
         }
 
-        public static int Delete(T entity, IDbTransaction trans = null) 
+        public static int Delete(T entity, IDbTransaction trans = null)
         {
             using (var db = DbFactory.OpenDbConnection())
             {
-                return db.Delete<T>(entity:entity, trans:trans);
+                return db.Delete<T>(entity: entity, trans: trans);
             }
         }
 
         public static int Delete(List<T> entityList, IDbTransaction trans = null)
         {
-            using (var db = DbFactory.OpenDbConnection())
+            if (trans != null)
             {
-                return db.DeleteList<T>(entityList, trans: trans);
+                return trans.Connection.DeleteList<T>(entityList, trans);
+            }
+            else
+            {
+                using (var db = DbFactory.OpenDbConnection())
+                {
+                    var tr = db.BeginTransaction();
+                    try
+                    {
+                        var ret= db.DeleteList<T>(entityList, trans: tr);
+                        tr.Commit();
+                        return ret;
+                    }
+                    catch (Exception ex)
+                    {
+                        tr.Rollback();
+                        throw ex;
+                    }
+                }
             }
         }
 
@@ -68,15 +105,15 @@ namespace Dapper.LambdaExtension.Extentions
         {
             using (var db = DbFactory.OpenDbConnection())
             {
-                return db.Delete<T>(action:action, trans: trans);
+                return db.Delete<T>(action: action, trans: trans);
             }
         }
 
-        public static int Delete(Expression<Func<T,bool>> expression, IDbTransaction trans = null)
+        public static int Delete(Expression<Func<T, bool>> expression, IDbTransaction trans = null)
         {
             using (var db = DbFactory.OpenDbConnection())
             {
-                 return db.Delete<T>(expression, trans: trans);
+                return db.Delete<T>(expression, trans: trans);
             }
         }
 
@@ -84,29 +121,52 @@ namespace Dapper.LambdaExtension.Extentions
         {
             using (var db = DbFactory.OpenDbConnection())
             {
-               return  db.Update<T>(entity, trans: trans);
+                return db.Update<T>(entity, trans: trans);
             }
         }
 
         public static int Update(List<T> entityList, IDbTransaction trans = null)
         {
-            using (var db = DbFactory.OpenDbConnection())
+            //using (var db = DbFactory.OpenDbConnection())
+            //{
+            //    return db.UpdateList<T>(entityList, trans: trans);
+            //}
+
+            if (trans != null)
             {
-                return db.UpdateList<T>(entityList, trans: trans);
+                return trans.Connection.UpdateList<T>(entityList, trans);
+            }
+            else
+            {
+                using (var db = DbFactory.OpenDbConnection())
+                {
+                    var tr = db.BeginTransaction();
+                    try
+                    {
+                        var ret = db.UpdateList<T>(entityList, trans: tr);
+                        tr.Commit();
+                        return ret;
+                    }
+                    catch (Exception ex)
+                    {
+                        tr.Rollback();
+                        throw ex;
+                    }
+                }
             }
         }
 
-        public static int Update(Action<SqlExp<T>> action,IDbTransaction trans=null)
+        public static int Update(Action<SqlExp<T>> action, IDbTransaction trans = null)
         {
             using (var db = DbFactory.OpenDbConnection())
             {
-               return  db.Update<T>(action,trans);
+                return db.Update<T>(action, trans);
             }
         }
 
 
 
-        public static List<T> Query(Expression<Func<T, bool>> expression, IDbTransaction trans=null)
+        public static List<T> Query(Expression<Func<T, bool>> expression, IDbTransaction trans = null)
         {
             using (var db = DbFactory.OpenDbConnection())
             {
@@ -114,7 +174,7 @@ namespace Dapper.LambdaExtension.Extentions
             }
         }
 
-        public static List<T> Query(Action<SqlExp<T>> action, IDbTransaction trans=null)
+        public static List<T> Query(Action<SqlExp<T>> action, IDbTransaction trans = null)
         {
             using (var db = DbFactory.OpenDbConnection())
             {
@@ -122,11 +182,11 @@ namespace Dapper.LambdaExtension.Extentions
             }
         }
 
-        public static PagedResult<T> PagedQuery(int pageSize,int pageNumber, Expression<Func<T, bool>> expression=null, Expression<Func<T,object>> orderby=null, IDbTransaction trans=null)
+        public static PagedResult<T> PagedQuery(int pageSize, int pageNumber, Expression<Func<T, bool>> expression = null, Expression<Func<T, object>> orderby = null, IDbTransaction trans = null)
         {
             using (var db = DbFactory.OpenDbConnection())
             {
-                return db.PagedQuery<T>(pageSize,pageNumber,expression,orderbyExpression:orderby,trans: trans);
+                return db.PagedQuery<T>(pageSize, pageNumber, expression, orderbyExpression: orderby, trans: trans);
             }
         }
 
@@ -134,7 +194,7 @@ namespace Dapper.LambdaExtension.Extentions
         {
             using (var db = DbFactory.OpenDbConnection())
             {
-                return db.PagedQuery<T>(pageSize,pageNumber,action, trans);
+                return db.PagedQuery<T>(pageSize, pageNumber, action, trans);
             }
         }
 
@@ -168,7 +228,7 @@ namespace Dapper.LambdaExtension.Extentions
         {
             using (var db = DbFactory.OpenDbConnection())
             {
-                  db.CreateTable<T>(trans);
+                db.CreateTable<T>(trans);
             }
         }
 
