@@ -164,10 +164,10 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
             return this;
         }
 
-        public SqlExp<T> WhereIsIn(Expression<Func<T, object>> expression, IEnumerable<object> values)
+        public SqlExp<T> WhereIsIn<TValue>(Expression<Func<T, object>> expression, IEnumerable<TValue> values)
         {
             _builder.And();
-            _resolver.QueryByIsIn(false, expression, values);
+            _resolver.QueryByIsIn(false, expression, values.Cast<object>());
             return this;
         }
   
@@ -178,10 +178,10 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
             return this;
         }
 
-        public SqlExp<T> WhereNotIn(Expression<Func<T, object>> expression, IEnumerable<object> values)
+        public SqlExp<T> WhereNotIn<TValue>(Expression<Func<T, object>> expression, IEnumerable<TValue> values)
         {
             _builder.And();
-            _resolver.QueryByIsIn(true, expression, values);
+            _resolver.QueryByIsIn(true, expression, values.Cast<object>());
             return this;
         }
 

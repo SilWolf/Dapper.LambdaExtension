@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.15
+VisualStudioVersion = 15.0.27130.2020
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AZ.Dapper.LambdaExtension", "AZ.Dapper.LambdaExtension\AZ.Dapper.LambdaExtension.csproj", "{8B94DAD8-CF44-4FF7-BF66-AA2A0E8B2A63}"
 EndProject
@@ -12,6 +12,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AZ.Dapper.LambdaExtension.Standard", "AZ.Dapper.LambdaExtension.Standard\AZ.Dapper.LambdaExtension.Standard.csproj", "{4D350316-2701-4699-A4EC-EF4723E4ADAF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{F4EB99D1-E70B-4051-AC2D-4D7551DE2228}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestLib", "TestLib\TestLib.csproj", "{82265566-2A30-42A0-8595-3BECCB7F76B7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +37,10 @@ Global
 		{F4EB99D1-E70B-4051-AC2D-4D7551DE2228}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F4EB99D1-E70B-4051-AC2D-4D7551DE2228}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F4EB99D1-E70B-4051-AC2D-4D7551DE2228}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82265566-2A30-42A0-8595-3BECCB7F76B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82265566-2A30-42A0-8595-3BECCB7F76B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82265566-2A30-42A0-8595-3BECCB7F76B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82265566-2A30-42A0-8595-3BECCB7F76B7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -42,5 +48,9 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{946E6FE0-AB69-4E63-A105-2F1216D2CFA8} = {0601A551-0F9F-4581-98A9-01F3B889846D}
 		{F4EB99D1-E70B-4051-AC2D-4D7551DE2228} = {0601A551-0F9F-4581-98A9-01F3B889846D}
+		{82265566-2A30-42A0-8595-3BECCB7F76B7} = {0601A551-0F9F-4581-98A9-01F3B889846D}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E92574C7-B9B9-4BDA-ADDE-07DAA171CD22}
 	EndGlobalSection
 EndGlobal
