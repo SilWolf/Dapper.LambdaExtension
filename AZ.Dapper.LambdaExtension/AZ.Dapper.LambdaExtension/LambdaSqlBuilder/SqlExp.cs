@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using Dapper.LambdaExtension.Helpers;
 using Dapper.LambdaExtension.LambdaSqlBuilder.Adapter;
 using Dapper.LambdaExtension.LambdaSqlBuilder.Builder;
 using Dapper.LambdaExtension.LambdaSqlBuilder.Entity;
@@ -502,7 +503,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
 
         public SqlExp<T2> SubQuery<T2>(SqlExp<T2> subQuery)
         {
-            var aliasTname = $"query_" + DateTime.Now.Ticks;
+            var aliasTname = $"q_" + EnvHelper.GetRandomString(6, true, true, false); //$"query_" + DateTime.Now.Ticks;
             JoinSubAliasTableName = aliasTname;
 
             subQuery.JoinSubAliasTableName = aliasTname;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using Dapper.LambdaExtension.Helpers;
 using Dapper.LambdaExtension.LambdaSqlBuilder.Resolver.ExpressionTree;
 
 namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
@@ -26,7 +27,8 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
            
             var joinTypeStr = GetJoinType(joinType);
 
-            var aliasTname = $"join_" + DateTime.Now.Ticks;
+            //var aliasTname = $"join_" + DateTime.Now.Ticks;
+            var aliasTname = $"j_" + EnvHelper.GetRandomString(6, true, true, false);// $"join_" + DateTime.Now.Ticks;
 
             sqlExp.JoinSubAliasTableName = aliasTname;
     

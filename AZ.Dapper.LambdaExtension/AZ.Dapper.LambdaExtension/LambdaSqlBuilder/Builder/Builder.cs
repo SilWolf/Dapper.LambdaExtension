@@ -253,10 +253,24 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
         public void SelectAll()
         {
             var entityDef = _entityType.GetEntityDefines();
+            var tablename = entityDef.Item1.Name;
+            if (string.IsNullOrEmpty(tablename))
+            {
+                tablename = entityDef.Item1.TableAttribute.Name;
+            }
+
+            var schema = entityDef.Item1.TableAttribute?.Schema;
+
+            var tbname = _adapter.Table(tablename, schema);
+
+            if (_isSubQuery && !string.IsNullOrEmpty(JoinSubAliasTableName))
+            {
+                tbname = JoinSubAliasTableName;
+            }
 
             foreach (var cdef in entityDef.Item2)
             {
-                var s = _adapter.Field(cdef.AliasName);
+                var s = _adapter.Field(tbname, cdef.AliasName);
 
                 if (!string.IsNullOrEmpty(cdef.AliasName))
                 {
@@ -264,7 +278,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
                 }
                 else
                 {
-                    s = _adapter.Field(cdef.Name);
+                    s = _adapter.Field(tbname, cdef.Name);
                 }
                 _selectionList.Add(s);
             }
