@@ -220,6 +220,41 @@ namespace Dapper.LambdaExtension.Extentions
 
             db.Execute(sql, transaction: transaction);
         }
+        /// <summary>
+        /// 根据实体类删除数据表
+        /// </summary>
+        /// <typeparam name="T">实体类类型</typeparam>
+        /// <param name="db"></param>
+        public static void DropTableIfExist<T>(this IDbConnection db, IDbTransaction transaction = null)
+        {
+
+            var tableDefine = EntityHelper.GetEntityDefine<T>().Item1;
+
+            db.DropTableIfExist(tableDefine, transaction);
+
+        }
+
+        public static void DropTableIfExist(this IDbConnection db, SqlTableDefine tableDefine, IDbTransaction transaction = null)
+        {
+            var tableSchema = string.Empty;
+            var tableName = tableDefine.Name;
+
+            if (!string.IsNullOrEmpty(tableDefine.TableAttribute?.Name))
+            {
+                tableName = tableDefine.TableAttribute.Name;
+                tableSchema = tableDefine.TableAttribute.Schema;
+            }
+            db.DropTableIfExist(tableName, tableSchema, transaction);
+        }
+
+        public static void DropTableIfExist(this IDbConnection db, string tableName, string tableSchema, IDbTransaction transaction = null)
+        {
+            var dbAdapter = AdapterFactory.GetAdapterInstance(db.GetAdapter());
+
+            var sql = dbAdapter.DropTableIfExistSql(tableName, tableSchema);
+
+            db.Execute(sql, transaction: transaction);
+        }
 
         /// <summary>
         /// 根据实体类删除数据表

@@ -38,6 +38,8 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
 
         string DropTableSql(string tableName, string tableSchema);
 
+        string DropTableIfExistSql(string tableName, string tableSchema);
+
         string TruncateTableSql(string tableName, string tableSchema);
     }
 }

@@ -31,6 +31,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Entity
         public SqlTableDefine(DBTableAttribute tableAttr)
         {
             TableAttribute = tableAttr;
+            Name = tableAttr.Name;
         }
     }
 }

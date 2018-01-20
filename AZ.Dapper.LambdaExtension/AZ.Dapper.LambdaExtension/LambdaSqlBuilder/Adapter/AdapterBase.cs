@@ -148,7 +148,10 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
         {
             get { return "CREATE TABLE "; }
         }
-
+        public virtual string DropTableIfNotExistPrefix
+        {
+            get { return "DROP TABLE IF EXISTS "; }
+        }
 
         public virtual string FormatColumnDefineSql(string columName, string dataTypestr, string nullstr, string primaryStr, string incrementStr)
         {
@@ -333,6 +336,19 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
 
             var sql = $" DROP TABLE {tablename}";
            
+            return sql;
+        }
+
+        public virtual string DropTableIfExistSql(string tableName, string tableSchema)
+        {
+            var tablename = tableName;
+            if (!string.IsNullOrEmpty(tableSchema))
+            {
+                tablename = $"{tableSchema}.{tablename}";
+            }
+
+            var sql = $"{DropTableIfNotExistPrefix} {tablename} ;";
+
             return sql;
         }
 

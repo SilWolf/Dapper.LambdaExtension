@@ -40,5 +40,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Attributes
         public string FieldLength { get; set; }
 
         public DbType? DbType { get; set; }
+
+        public Type ValueType { get; set; }
     }
 }

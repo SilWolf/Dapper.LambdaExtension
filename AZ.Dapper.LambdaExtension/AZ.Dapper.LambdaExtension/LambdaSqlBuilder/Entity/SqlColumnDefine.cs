@@ -29,6 +29,13 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Entity
 
         public SqlColumnDefine(string name, string aliasName, object value,Type valueType, bool nullAble, DBColumnAttribute columnAttr, DBKeyAttribute keyAttr, DBCustomeDataTypeAttribute customeDataTypeAttr, DBIgnoreAttribute ignoreAttr=null, DBIndexAttribute indexAttr = null)
         {
+            Init(name, aliasName, value, valueType, nullAble, columnAttr, keyAttr, customeDataTypeAttr, ignoreAttr, indexAttr);
+        }
+
+        private void Init(string name, string aliasName, object value, Type valueType, bool nullAble,
+            DBColumnAttribute columnAttr, DBKeyAttribute keyAttr, DBCustomeDataTypeAttribute customeDataTypeAttr,
+            DBIgnoreAttribute ignoreAttr, DBIndexAttribute indexAttr)
+        {
             Name = name;
             AliasName = aliasName;
             Value = value;
@@ -41,13 +48,10 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Entity
             IndexAttribute = indexAttr;
         }
 
-        public SqlColumnDefine( DBColumnAttribute columnAttribute, DBKeyAttribute keyAttribute = null, DBIndexAttribute indexAttr = null)
+        public SqlColumnDefine(DBColumnAttribute columnAttribute, DBKeyAttribute keyAttribute = null, DBIndexAttribute indexAttr = null)
         {
-            Name = columnAttribute.Name;
-            AliasName = columnAttribute.Name;
-            ColumnAttribute = columnAttribute;
-            KeyAttribute = keyAttribute;
-            IndexAttribute = indexAttr;
+    
+            Init(columnAttribute.Name, columnAttribute.Name, null, columnAttribute.ValueType, columnAttribute.Nullable.HasValue ? columnAttribute.Nullable.Value : false, columnAttribute, keyAttribute, null, null, indexAttr);
         }
     }
 }
