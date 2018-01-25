@@ -24,6 +24,10 @@ namespace ConsoleApp1
             //TestINsert();
 
 
+            var sqldbLogic=new IgniteLogic();
+
+          
+
             //var pg = npglogic.FindPageAction(10, 2);
 
             //Console.WriteLine($"total:{pg.Count},pageSize:{pg.PageSize},currentPage:{pg.PageNumber}");

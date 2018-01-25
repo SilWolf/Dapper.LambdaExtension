@@ -40,8 +40,8 @@ namespace Dapper.LambdaExtension
 #if NETCOREAPP1_0 || NETSTANDARD1_6
                 try
                 {
- 
-                    var runLiblist = DependencyContext.Default.RuntimeLibraries.ToList();
+
+                    var runLiblist = DependencyContext.Default.RuntimeLibraries.ToList().Where(p => !p.Name.StartsWith("Microsoft.") && !p.Name.StartsWith("System.") && !p.Name.StartsWith("runtime.") && !p.Name.StartsWith("NETStandard.") && !p.Name.StartsWith("CoreCompat."));
 
 
                     foreach (var rl in runLiblist)
@@ -74,7 +74,7 @@ namespace Dapper.LambdaExtension
 
 #if NETCOREAPP1_0 || NETSTANDARD1_6
 #else
-                var assemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
+                var assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(p=>!p.FullName.StartsWith("System.")&& !p.FullName.StartsWith("System,") && !p.FullName.StartsWith("Microsoft.") && !p.FullName.StartsWith("mscorlib,")).ToList();
 
                 AppDomain.CurrentDomain.AssemblyLoad += (sender, args) =>
                 {

@@ -22,6 +22,8 @@ namespace Dapper.LambdaExtension.Helpers
 
             //runtimeInfo.Identifier; //.NETFramework // .NETCoreApp
             _isNetFx= runtimeInfo.Identifier.ToLower().Contains(".NETFramework".ToLower());
+#else
+            _isNetFx = true;
 #endif
         }
 
