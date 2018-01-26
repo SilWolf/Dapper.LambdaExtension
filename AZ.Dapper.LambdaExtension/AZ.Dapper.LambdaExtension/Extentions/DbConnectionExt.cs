@@ -292,7 +292,122 @@ namespace Dapper.LambdaExtension.Extentions
 
             db.Execute(sql, transaction: transaction);
         }
+        
+        public static bool SchemaExist<T>(this IDbConnection db, IDbTransaction transaction = null)
+        {
+            var entityDef = EntityHelper.GetEntityDefine<T>();
 
+            return db.SchemaExist(entityDef.Item1, transaction);
+        }
+
+        public static bool SchemaExist(this IDbConnection db, SqlTableDefine tableDefine, IDbTransaction transaction = null)
+        {
+           
+            var tableSchema = "";
+
+            if (!string.IsNullOrEmpty(tableDefine.TableAttribute?.Name))
+            {
+                
+                tableSchema = tableDefine.TableAttribute.Schema;
+            }
+            return db.SchemaExist( tableSchema, transaction);
+        }
+
+        public static bool SchemaExist(this IDbConnection db, string tableSchema , IDbTransaction transaction = null)
+        {
+            var dbAdapter = AdapterFactory.GetAdapterInstance(db.GetAdapter());
+
+            var schemaExistSql = dbAdapter.SchemaExistsSql(tableSchema);
+
+            if (string.IsNullOrEmpty(schemaExistSql))
+            {
+                return true;
+            }
+
+            return db.ExecuteScalar<int>(schemaExistSql, transaction: transaction) > 0;
+        }
+
+
+
+
+        /// <summary>
+        /// 根据实体类创建schema
+        /// </summary>
+        /// <typeparam name="T">实体类类型</typeparam>
+        /// <param name="db"></param>
+        public static void CreateSchema<T>(this IDbConnection db, IDbTransaction transaction = null)
+        {
+
+            var tableDefine = EntityHelper.GetEntityDefine<T>().Item1;
+
+            db.CreateSchema(tableDefine, transaction);
+
+        }
+
+        public static void CreateSchema(this IDbConnection db, SqlTableDefine tableDefine, IDbTransaction transaction = null)
+        {
+            var tableSchema = string.Empty;
+     
+            if (!string.IsNullOrEmpty(tableDefine.TableAttribute?.Name))
+            {
+                
+                tableSchema = tableDefine.TableAttribute.Schema;
+            }
+            db.CreateSchema( tableSchema, transaction);
+        }
+
+        public static void CreateSchema(this IDbConnection db, string tableSchema, IDbTransaction transaction = null)
+        {
+            var dbAdapter = AdapterFactory.GetAdapterInstance(db.GetAdapter());
+
+            var sql = dbAdapter.CreateSchemaSql(tableSchema);
+
+            if (string.IsNullOrEmpty(sql))
+            {
+                return ;
+            }
+            db.Execute(sql, transaction: transaction);
+        }
+
+
+        /// <summary>
+        /// 根据实体类创建schema
+        /// </summary>
+        /// <typeparam name="T">实体类类型</typeparam>
+        /// <param name="db"></param>
+        public static void CreateSchemaIfNotExists<T>(this IDbConnection db, IDbTransaction transaction = null)
+        {
+
+            var tableDefine = EntityHelper.GetEntityDefine<T>().Item1;
+
+            db.CreateSchemaIfNotExists(tableDefine, transaction);
+
+        }
+
+        public static void CreateSchemaIfNotExists(this IDbConnection db, SqlTableDefine tableDefine, IDbTransaction transaction = null)
+        {
+            var tableSchema = string.Empty;
+     
+            if (!string.IsNullOrEmpty(tableDefine.TableAttribute?.Name))
+            {
+                
+                tableSchema = tableDefine.TableAttribute.Schema;
+            }
+            db.CreateSchemaIfNotExists( tableSchema, transaction);
+        }
+
+        public static void CreateSchemaIfNotExists(this IDbConnection db, string tableSchema, IDbTransaction transaction = null)
+        {
+            var dbAdapter = AdapterFactory.GetAdapterInstance(db.GetAdapter());
+
+            var sql = dbAdapter.CreateSchemaIfNotExistsSql(tableSchema);
+
+            if (string.IsNullOrEmpty(sql))
+            {
+                return ;
+            }
+            db.Execute(sql, transaction: transaction);
+        }
         private static void ExecuteSql(this IDbConnection db, IDbTransaction transaction, string createTableSql)
         {
             DapperLambdaExt.DebuggingSqlString(createTableSql);
@@ -328,41 +443,6 @@ namespace Dapper.LambdaExtension.Extentions
             }
         }
 
-        private static async Task<int> ExecuteSqlAsync(this IDbConnection db, IDbTransaction transaction, string createTableSql)
-        {
-            DapperLambdaExt.DebuggingSqlString(createTableSql);
-
-            if (transaction == null)
-            {
-                var trans = db.BeginTransaction();
-                try
-                {
-                  var ret=  await db.ExecuteAsync(createTableSql, transaction: trans);
-
-                    trans.Commit();
-
-                    return ret;
-                }
-                catch (Exception ex)
-                {
-                    trans.Rollback();
-
-                    DapperLambdaExt.DebuggingException(ex, createTableSql);
-                    throw new DapperLamException(ex.Message, ex, createTableSql);
-                }
-            }
-            else
-            {
-                try
-                {
-                    return  await db.ExecuteAsync(createTableSql, transaction: transaction);
-                }
-                catch (Exception ex)
-                {
-                    DapperLambdaExt.DebuggingException(ex, createTableSql);
-                    throw new DapperLamException(ex.Message, ex, createTableSql);
-                }
-            }
-        }
+        
     }
 }

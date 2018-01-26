@@ -390,6 +390,18 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
             _builder.Select(subAlias, fieldName, selectFunction, aliasFieldName);
         }
 
+        public void SelectWithFunctionSubQuery<T>(Expression<Func<T, object>> expression, SelectFunction selectFunction,string subAlias)
+        {
+            var fieldName = "*";
+
+            if (expression != null)
+            {
+                fieldName = GetColumnName(GetMemberExpression(expression.Body));
+            }
+
+            _builder.Select(subAlias, fieldName, selectFunction, "");
+        }
+
         public void GroupBy<T>(Expression<Func<T, object>> expression)
         {
             var body = expression.Body;

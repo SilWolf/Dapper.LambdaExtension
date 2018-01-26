@@ -7,11 +7,30 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
     sealed class OracleAdapter : AdapterBase
     {
         public new string AutoIncrementDefinition { get; } = string.Empty;
- 
+        //public virtual string StringColumnDefinition { get; } = "VARCHAR(255)";
+
+        //public virtual string IntColumnDefinition { get; } = "INTEGER";
+        //public virtual string LongColumnDefinition { get; } = "BIGINT";
+        //public virtual string GuidColumnDefinition { get; } = "VARCHAR(37)";
+        //public virtual string BoolColumnDefinition { get; } = "BOOL";
+        //public virtual string RealColumnDefinition { get; } = "FLOAT";
+        //public virtual string DecimalColumnDefinition { get; } = "DECIMAL";
+        //public virtual string BlobColumnDefinition { get; } = "BLOB";
+        //public virtual string DateTimeColumnDefinition { get; } = "TIMESTAMP";
+        //public virtual string TimeColumnDefinition { get; } = "TIME";
+
+        //public virtual string StringLengthNonUnicodeColumnDefinitionFormat { get; } = "VARCHAR({0})";
+        //public virtual string StringLengthUnicodeColumnDefinitionFormat { get; } = "NVARCHAR({0})";
 
         public new string ParamStringPrefix { get; } = ":";
 
         public new string PrimaryKeyDefinition { get; } = " Primary Key";
+
+        /// <summary>
+        /// CREATE UNIQUE INDEX index_name ON table_name (column_name or column_names)
+        /// </summary>
+        public override string CreateIndexFormatter { get; } = "CREATE {0} INDEX if not EXISTS {1} ON {2}({3});";
+
 
 
         public OracleAdapter()
@@ -19,6 +38,12 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
         {
 
         }
+        
+        public override string CreateTablePrefix
+        {
+            get { return "CREATE TABLE if not EXISTS "; }
+        }
+
 
         public override string QueryPage(SqlEntity entity)
         {

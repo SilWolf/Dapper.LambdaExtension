@@ -25,9 +25,6 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
         string LikeStagement();
 
         string LikeChars();
-
-        string EqualChars();
-
         string CreateTableSql(SqlTableDefine tableDefine, List<SqlColumnDefine> columnDefines);
 
         /// <summary>
@@ -41,5 +38,11 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
         string DropTableIfExistSql(string tableName, string tableSchema);
 
         string TruncateTableSql(string tableName, string tableSchema);
+
+        string CreateSchemaSql(string schemaName);
+
+        string SchemaExistsSql(string schemaName);
+
+        string CreateSchemaIfNotExistsSql(string schemaName);
     }
 }

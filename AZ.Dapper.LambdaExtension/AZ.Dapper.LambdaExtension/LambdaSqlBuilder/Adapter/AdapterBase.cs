@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Net;
+ 
 using Dapper.LambdaExtension.LambdaSqlBuilder.Entity;
 using System.Reflection;
+using System.Text;
 using Dapper.LambdaExtension.Helpers;
 
 //using Microsoft.Extensions.DependencyModel;
@@ -38,10 +41,12 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
 
         public virtual string PrimaryKeyDefinition { get; } = " Primary Key";
 
+
         /// <summary>
         /// CREATE UNIQUE INDEX index_name ON table_name (column_name or column_names)
         /// </summary>
         public virtual string CreateIndexFormatter { get; } = "CREATE {0} INDEX {1} ON {2}({3});";
+
 
         public virtual string SelectIdentitySql { get; set; }
 
@@ -131,11 +136,6 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
             return "%";
         }
 
-        public virtual string EqualChars()
-        {
-            return "=";
-        }
-
         public virtual string GetIdentitySql(string incrementColumnName)
         {
             return SelectIdentitySql;
@@ -148,10 +148,12 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
         {
             get { return "CREATE TABLE "; }
         }
+
         public virtual string DropTableIfNotExistPrefix
         {
             get { return "DROP TABLE IF EXISTS "; }
         }
+
 
         public virtual string FormatColumnDefineSql(string columName, string dataTypestr, string nullstr, string primaryStr, string incrementStr)
         {
@@ -184,13 +186,13 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
                 tableName = Table(tempTableName, tableDefine.TableAttribute.Schema);
             }
 
-
+           
 
             sql += tableName;
 
             sql += " (";
 
-            var indexList = new List<IndexStructure>();
+            var indexList=new List<IndexStructure>();
 
             foreach (var c in columnDefines)
             {
@@ -245,13 +247,13 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
                 {
                     if (string.IsNullOrEmpty(c.IndexAttribute.IndexName))
                     {
-                        var schemaSuffix = tempSchemaName;
+                        var schemaSuffix =tempSchemaName;
                         if (!string.IsNullOrEmpty(tempSchemaName))
                         {
                             schemaSuffix += "_";
                         }
 
-                        c.IndexAttribute.IndexName = "lidx_" + schemaSuffix + tempTableName + "_" + tempCname;
+                        c.IndexAttribute.IndexName="lidx_"+ schemaSuffix + tempTableName + "_" + tempCname;
                     }
 
                     if (indexList.Exists(p => p.IndexName == c.IndexAttribute.IndexName))
@@ -269,7 +271,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
                             IndexName = c.IndexAttribute.IndexName,
                             Unique = c.IndexAttribute.Unique,
                             TableName = tableName,
-                            Columns = new List<IndexColumnStructure>() { new IndexColumnStructure() { ColumnName = cname, Asc = c.IndexAttribute.Asc } }
+                            Columns = new List<IndexColumnStructure>() {new IndexColumnStructure(){ColumnName = cname,Asc = c.IndexAttribute.Asc} }
                         });
                     }
 
@@ -285,11 +287,12 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
             sql = sql.TrimEnd(',');
 
             sql += " );";
- 
+
+
             //process index create sql 
- 
-            foreach (var indexItem in indexList)
-            {
+            //var indexSb = new StringBuilder();
+
+            foreach (var indexItem in indexList  )          {
 
                 var uniqueStr = string.Empty;
                 if (indexItem.Unique)
@@ -297,22 +300,27 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
                     uniqueStr = "UNIQUE";
                 }
 
-                var columnlist = new List<string>();
+                var columnlist=new List<string>();
 
                 var columnstr = string.Empty;
 
                 foreach (var column in indexItem.Columns)
                 {
+                    //var tmpStr = column.ColumnName + " " + (column.Asc? "ASC" : "DESC")+",";
                     columnlist.Add(column.ColumnName + " " + (column.Asc ? "ASC" : "DESC"));
                 }
 
                 columnstr = string.Join(",", columnlist);
 
                 var str = string.Format(CreateIndexFormatter, uniqueStr, indexItem.IndexName, indexItem.TableName, columnstr);
- 
+
+                //indexSb.AppendLine(str);
                 sql += str;
             }
- 
+
+            //sql += indexSb.ToString();
+
+
             return sql;
         }
 
@@ -339,6 +347,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
             return sql;
         }
 
+
         public virtual string DropTableIfExistSql(string tableName, string tableSchema)
         {
             var tablename = tableName;
@@ -352,6 +361,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
             return sql;
         }
 
+
         public virtual  string TruncateTableSql(string tableName, string tableSchema)
         {
             var tablename = tableName;
@@ -364,6 +374,38 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
 
             return sql;
         }
+
+        public virtual string CreateSchemaSql(string schemaName)
+        {
+            if (!string.IsNullOrEmpty(schemaName))
+            {
+                return $"CREATE SCHEMA {_leftToken}{schemaName}{_rightToken} ;";
+            }
+
+            return string.Empty;
+        }
+
+        public virtual string SchemaExistsSql(string schemaName)
+        {
+            if (!string.IsNullOrEmpty(schemaName))
+            {
+                return $" SELECT COUNT(*) FROM INFORMATION_SCHEMA.schemata where schema_name='{schemaName}'; ";
+            }
+
+            return string.Empty;
+           
+        }
+
+        public virtual  string CreateSchemaIfNotExistsSql(string schemaName)
+        {
+            if (!string.IsNullOrEmpty(schemaName))
+            {
+                return $"CREATE SCHEMA IF NOT EXISTS {_leftToken}{schemaName}{_rightToken} ;";
+            }
+
+            return string.Empty;
+        }
+ 
 
         #endregion
         protected DbTypeMap DbTypeMap = new DbTypeMap();
@@ -848,6 +890,9 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
             return $"XML";
         }
 #endregion
+
+
+       
     }
 
     internal class IndexStructure

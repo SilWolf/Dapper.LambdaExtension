@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Dapper.LambdaExtension.LambdaSqlBuilder.Entity;
 
 namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
@@ -7,7 +9,22 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
     class PostgresAdapter : AdapterBase
     {
         public override string AutoIncrementDefinition { get; } = "serial";
- 
+
+        //public override string StringColumnDefinition { get; } = "VARCHAR(255)";
+
+        //public override string IntColumnDefinition { get; } = "integer";
+        //public override string LongColumnDefinition { get; } = "BIGINT";
+        //public override string GuidColumnDefinition { get; } = "uuid";
+        //public override string BoolColumnDefinition { get; } = "boolean";
+        //public override string RealColumnDefinition { get; } = "double precision";
+        //public override string DecimalColumnDefinition { get; } = "numeric(38,6)";
+        //public override string BlobColumnDefinition { get; } = "bytea";
+        //public override string DateTimeColumnDefinition { get; } = "timestamp";
+        //public override string TimeColumnDefinition { get; } = "time";
+
+        //public override string StringLengthNonUnicodeColumnDefinitionFormat { get; } = "VARCHAR({0})";
+        //public override string StringLengthUnicodeColumnDefinitionFormat { get; } = "NVARCHAR({0})";
+
         public override string ParamStringPrefix { get; } = ":";
 
         public override string PrimaryKeyDefinition { get; } = " Primary Key";
@@ -38,13 +55,15 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
 
         public override string Table(string tableName,string schema)
         {
-            var tbname = string.Format("{0}{1}{2}", "", tableName, "");
+            var tbname = string.Format("{0}{1}{2}", _leftToken, tableName, _rightToken);
             if (!string.IsNullOrEmpty(schema))
             {
                 return _leftToken + schema + _rightToken + "."+tbname;
             }
             return tbname;
         }
+
+        
 
         public override string LikeStagement()
         {
@@ -60,6 +79,13 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
         {
             get { return "CREATE TABLE if not EXISTS "; }
         }
+
+        /// <summary>
+        /// CREATE UNIQUE INDEX index_name ON table_name (column_name or column_names)
+        /// </summary>
+        public override string CreateIndexFormatter { get; } = "CREATE {0} INDEX if not EXISTS {1} ON {2}({3});";
+
+
 
         /// <summary>
         /// 同样,获取最后一条插入数据的id,在postgresql中也有点特殊.

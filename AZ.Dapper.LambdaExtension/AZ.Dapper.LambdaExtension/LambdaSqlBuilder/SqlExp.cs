@@ -345,20 +345,52 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
             return this;
         }
 
-        public SqlExp<T> Count<TSub>(SqlExpBase subExp,Expression<Func<T, object>> expression, Expression<Func<TSub, object>> aliasProp)
-        {
-            _resolver.SelectWithFunctionSubQuery<T, TSub>(expression, SelectFunction.COUNT, aliasProp,subExp.JoinSubAliasTableName);
-            return this;
-        }
         public SqlExp<T> Count(string aliasName = "count")
         {
             _resolver.SelectWithFunction<T>(null, SelectFunction.COUNT, aliasName);
             return this;
         }
-        public SqlExp<T> Count<TResult>(SqlExp<TResult> subExp,string aliasName = "count")
+
+        //public SqlExp<T> Count<TSub>(SqlExpBase subExp,Expression<Func<T, object>> expression, Expression<Func<TSub, object>> aliasProp)
+        //{
+        //    _resolver.SelectWithFunctionSubQuery<T, TSub>(expression, SelectFunction.COUNT, aliasProp,subExp.JoinSubAliasTableName);
+        //    return this;
+        //}
+        //public SqlExp<T> Count(string aliasName = "count")
+        //{
+        //    _resolver.SelectWithFunction<T>(null, SelectFunction.COUNT, aliasName);
+        //    return this;
+        //}
+        //public SqlExp<T> Count<TResult>(SqlExp<TResult> subExp,string aliasName = "count")
+        //{
+
+        //    _resolver.SelectWithFunction<T>(null, SelectFunction.COUNT, aliasName,subExp.JoinSubAliasTableName);
+        //    return this;
+        //}
+
+        public SqlExp<T> CountSubQuery<TResult>(SqlExp<T> subExp,Expression<Func<T, object>> expression, Expression<Func<TResult, object>> aliasProp)
+        {
+            _resolver.SelectWithFunctionSubQuery<T, TResult>(expression, SelectFunction.COUNT, aliasProp,subExp.JoinSubAliasTableName);
+            return this;
+        }
+
+        public SqlExp<T> CountSubQuery<TSub>(SqlExp<TSub> subExp,Expression<Func<T, object>> expression)
+        {
+            _resolver.SelectWithFunctionSubQuery<T,TSub>(expression, SelectFunction.COUNT,null,subExp.JoinSubAliasTableName);
+            return this;
+        }
+
+        public SqlExp<T> CountSubQuery<TSub>(SqlExp<TSub> subExp,string aliasName = "count")
         {
             
             _resolver.SelectWithFunction<T>(null, SelectFunction.COUNT, aliasName,subExp.JoinSubAliasTableName);
+            return this;
+        }
+
+        public SqlExp<T> CountSubQuery<TSub,TResult>(SqlExpBase subExp,Expression<Func<TSub, object>> expression, Expression<Func<TResult, object>> aliasExpression)
+        {
+   
+            _resolver.SelectWithFunctionSubQuery<TSub,TResult>(expression, SelectFunction.COUNT, aliasExpression, subExp.JoinSubAliasTableName);
             return this;
         }
 
@@ -381,6 +413,20 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
             return this;
         }
 
+        public SqlExp<T> SumSubQuery<TSub>(SqlExpBase subExp,Expression<Func<T, object>> expression)
+        {
+      
+            _resolver.SelectWithFunctionSubQuery(expression, SelectFunction.SUM, subExp.JoinSubAliasTableName);
+            return this;
+        }
+
+        public SqlExp<T> SumSubQuery<TSub,TResult>(SqlExpBase subExp,Expression<Func<TSub, object>> expression, Expression<Func<TResult, object>> aliasExpression)
+        {
+   
+            _resolver.SelectWithFunctionSubQuery<TSub,TResult>(expression, SelectFunction.SUM, aliasExpression, subExp.JoinSubAliasTableName);
+            return this;
+        }
+
         public SqlExp<T> Max(Expression<Func<T, object>> expression, string aliasName = "")
         {
             _resolver.SelectWithFunction(expression, SelectFunction.MAX, aliasName);
@@ -393,14 +439,26 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
             return this;
         }
 
- 
-
         public SqlExp<T> MaxSubQuery<TSub>(SqlExpBase subExp,Expression<Func<TSub, object>> expression, Expression<Func<T, object>> mainExpression)
         {
    
             _resolver.SelectWithFunctionSubQuery<TSub, T>(expression, SelectFunction.MAX, mainExpression, subExp.JoinSubAliasTableName);
             return this;
         }
+
+        public SqlExp<T> MaxSubQuery<TSub,TResult>(SqlExpBase subExp,Expression<Func<TSub, object>> expression, Expression<Func<TResult, object>> aliasExpression)
+        {
+   
+            _resolver.SelectWithFunctionSubQuery<TSub,TResult>(expression, SelectFunction.MAX, aliasExpression, subExp.JoinSubAliasTableName);
+            return this;
+        }
+        public SqlExp<T> MaxSubQuery<TSub>(SqlExpBase subExp,Expression<Func<TSub, object>> expression)
+        {
+   
+            _resolver.SelectWithFunctionSubQuery<TSub, T>(expression, SelectFunction.MAX, null, subExp.JoinSubAliasTableName);
+            return this;
+        }
+
 
         public SqlExp<T> Min(Expression<Func<T, object>> expression, string aliasName = "")
         {
@@ -420,6 +478,19 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
             return this;
         }
 
+        public SqlExp<T> MinSubQuery<TSub>(SqlExpBase subExp, Expression<Func<T, object>> expression)
+        {
+            _resolver.SelectWithFunctionSubQuery(expression, SelectFunction.MIN, subExp.JoinSubAliasTableName);
+            return this;
+        }
+
+        public SqlExp<T> MinSubQuery<TSub,TResult>(SqlExpBase subExp,Expression<Func<TSub, object>> expression, Expression<Func<TResult, object>> aliasExpression)
+        {
+   
+            _resolver.SelectWithFunctionSubQuery(expression, SelectFunction.MIN,aliasExpression, subExp.JoinSubAliasTableName);
+            return this;
+        }
+
         public SqlExp<T> Average(Expression<Func<T, object>> expression, string aliasName = "")
         {
             _resolver.SelectWithFunction(expression, SelectFunction.AVG, aliasName);
@@ -432,9 +503,22 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
             return this;
         }
 
+      
         public SqlExp<T> AverageSubQuery<TSub>(SqlExpBase subExp, Expression<Func<T, object>> expression, Expression<Func<TSub, object>> subExpression)
         {
             _resolver.SelectWithFunctionSubQuery(expression, SelectFunction.AVG, subExpression,subExp.JoinSubAliasTableName);
+            return this;
+        }
+
+        public SqlExp<T> AverageSubQuery<TSub>(SqlExpBase subExp, Expression<Func<T, object>> expression)
+        {
+            _resolver.SelectWithFunctionSubQuery(expression, SelectFunction.AVG, subExp.JoinSubAliasTableName);
+            return this;
+        }
+
+        public SqlExp<T> AverageSubQuery<TSub,TResult>(SqlExpBase subExp, Expression<Func<T, object>> expression ,Expression<Func<TResult, object>> aliasExpression)
+        {
+            _resolver.SelectWithFunctionSubQuery(expression, SelectFunction.AVG,aliasExpression,subExp.JoinSubAliasTableName);
             return this;
         }
 

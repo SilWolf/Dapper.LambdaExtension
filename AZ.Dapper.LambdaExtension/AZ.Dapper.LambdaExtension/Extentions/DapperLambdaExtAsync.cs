@@ -733,7 +733,7 @@ namespace Dapper.LambdaExtension.Extentions
 
             action?.Invoke(countSqlam);
 
-            countSqlam = countSqlam.Count<TResult>(sqlLamMain);
+            countSqlam = countSqlam.CountSubQuery<TResult>(sqlLamMain);
             int countRet = 0;
             var sqlString = countSqlam.SqlString;
             try

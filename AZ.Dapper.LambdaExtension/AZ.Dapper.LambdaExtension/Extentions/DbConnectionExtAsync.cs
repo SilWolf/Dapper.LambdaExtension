@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 using Dapper.LambdaExtension.Helpers;
@@ -164,6 +165,43 @@ namespace Dapper.LambdaExtension.Extentions
             var sql = dbAdapter.TruncateTableSql(tableName, tableSchema);
 
             return db.ExecuteAsync(sql, transaction: transaction);
+        }
+
+        private static async Task<int> ExecuteSqlAsync(this IDbConnection db, IDbTransaction transaction, string createTableSql)
+        {
+            DapperLambdaExt.DebuggingSqlString(createTableSql);
+
+            if (transaction == null)
+            {
+                var trans = db.BeginTransaction();
+                try
+                {
+                    var ret=  await db.ExecuteAsync(createTableSql, transaction: trans);
+
+                    trans.Commit();
+
+                    return ret;
+                }
+                catch (Exception ex)
+                {
+                    trans.Rollback();
+
+                    DapperLambdaExt.DebuggingException(ex, createTableSql);
+                    throw new DapperLamException(ex.Message, ex, createTableSql);
+                }
+            }
+            else
+            {
+                try
+                {
+                    return  await db.ExecuteAsync(createTableSql, transaction: transaction);
+                }
+                catch (Exception ex)
+                {
+                    DapperLambdaExt.DebuggingException(ex, createTableSql);
+                    throw new DapperLamException(ex.Message, ex, createTableSql);
+                }
+            }
         }
     }
 }
