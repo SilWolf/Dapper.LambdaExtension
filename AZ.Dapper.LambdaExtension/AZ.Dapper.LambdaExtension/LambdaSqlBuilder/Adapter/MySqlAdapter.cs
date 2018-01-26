@@ -6,7 +6,7 @@ using Dapper.LambdaExtension.LambdaSqlBuilder.Entity;
 
 namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
 {
-    
+
     class MySqlAdapter : AdapterBase
     {
         public override string AutoIncrementDefinition { get; } = "AUTO_INCREMENT";
@@ -35,7 +35,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
         {
 
         }
-        
+
         public override string QueryPage(SqlEntity entity)
         {
             int pageSize = entity.PageSize;
@@ -69,10 +69,21 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
             {
                 tmpTablename = string.Format("{0}{1}{2}", _leftToken, tableName, _rightToken);
             }
-
             if (!string.IsNullOrEmpty(schema))
             {
-                return _leftToken + schema + _rightToken + "." + tmpTablename;
+                var tempScheme = schema;
+
+                if (schema.StartsWith(_leftToken) && schema.EndsWith(_rightToken))
+                {
+                    tempScheme = schema;
+                }
+                else
+                {
+                    tempScheme = string.Format("{0}{1}{2}", _leftToken, schema, _rightToken);
+                }
+
+
+                tmpTablename = tempScheme + "." + tmpTablename;
             }
             return tmpTablename;
         }

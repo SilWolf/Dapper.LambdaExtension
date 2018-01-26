@@ -63,7 +63,19 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
  
             if (!string.IsNullOrEmpty(schema))
             {
-                return _leftToken + schema + _rightToken + "." + tmpTablename;
+                var tempScheme = schema;
+
+                if (schema.StartsWith(_leftToken) && schema.EndsWith(_rightToken))
+                {
+                    tempScheme = schema;
+                }
+                else
+                {
+                    tempScheme = string.Format("{0}{1}{2}", _leftToken, schema, _rightToken);
+                }
+
+
+                tmpTablename = tempScheme + "." + tmpTablename;
             }
             return tmpTablename;
         }

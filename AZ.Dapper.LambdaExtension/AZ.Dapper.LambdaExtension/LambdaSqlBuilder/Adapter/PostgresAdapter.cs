@@ -55,10 +55,31 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
 
         public override string Table(string tableName,string schema)
         {
-            var tbname = string.Format("{0}{1}{2}", _leftToken, tableName, _rightToken);
+            var tbname = tableName;
+            if (tableName.StartsWith(_leftToken) && tableName.EndsWith(_rightToken))
+            {
+                tbname= tableName;
+            }
+            else
+            {
+                tbname = string.Format("{0}{1}{2}", _leftToken, tableName, _rightToken);
+            }
+              
             if (!string.IsNullOrEmpty(schema))
             {
-                return _leftToken + schema + _rightToken + "."+tbname;
+                var tempScheme = schema;
+
+                if (schema.StartsWith(_leftToken) && schema.EndsWith(_rightToken))
+                {
+                    tempScheme = schema;
+                }
+                else
+                {
+                    tempScheme = string.Format("{0}{1}{2}", _leftToken, schema, _rightToken);
+                }
+
+
+                tbname = tempScheme + "." + tbname;
             }
             return tbname;
         }
