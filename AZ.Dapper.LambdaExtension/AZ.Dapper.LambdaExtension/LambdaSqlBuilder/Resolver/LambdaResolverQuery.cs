@@ -21,11 +21,34 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
 
         private Node ResolveQuery<T>(UnaryExpression unaryExpression)
         {
-            return new SingleOperationNode()
+            var exptype = unaryExpression.NodeType;
+
+            switch (exptype)
             {
-                Operator = unaryExpression.NodeType,
-                Child = ResolveQuery((dynamic)unaryExpression.Operand)
-            };
+                case ExpressionType.Convert:
+
+                    if (unaryExpression.Method != null)
+                    {
+                        return ResolveQuery<T>(unaryExpression.Reduce() as MethodCallExpression);
+                    }
+
+                    return ResolveQuery<T>((dynamic) unaryExpression.Operand);
+                    break;
+                default:
+                    return new SingleOperationNode()
+                    {
+                        Operator = unaryExpression.NodeType,
+                        Child = ResolveQuery((dynamic)unaryExpression.Operand)
+                    };
+                    break;
+
+            }
+
+            //return new SingleOperationNode()
+            //{
+            //    Operator = unaryExpression.NodeType,
+            //    Child = ResolveQuery((dynamic)unaryExpression.Operand)
+            //};
         }
 
         //private Node ResolveQuery(BinaryExpression binaryExpression)
