@@ -140,6 +140,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
         {
             return SelectIdentitySql;
         }
+ 
 
         #region create table or schema
 
@@ -529,7 +530,15 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
                     fieldLength = string.IsNullOrEmpty(fieldLength) ? "255" : fieldLength;
                     columnTypeString = DbTypeAnsiStringFixedLength(fieldLength);
                     break;
-                    case DbType.Binary:
+                case DbType.String:
+                    fieldLength = string.IsNullOrEmpty(fieldLength) ? "255" : fieldLength;
+                    columnTypeString = DbTypeString(fieldLength);
+                    break;
+                case DbType.StringFixedLength:
+                    fieldLength = string.IsNullOrEmpty(fieldLength) ? "255" : fieldLength;
+                    columnTypeString = DbTypeStringFixedLength(fieldLength);
+                    break;
+                case DbType.Binary:
                     columnTypeString = DbTypeBinary(fieldLength);
                     break;
                 case DbType.Boolean:
@@ -584,14 +593,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
                 case DbType.Single:
                     columnTypeString = DbTypeSingle(fieldLength);
                     break;
-                case DbType.String:
-                    fieldLength = string.IsNullOrEmpty(fieldLength) ? "255" : fieldLength;
-                    columnTypeString = DbTypeString(fieldLength);
-                    break;
-                case DbType.StringFixedLength:
-                    fieldLength = string.IsNullOrEmpty(fieldLength) ? "255" : fieldLength;
-                    columnTypeString = DbTypeStringFixedLength(fieldLength);
-                    break;
+               
                 case DbType.Time:
                     columnTypeString = DbTypeTime(fieldLength);
                     break;
@@ -640,13 +642,38 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
         }
 
         /// <summary>
+        /// DbType.String
+        /// A type representing Unicode character strings.
+        /// </summary>
+        /// <returns></returns>
+        protected virtual string DbTypeString(string fieldLength)
+        {
+            if (int.Parse(fieldLength) > 8000)
+            {
+                return $"TEXT";
+            }
+            return $"CHARACTER VARYING({fieldLength})";
+        }
+
+        /// <summary>
+        /// DbType.StringFixedLength
+        /// A fixed-length string of Unicode characters.
+        /// </summary>
+        /// <returns></returns>
+        protected virtual string DbTypeStringFixedLength(string fieldLength)
+        {
+            return $"CHARACTER({fieldLength})";
+        }
+
+
+        /// <summary>
         /// DbType.Binary
         /// A variable-length stream of binary data ranging between 1 and 8,000 bytes.
         /// </summary>
         /// <returns></returns>
         protected virtual string DbTypeBinary(string fieldLength)
         {
-            return $"CHARACTER VARYING(8000)";
+            return $"VARBINARY({fieldLength})";
         }
 
         /// <summary>
@@ -807,30 +834,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
             return $"FLOAT";
         }
 
-        /// <summary>
-        /// DbType.String
-        /// A type representing Unicode character strings.
-        /// </summary>
-        /// <returns></returns>
-        protected virtual string DbTypeString(string fieldLength)
-        {
-            if (int.Parse(fieldLength) > 8000)
-            {
-                return $"TEXT";
-            }
-            return $"CHARACTER VARYING({fieldLength})";
-        }
-
-        /// <summary>
-        /// DbType.StringFixedLength
-        /// A fixed-length string of Unicode characters.
-        /// </summary>
-        /// <returns></returns>
-        protected virtual string DbTypeStringFixedLength(string fieldLength)
-        {
-            return $"CHARACTER({fieldLength})";
-        }
-
+      
         /// <summary>
         /// DbType.Time
         /// A fixed-length string of Unicode characters.
@@ -889,10 +893,17 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
         {
             return $"XML";
         }
-#endregion
+
+        public virtual string InsertValues(SqlEntity entity)
+        {
+            string sql = string.Format(SqlConst.InsertValuesSQLFormatString, entity.TableName, entity.Selection);
+           
+            return sql;
+        }
+        #endregion
 
 
-       
+
     }
 
     internal class IndexStructure

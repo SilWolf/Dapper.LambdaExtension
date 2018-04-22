@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
 using Dapper.LambdaExtension.LambdaSqlBuilder.Entity;
 
 namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
@@ -44,5 +46,9 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
         string SchemaExistsSql(string schemaName);
 
         string CreateSchemaIfNotExistsSql(string schemaName);
+        string InsertValues(SqlEntity entity);
+
+
+        DbType GetDbType(Type valueType);
     }
 }

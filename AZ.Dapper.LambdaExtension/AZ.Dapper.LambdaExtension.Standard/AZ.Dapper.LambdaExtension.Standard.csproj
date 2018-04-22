@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="..\AZ.Dapper.LambdaExtension\Bulk\DbConnectionBulkExt.cs" Link="Bulk\DbConnectionBulkExt.cs" />
     <Compile Include="..\AZ.Dapper.LambdaExtension\Extentions\DapperLambdaExt.cs" Link="Extensions\DapperLambdaExt.cs" />
     <Compile Include="..\AZ.Dapper.LambdaExtension\Extentions\DapperLambdaExtAsync.cs" Link="Extensions\DapperLambdaExtAsync.cs" />
     <Compile Include="..\AZ.Dapper.LambdaExtension\Extentions\DapperLamException.cs" Link="Extensions\DapperLamException.cs" />
@@ -86,9 +87,9 @@
   <ItemGroup>
     <Folder Include="Extensions\" />
     <Folder Include="Helpers\" />
-    <Folder Include="LambdaSqlBuilder\Adapter\" />
     <Folder Include="LambdaSqlBuilder\Builder\" />
     <Folder Include="LambdaSqlBuilder\Resolver\ExpressionTree\" />
+    <Folder Include="Bulk\" />
   </ItemGroup>
 
   <ItemGroup>

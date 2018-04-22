@@ -46,6 +46,7 @@
     <Compile Include="DbFactoryBase.cs" />
     <Compile Include="Extentions\DapperLambdaExtAsync.cs" />
     <Compile Include="Extentions\DapperLamException.cs" />
+    <Compile Include="Bulk\DbConnectionBulkExt.cs" />
     <Compile Include="Extentions\DbConnectionExtAsync.cs" />
     <Compile Include="Extentions\IDbFactory.cs" />
     <Compile Include="Extentions\TableBaseAsync.cs" />

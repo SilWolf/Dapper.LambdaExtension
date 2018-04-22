@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
+using System.Text;
 using Dapper.LambdaExtension.Helpers;
 using Dapper.LambdaExtension.LambdaSqlBuilder.Adapter;
+using Dapper.LambdaExtension.LambdaSqlBuilder.Attributes;
 using Dapper.LambdaExtension.LambdaSqlBuilder.Entity;
 
 namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
@@ -65,10 +69,10 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
 
         internal bool _isSubQuery;
 
-        private Type _entityType;
+        internal Type _entityType;
 
-        private SqlTableDefine _tableDefine;
-        private List<SqlColumnDefine> _columnDefines;
+        internal SqlTableDefine _tableDefine;
+        internal List<SqlColumnDefine> _columnDefines;
 
         internal ISqlAdapter Adapter { get { return _adapter; } set { _adapter = value; } }
 
@@ -108,6 +112,9 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
                     break;
                 case SqlType.Delete:
                     sql = _adapter.Delete(entity);
+                    break;
+                case SqlType.InsertValues :
+                    sql = _adapter.InsertValues(entity);
                     break;
                 default:
                     break;
@@ -421,6 +428,52 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
             if (!_parameterDic.ContainsKey(key))
                 _parameterDic.Add(key, value);
         }
+        #endregion
+
+        #region only for insert values building 
+
+        public Tuple<string,ExpandoObject> GetInsertValuesParameters<T>(IEnumerable<PropertyInfo> pi,List<T> items)
+        {
+             
+            var valuesStrList = new List<string>();
+            var tmpDict =new  ExpandoObject() as IDictionary<string,object>;
+
+            var ps = pi;
+            for (var i = 0; i < items.Count; i++)
+            {
+                var paramlist=new List<string>();
+                var objs = items[i];
+                foreach (PropertyInfo item in ps)
+                {
+                    object obj = item.GetValue(objs, null);
+
+                    var propname = item.Name+"_"+i.ToString();
+
+                    //var fieldAlias = propname;
+
+                    //resolve custome column name
+                    //var colAttr = item.GetCustomAttribute<DBColumnAttribute>();
+                    var colIgnore = item.GetCustomAttribute<DBIgnoreAttribute>();
+                    if (colIgnore != null)
+                    {
+                        continue;
+                    }
+                 
+                    var paramId = _adapter.Parameter(propname);
+                    paramlist.Add(paramId);
+
+                    tmpDict.Add(paramId,obj);
+                    
+
+                }
+                valuesStrList.Add($"({string.Join(",",paramlist)})");
+            }
+
+            var valuesStr = string.Join(",", valuesStrList);
+
+            return new Tuple<string, ExpandoObject>(valuesStr,tmpDict as ExpandoObject);
+        }
+
         #endregion
     }
 }

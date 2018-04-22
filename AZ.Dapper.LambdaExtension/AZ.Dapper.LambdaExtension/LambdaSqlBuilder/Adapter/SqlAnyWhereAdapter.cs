@@ -26,6 +26,46 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
            // select top 30 start at (N - 1) * 30 + 1 * from customer
             return string.Format("SELECT TOP {4} start at {5} {0} FROM {1} {2} {3} ", entity.Selection, entity.TableName, entity.Conditions, entity.OrderBy, pageSize,limit+1 );
         }
+        public override string Field(string filedName)
+        {
+            return string.Format("{0}{1}{2}", _leftToken, filedName, _rightToken);
+        }
+
+        public override string Field(string tableName, string fieldName)
+        {
+            return string.Format("{0}.{1}", Table(tableName,""), this.Field(fieldName)); //fieldName;
+        }
+
+        public override string Table(string tableName,string schema)
+        {
+            var tbname = tableName;
+            if (tableName.StartsWith(_leftToken) && tableName.EndsWith(_rightToken))
+            {
+                tbname= tableName;
+            }
+            else
+            {
+                tbname = string.Format("{0}{1}{2}", _leftToken, tableName, _rightToken);
+            }
+              
+            if (!string.IsNullOrEmpty(schema))
+            {
+                var tempScheme = schema;
+
+                if (schema.StartsWith(_leftToken) && schema.EndsWith(_rightToken))
+                {
+                    tempScheme = schema;
+                }
+                else
+                {
+                    tempScheme = string.Format("{0}{1}{2}", _leftToken, schema, _rightToken);
+                }
+
+
+                tbname = tempScheme + "." + tbname;
+            }
+            return tbname;
+        }
 
         public override string TableExistSql(string tableName, string tableSchema)
         {

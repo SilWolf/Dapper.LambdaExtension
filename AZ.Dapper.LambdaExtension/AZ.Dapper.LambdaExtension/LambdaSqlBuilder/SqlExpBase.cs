@@ -17,7 +17,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
 
         internal List<SqlExpBase> _childSqlExps = new List<SqlExpBase>();
 
-     
+        public ISqlAdapter SqlAdapter { get; }
 
         public string JoinSubAliasTableName { get; internal set; }
 
@@ -37,7 +37,9 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
             _type = SqlType.Query;
             _adapter = adater;
             _entityType = entityType;
-            _builder = new Builder.Builder(_type, entityType, AdapterFactory.GetAdapterInstance(_adapter));
+            SqlAdapter = AdapterFactory.GetAdapterInstance(_adapter);
+            _builder = new Builder.Builder(_type, entityType, SqlAdapter);
+            //_builder = new Builder.Builder(_type, entityType, AdapterFactory.GetAdapterInstance(_adapter));
             _resolver = new LambdaResolver(_builder);
         }
 
@@ -45,8 +47,8 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
         {
             _type = SqlType.Query;
             _adapter = adater;
-
-            _builder = new Builder.Builder(_type, tableDefine, columnDefines, AdapterFactory.GetAdapterInstance(_adapter));
+            SqlAdapter = AdapterFactory.GetAdapterInstance(_adapter);
+            _builder = new Builder.Builder(_type, tableDefine, columnDefines, SqlAdapter);
             _resolver = new LambdaResolver(_builder);
         }
 

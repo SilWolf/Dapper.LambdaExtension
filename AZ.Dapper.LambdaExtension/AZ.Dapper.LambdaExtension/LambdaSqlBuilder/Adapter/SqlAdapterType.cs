@@ -13,8 +13,10 @@
         Oracle = 3,
         MySql = 4,
         Postgres = 5,
-        SqlAnyWhere=6,
+        SqlAnyWhere = 6,
 
-        SqlServerCE=7
+        SqlServerCE = 7
+
+        //Default = 99
     }
 }

@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using Dapper.LambdaExtension.Bulk;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Dapper.LambdaExtension.LambdaSqlBuilder.Adapter;
 
-namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
+namespace Dapper.LambdaExtension.Bulk
 {
-    public static class AdapterFactory
+    public static class SqlBulkFactory
     {
-        //private static readonly Dictionary<SqlAdapterType, ISqlBulk> BulkPluginDict=new Dictionary<SqlAdapterType, ISqlBulk>();
+ 
 
-        public static ISqlAdapter GetAdapterInstance(SqlAdapterType adapter)
+        public static ISqlBulk GetAdapterInstance(SqlAdapterType adapter)
         {
             switch (adapter)
             {
@@ -24,16 +27,11 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
                     return new PostgresAdapter();
                 case SqlAdapterType.SqlAnyWhere:
                     return new SqlAnyWhereAdapter();
-                    case SqlAdapterType.SqlServerCE:
-                        return new SqlserverCEAdapter();
+                case SqlAdapterType.SqlServerCE:
+                    return new SqlserverCEAdapter();
                 default:
                     throw new ArgumentException("The specified Sql Adapter was not recognized");
             }
         }
-
-        //public static void RegisterBulkInstance(SqlAdapterType adapterType, ISqlBulk bulkInstance)
-        //{
-        //    BulkPluginDict.Add(adapterType,bulkInstance);
-        //}
     }
 }

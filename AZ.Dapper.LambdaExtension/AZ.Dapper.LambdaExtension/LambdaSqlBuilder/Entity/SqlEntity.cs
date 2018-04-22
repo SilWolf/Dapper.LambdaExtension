@@ -54,6 +54,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Entity
         Query = 1,
         Insert = 2,
         Update = 3,
-        Delete = 4
+        Delete = 4,
+        InsertValues=5
     }
 }

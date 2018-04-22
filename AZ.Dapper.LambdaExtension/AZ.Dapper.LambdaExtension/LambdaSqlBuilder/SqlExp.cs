@@ -101,6 +101,28 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
             return this;
         }
 
+        public SqlExp<T> InsertValues( bool key = false)
+        {
+            _builder.UpdateSqlType(SqlType.InsertValues);
+            _resolver.ResolveInsertValues<T>(key);
+            return this;
+        }
+
+        public SqlExp<T> InsertValues(object obj, bool key = false)
+        {
+            _builder.UpdateSqlType(SqlType.InsertValues);
+            _resolver.ResolveInsertValues(key, typeof(T), obj);
+            return this;
+        }
+
+        public SqlExp<T> InsertValues(SqlTableDefine tableDefine, List<SqlColumnDefine> columnDefines, bool key = false)
+        {
+            _builder.UpdateSqlType(SqlType.InsertValues);
+
+            _resolver.ResolveInsertValues(key, tableDefine, columnDefines);
+            return this;
+        }
+
         public SqlExp<T> Update()
         {
             _builder.UpdateSqlType(SqlType.Update);

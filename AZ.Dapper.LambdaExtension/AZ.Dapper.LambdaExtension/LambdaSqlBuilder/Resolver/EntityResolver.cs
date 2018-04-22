@@ -48,6 +48,25 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
             ResolveParameter(key, tableName, columnDefines);
         }
 
+        public void ResolveInsertValues<T>(bool key)
+        {
+            string tableName = GetTableName<T>();
+            ResolveParameter<T>(key, tableName);
+        }
+
+        public void ResolveInsertValues(bool key, Type type, object obj)
+        {
+            string tableName = GetTableName(type);
+            ResolveParameter<object>(key, tableName);
+        }
+
+        public void ResolveInsertValues(bool key, SqlTableDefine tableDefine, List<SqlColumnDefine> columnDefines)
+        {
+            string tableName = GetTableName(tableDefine);
+            ResolveParameter(key, tableName, columnDefines);
+        }
+
+
         private void ResolveParameter<T>(string tableName)
         {
             var ps = GetPropertyInfos<T>();
@@ -163,6 +182,8 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
             }
         }
 
+      
+
         private void ResolveParameter(bool key, string tableName, List<SqlColumnDefine> columnsDefines)
         {
             _builder.UpdateInsertKey(key);
@@ -212,7 +233,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Resolver
         //    return ps;
         //}
 
-        private IEnumerable<PropertyInfo> GetPropertyInfos<T>()
+        internal IEnumerable<PropertyInfo> GetPropertyInfos<T>()
         {
             Type type = typeof(T);// entity.GetType();
             var ps = type.GetProperties().Where(m =>
