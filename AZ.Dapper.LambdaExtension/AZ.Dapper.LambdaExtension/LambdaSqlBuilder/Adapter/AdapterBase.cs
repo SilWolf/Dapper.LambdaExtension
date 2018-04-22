@@ -627,7 +627,10 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
         /// <param name="length"></param>
         /// <returns></returns>
         protected virtual string DbTypeAnsiString(string length)
-        {
+        { if (int.Parse(length) > 8000)
+            {
+                return $"TEXT";
+            }
             return $"CHARACTER VARYING({length})";
         }
         /// <summary>
