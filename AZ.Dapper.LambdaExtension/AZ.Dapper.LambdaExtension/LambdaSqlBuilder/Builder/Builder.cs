@@ -16,7 +16,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
     
     public partial class Builder
     {
-        internal Builder(SqlType type, Type entityType, ISqlAdapter adapter)
+        internal Builder(SqlType type, Type entityType, ISqlAdapter adapter,string specialSchema)
         {
             _paramIndex = 0;
            
@@ -34,12 +34,18 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
 
             _tableNames.Add(tname);
             _schema = tabDef.Item1.TableAttribute?.Schema;
+            if (!string.IsNullOrEmpty(specialSchema))
+            {
+
+                _schema = specialSchema;
+            }
+
             _tableDefine = tabDef.Item1;
             _columnDefines = tabDef.Item2;
             this._parameterDic = new Dictionary<string, object>(); //new ExpandoObject();
         }
 
-        internal Builder(SqlType type, SqlTableDefine tableDefine ,List<SqlColumnDefine> columnDefines,ISqlAdapter adapter)
+        internal Builder(SqlType type, SqlTableDefine tableDefine ,List<SqlColumnDefine> columnDefines,ISqlAdapter adapter,string specialSchema)
         {
             _paramIndex = 0;
 
@@ -57,6 +63,12 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
 
             _tableNames.Add(tname);
             _schema = tabDef.TableAttribute?.Schema;
+            if (!string.IsNullOrEmpty(specialSchema))
+            {
+
+                _schema = specialSchema;
+            }
+
             _tableDefine = tableDefine;
             _columnDefines = columnDefines;
             this._parameterDic = new Dictionary<string, object>(); //new ExpandoObject();
@@ -266,9 +278,9 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
                 tablename = entityDef.Item1.TableAttribute.Name;
             }
 
-            var schema = entityDef.Item1.TableAttribute?.Schema;
+            //var schema = entityDef.Item1.TableAttribute?.Schema;
 
-            var tbname = _adapter.Table(tablename, schema);
+            var tbname = _adapter.Table(tablename, _schema);
 
             if (_isSubQuery && !string.IsNullOrEmpty(JoinSubAliasTableName))
             {

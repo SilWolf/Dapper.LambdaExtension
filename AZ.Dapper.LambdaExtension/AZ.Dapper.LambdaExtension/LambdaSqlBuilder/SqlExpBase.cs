@@ -32,23 +32,23 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
 
         }
 
-        public SqlExpBase(SqlAdapterType adater, Type entityType)
+        public SqlExpBase(SqlAdapterType adater, Type entityType,string specialSchema)
         {
             _type = SqlType.Query;
             _adapter = adater;
             _entityType = entityType;
             SqlAdapter = AdapterFactory.GetAdapterInstance(_adapter);
-            _builder = new Builder.Builder(_type, entityType, SqlAdapter);
+            _builder = new Builder.Builder(_type, entityType, SqlAdapter,specialSchema);
             //_builder = new Builder.Builder(_type, entityType, AdapterFactory.GetAdapterInstance(_adapter));
             _resolver = new LambdaResolver(_builder);
         }
 
-        public SqlExpBase(SqlAdapterType adater, SqlTableDefine tableDefine, List<SqlColumnDefine> columnDefines)
+        public SqlExpBase(SqlAdapterType adater, SqlTableDefine tableDefine, List<SqlColumnDefine> columnDefines,string specialSchema)
         {
             _type = SqlType.Query;
             _adapter = adater;
             SqlAdapter = AdapterFactory.GetAdapterInstance(_adapter);
-            _builder = new Builder.Builder(_type, tableDefine, columnDefines, SqlAdapter);
+            _builder = new Builder.Builder(_type, tableDefine, columnDefines, SqlAdapter,specialSchema);
             _resolver = new LambdaResolver(_builder);
         }
 

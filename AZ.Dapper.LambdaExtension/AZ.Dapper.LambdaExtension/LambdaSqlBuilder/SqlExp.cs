@@ -19,8 +19,8 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
 
 
 
-        public SqlExp(SqlAdapterType type = SqlAdapterType.SqlServer , bool forCount = false)
-            : base(type, typeof(T))
+        public SqlExp(SqlAdapterType type = SqlAdapterType.SqlServer , bool forCount = false,string specialSchema=null)
+            : base(type, typeof(T),specialSchema)
         {
             useForCount = forCount;
             _type = SqlType.Query;
@@ -29,8 +29,8 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder
             //_resolver = new LambdaResolver(_builder);
         }
 
-        public SqlExp(SqlTableDefine tableDefine, List<SqlColumnDefine> columnDefines, SqlAdapterType type = SqlAdapterType.SqlServer, bool forCount = false)
-            : base(type,tableDefine, columnDefines)
+        public SqlExp(SqlTableDefine tableDefine, List<SqlColumnDefine> columnDefines, SqlAdapterType type = SqlAdapterType.SqlServer, bool forCount = false,string specialSchema=null)
+            : base(type,tableDefine, columnDefines,specialSchema)
         {
             useForCount = forCount;
             _type = SqlType.Query;
