@@ -80,7 +80,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
 
             var subQueryStr = sqlExp.SqlString;
 
-            var subTableString = string.Format("({0}) AS {1}", subQueryStr,sqlExp.JoinSubAliasTableName);
+            var subTableString = string.Format("({0}) AS {1}", subQueryStr,Adapter.Table(sqlExp.JoinSubAliasTableName,string.Empty));
            
             _tableNames.Clear();
             _tableNames.Add(subTableString);
@@ -110,7 +110,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Builder
 
         public void Select(string tableName, string fieldName,string aliasName)
         {
-            _selectionList.Add(_adapter.Field(tableName, fieldName)+" AS "+aliasName);
+            _selectionList.Add(_adapter.Field(tableName, fieldName)+" AS "+_adapter.Field(aliasName));
         }
 
         public void Select(string tableName, string fieldName, SelectFunction selectFunction, string aliasName)
