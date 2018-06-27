@@ -170,7 +170,7 @@ namespace Dapper.LambdaExtension.Extentions
         {
             using (var db = DbFactory.OpenDbConnection())
             {
-                return db.Query<T>(expression, trans).ToList();
+                return db.Query<T>(wherExpression:expression, trans:trans).ToList();
             }
         }
 
@@ -178,7 +178,23 @@ namespace Dapper.LambdaExtension.Extentions
         {
             using (var db = DbFactory.OpenDbConnection())
             {
-                return db.Query<T>(action, trans).ToList();
+                return db.Query<T>(action:action, trans:trans).ToList();
+            }
+        }
+
+        public static List<TResult> Query< TResult>(Action<SqlExp<T>> action, IDbTransaction trans = null)  
+        {
+            using (var db = DbFactory.OpenDbConnection())
+            {
+                return db.Query<T, TResult>(action, trans).ToList();
+            }
+        }
+
+        public static List<TResult> Query<TResult>(Action<SqlExp<TResult>> action,Action<SqlExp<T>> subAction, IDbTransaction trans = null)  
+        {
+            using (var db = DbFactory.OpenDbConnection())
+            {
+                return db.Query<T, TResult>(action,subAction ,trans).ToList();
             }
         }
 
@@ -186,7 +202,7 @@ namespace Dapper.LambdaExtension.Extentions
         {
             using (var db = DbFactory.OpenDbConnection())
             {
-                return db.PagedQuery<T>(pageSize, pageNumber, expression, orderbyExpression: orderby, trans: trans);
+                return db.PagedQuery<T>(pageSize, pageNumber,whereExpression: expression, orderbyExpression: orderby, trans: trans);
             }
         }
 
@@ -194,16 +210,24 @@ namespace Dapper.LambdaExtension.Extentions
         {
             using (var db = DbFactory.OpenDbConnection())
             {
-                return db.PagedQuery<T>(pageSize, pageNumber, action, trans);
+                return db.PagedQuery<T>(pageSize, pageNumber,action: action, trans:trans);
             }
         }
+ 
 
+        public static PagedResult<TResult> PagedQuery<TResult>(int pageSize, int pageNumber,Action<SqlExp<TResult>> action,Action<SqlExp<T>> subAction, IDbTransaction trans = null) where TResult : class
+        {
+            using (var db = DbFactory.OpenDbConnection())
+            {
+                return db.PagedQuery<T, TResult>(pageSize, pageNumber,action,subAction ,trans);
+            }
+        }
 
         public static T QueryFirstOrDefault(Expression<Func<T, bool>> expression, IDbTransaction trans = null)
         {
             using (var db = DbFactory.OpenDbConnection())
             {
-                return db.QueryFirstOrDefault<T>(expression, trans);
+                return db.QueryFirstOrDefault<T>(wherExpression:expression,trans: trans);
             }
         }
 
@@ -211,7 +235,7 @@ namespace Dapper.LambdaExtension.Extentions
         {
             using (var db = DbFactory.OpenDbConnection())
             {
-                return db.QueryFirstOrDefault<T>(action, trans);
+                return db.QueryFirstOrDefault<T>(action:action, trans:trans);
             }
         }
 

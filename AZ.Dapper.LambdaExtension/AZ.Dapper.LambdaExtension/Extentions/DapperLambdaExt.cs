@@ -418,11 +418,12 @@ namespace Dapper.LambdaExtension.Extentions
             var db = trans == null ? con : trans.Connection;
             var sqllam = new SqlExp<TEntity>(db.GetAdapter(),specialSchema:specialSchema);
 
-            action?.Invoke(sqllam);
-            var sqlString = sqllam.SqlString;
+            var sqlString = string.Empty;
+           
             try
             {
-
+                action?.Invoke(sqllam);
+                sqlString = sqllam.SqlString;
                 DebuggingSqlString(sqlString);
                 return db.QueryFirstOrDefault<TResult>(sqlString, sqllam.Parameters, trans, commandTimeout: commandTimeout);
             }
@@ -439,12 +440,13 @@ namespace Dapper.LambdaExtension.Extentions
             var db = trans == null ? con : trans.Connection;
             var sqllam = new SqlExp<T>(db.GetAdapter(),specialSchema:specialSchema);
 
-            action?.Invoke(sqllam);
-
-            var sqlString = sqllam.SqlString;
+            var sqlString = string.Empty;
+           
             try
             {
+                action?.Invoke(sqllam);
 
+                sqlString = sqllam.SqlString;
                 DebuggingSqlString(sqlString);
                 return db.Query<T>(sqlString, sqllam.Parameters, trans, commandTimeout: commandTimeout);
             }
@@ -460,14 +462,16 @@ namespace Dapper.LambdaExtension.Extentions
             var db = trans == null ? con : trans.Connection;
             var sqllam = new SqlExp<T>(db.GetAdapter(),specialSchema:specialSchema);
 
-            if (wherExpression != null)
-            {
-                sqllam = sqllam.Where(wherExpression);
-            }
+            var sqlString = string.Empty;
 
-            var sqlString = sqllam.SqlString;
+            
             try
-            {
+            {if (wherExpression != null)
+                {
+                    sqllam = sqllam.Where(wherExpression);
+                }
+
+                  sqlString = sqllam.SqlString;
                 DebuggingSqlString(sqlString);
 
                 return db.Query<T>(sqlString, sqllam.Parameters, trans, commandTimeout: commandTimeout);
@@ -483,11 +487,11 @@ namespace Dapper.LambdaExtension.Extentions
         {
             var db = trans == null ? con : trans.Connection;
             var sqllam = new SqlExp<TEntity>(db.GetAdapter(),specialSchema:specialSchema);
-
-            action?.Invoke(sqllam);
-            var sqlString = sqllam.SqlString;
+            var sqlString = string.Empty;
+          
             try
-            {
+            {  action?.Invoke(sqllam);
+                  sqlString = sqllam.SqlString;
 
                 DebuggingSqlString(sqlString);
                 return db.Query<TResult>(sqlString, sqllam.Parameters, trans, commandTimeout: commandTimeout);
@@ -505,19 +509,20 @@ namespace Dapper.LambdaExtension.Extentions
             var sqllamSub = new SqlExp<TEntity>(db.GetAdapter(),specialSchema:specialSchema);
 
             //action?.Invoke(sqllam);
-
-            subAction?.Invoke(sqllamSub);
-
-            //sqllam.SubQuery(action);
-
+            var sqlString = string.Empty;
             var sqlLamMain = new SqlExp<TResult>(db.GetAdapter(),specialSchema:specialSchema);
-
-            sqlLamMain.SubQuery(sqllamSub);
-
-            action?.Invoke(sqlLamMain);
-            var sqlString = sqlLamMain.SqlString;
             try
             {
+                subAction?.Invoke(sqllamSub);
+
+                //sqllam.SubQuery(action);
+
+            
+
+                sqlLamMain.SubQuery(sqllamSub);
+
+                action?.Invoke(sqlLamMain);
+                  sqlString = sqlLamMain.SqlString;
 
                 DebuggingSqlString(sqlString);
                 return db.Query<TResult>(sqlString, sqlLamMain.Parameters, trans, commandTimeout: commandTimeout);

@@ -184,9 +184,9 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
                 //{
                 //    tableName = (_leftToken + tableDefine.TableAttribute.Schema + _rightToken + ".") + tableName;
                 //}
-                tableName = Table(tempTableName, tableDefine.TableAttribute.Schema);
+               
             }
-
+            tableName = Table(tempTableName, tempSchemaName);
            
 
             sql += tableName;
@@ -538,7 +538,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
                     fieldLength = string.IsNullOrEmpty(fieldLength) ? "255" : fieldLength;
                     columnTypeString = DbTypeStringFixedLength(fieldLength);
                     break;
-                case DbType.Binary:
+               case DbType.Binary:
                     columnTypeString = DbTypeBinary(fieldLength);
                     break;
                 case DbType.Boolean:
@@ -593,7 +593,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
                 case DbType.Single:
                     columnTypeString = DbTypeSingle(fieldLength);
                     break;
-               
+           
                 case DbType.Time:
                     columnTypeString = DbTypeTime(fieldLength);
                     break;
@@ -627,7 +627,8 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
         /// <param name="length"></param>
         /// <returns></returns>
         protected virtual string DbTypeAnsiString(string length)
-        { if (int.Parse(length) > 8000)
+        {
+            if (int.Parse(length) > 8000)
             {
                 return $"TEXT";
             }
@@ -643,6 +644,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
         {
             return $"CHARACTER({length})";
         }
+
 
         /// <summary>
         /// DbType.String
@@ -676,7 +678,7 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
         /// <returns></returns>
         protected virtual string DbTypeBinary(string fieldLength)
         {
-            return $"VARBINARY({fieldLength})";
+            return $"VARBINARY (8000)";
         }
 
         /// <summary>
@@ -837,7 +839,8 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
             return $"FLOAT";
         }
 
-      
+       
+
         /// <summary>
         /// DbType.Time
         /// A fixed-length string of Unicode characters.

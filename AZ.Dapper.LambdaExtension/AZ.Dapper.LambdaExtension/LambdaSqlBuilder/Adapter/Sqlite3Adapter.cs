@@ -115,9 +115,9 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
                 //{
                 //    tableName = (_leftToken + tableDefine.TableAttribute.Schema + _rightToken + ".") + tableName;
                 //}
-                tableName = Table(tempTableName, tableDefine.TableAttribute.Schema);
+               
             }
-
+            tableName = Table(tempTableName, tempSchemaName);
            
 
             sql += tableName;

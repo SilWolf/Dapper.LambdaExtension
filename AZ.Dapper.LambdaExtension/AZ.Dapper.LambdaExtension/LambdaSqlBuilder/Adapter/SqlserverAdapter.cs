@@ -141,9 +141,9 @@ namespace Dapper.LambdaExtension.LambdaSqlBuilder.Adapter
                     tempSchemaName = "dbo";
                 }
 
-                tableName = Table(tempTableName, tempSchemaName);
+               
             }
-
+            tableName = Table(tempTableName, tempSchemaName);
            
             var sql = $"IF NOT EXISTS  (SELECT * FROM INFORMATION_SCHEMA.TABLES where table_schema='{tempSchemaName}' and table_name='{tempTableName}') BEGIN  ";
 
